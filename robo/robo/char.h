@@ -208,6 +208,8 @@ public:
 
 	int select_type = 0;
 
+	bool key_flag = false;
+
 	int img{ 0 };
 	int Action(list<unique_ptr<Bace>>& bace);
 	void Draw();

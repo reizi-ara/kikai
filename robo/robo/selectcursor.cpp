@@ -5,6 +5,7 @@
 
 //コンストラクタ
 SelectCursor::SelectCursor(float _x, float _y) {
+
 	img = LoadGraph("image\\ArrowDown.png");
 
 	pos.x = _x;
@@ -18,34 +19,39 @@ SelectCursor::SelectCursor(float _x, float _y) {
 //処理
 int SelectCursor::Action(list<unique_ptr<Bace>>& bace) 
 {
-	if (CheckHitKey(KEY_INPUT_RIGHT) && time >= 40)
+	if (CheckHitKey(KEY_INPUT_RIGHT) && key_flag == false)
 	{
 		if (pos.x == 512.0f)
 		{
 			pos.x = 128.0f;
-			time = 0;
+			key_flag = true;
 		}
 		else
 		{
 			pos.x += 128.0f;
-			time = 0;
-			
+			key_flag = true;
 		}
 
 	}
+	
 
-	if (CheckHitKey(KEY_INPUT_LEFT) && time >= 40)
+	if (CheckHitKey(KEY_INPUT_LEFT) && key_flag == false)
 	{
 		if (pos.x == 128.0f)
 		{
 			pos.x = 512.0f;
-			time = 0;
+			key_flag = true;
 		}
 		else
 		{
 			pos.x -= 128.0f;
-			time = 0;
+			key_flag = true;
 		}
+	}
+	
+	if (!CheckHitKey(KEY_INPUT_LEFT) && !CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		key_flag = false;
 	}
 
 	if (CheckHitKey(KEY_INPUT_RETURN))
@@ -78,10 +84,6 @@ int SelectCursor::Action(list<unique_ptr<Bace>>& bace)
 			}
 		}
 	}
-
-
-
-	time++;
 	
 
 	return 0;
