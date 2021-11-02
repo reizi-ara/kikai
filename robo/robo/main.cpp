@@ -5,7 +5,7 @@
 //リスト
 list<unique_ptr<Bace>> bace;
 
-unsigned char scene = SELECT;
+
 
 //クライアント用プログラム(TCP/IP)
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
@@ -13,6 +13,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 {
 	//windowモード切替
 	ChangeWindowMode(TRUE);
+
 	//windowサイズ
 	SetGraphMode(800, 600, 32);
 
@@ -29,7 +30,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f);
 	bace.emplace_back(move(P));
 
-	bace.emplace_back((unique_ptr<Bace>)new SelectCursor(128.0f, 192.0f));
+	//bace.emplace_back((unique_ptr<Bace>)new Cursor(128.0f, 192.0f));
+
+	int scene = GAME;
 	
 	//機体選択画面
 	while (scene == SELECT)
@@ -39,49 +42,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		
 		for (auto i = bace.begin(); i != bace.end(); i++)
 		{
-			if ((*i)->ID == 1)
+			if ((*i)->Charcter.ID == 1)
 			{
 				(*i)->Action(bace);//各オブジェクトの処理
 			}
 		}
 		for (auto i = bace.begin(); i != bace.end(); i++)
 		{
-			if ((*i)->ID == 1)
+			if ((*i)->Charcter.ID == 1)
 			{
 				(*i)->Draw();//各オブジェクトの処理
 			}
-		}
-
-		if (CheckHitKey(KEY_INPUT_RETURN))
-		{
-			for (auto i = bace.begin(); i != bace.end(); i++)
-			{
-				if ((*i)->ID == 1)
-				{
-					if (((SelectCursor*)(*i).get())->select_type == 1)
-					{
-						auto Attack = (unique_ptr<Bace>)new attacktype(0.0f, 0.0f);
-						bace.emplace_back(move(Attack));
-					}
-					else if (((SelectCursor*)(*i).get())->select_type == 2)
-					{
-						auto Speed = (unique_ptr<Bace>)new speedtype(0.0f, 0.0f);
-						bace.emplace_back(move(Speed));
-					}
-					else if (((SelectCursor*)(*i).get())->select_type == 3)
-					{
-						auto Shield = (unique_ptr<Bace>)new shieldtype(0.0f, 0.0f);
-						bace.emplace_back(move(Shield));
-					}
-					else if (((SelectCursor*)(*i).get())->select_type == 4)
-					{
-						auto Trap = (unique_ptr<Bace>)new traptype(0.0f, 0.0f);
-						bace.emplace_back(move(Trap));
-					}
-				}
-			}
-
-			scene = GAME;
 		}
 
 		//ESC終了処理
@@ -111,7 +82,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		//リストから不要オブジェクトを削除（弾）
 		for (auto i = bace.begin(); i != bace.end(); i++) {
-			if ((*i)->FLAG == false) {
+			if ((*i)->Charcter.FLAG == false) {
 				i = bace.erase(i);
 				break;
 			}

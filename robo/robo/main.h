@@ -26,11 +26,21 @@
 #define run_type       0.3
 #define mechanic_type  5.0
 
+#define NONE 0.0f
+
 using namespace std;
 
 enum  mode{
 	SELECT,//セレクト画面
 	GAME//ゲーム中
+};
+
+enum ID_NUMBER
+{
+	SPEED_PLAYER,
+	DEFENSE_PLAYER,
+	SHOOTING_PLAYER,
+	TRAP_PLAYER
 };
 
 typedef struct Vec {
@@ -44,6 +54,9 @@ typedef struct Point {
 
 typedef struct Status
 {
+	int img;//画像
+	int ID;//リストのID
+	bool FLAG;//リストの削除フラグ
 	int hp;//HP
 	int sp;//SP
 	Point pos;//位置
@@ -52,7 +65,7 @@ typedef struct Status
 	float def;//DEF
 	float skill_cooldown;//スキルクールダウン
 	int wepon_num;// 武器の種類
-};
+}Status;
 
 typedef struct Pilot
 {
@@ -66,12 +79,8 @@ typedef struct Pilot
 class Bace {
 private:
 public:
-	char ID{ -1 };
 
-	Point pos{ 0.0f,0.0f };//位置
-	Vec vec{ 0.0f,0.0f };//移動ベクトル
-
-	bool FLAG{ false };
+	Status Charcter{ 0,0,false,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0 };
 
 	virtual int Action(list<unique_ptr<Bace>>& bace) = 0;
 	virtual void Draw() = 0;

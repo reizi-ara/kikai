@@ -5,20 +5,20 @@ Bullet::Bullet(float vx, float vy, float px, float py)
 {
 	img = LoadGraph("image\\square.png");
 
-	pos.x = px;
-	pos.y = py;
+	Charcter.pos.x = px;
+	Charcter.pos.y = py;
 
-	vec.x = vx;
-	vec.y = vy;
+	Charcter.speed.x = vx;
+	Charcter.speed.y = vy;
 
-	FLAG = true;
+	Charcter.FLAG = true;
 
 }
 
 int Bullet::Action(list<unique_ptr<Bace>>& bace)
 {
 	float r = 0.0f;
-	r = vec.x * vec.x + vec.y * vec.y;
+	r = Charcter.speed.x * Charcter.speed.x + Charcter.speed.y * Charcter.speed.y;
 	r = sqrt(r);
 
 	if (r == 0.0f)
@@ -27,18 +27,18 @@ int Bullet::Action(list<unique_ptr<Bace>>& bace)
 	}
 	else
 	{
-		vec.x = 5.0f / r * vec.x;
-		vec.y = 5.0f / r * vec.y;
+		Charcter.speed.x = 5.0f / r * Charcter.speed.x;
+		Charcter.speed.y = 5.0f / r * Charcter.speed.y;
 	}
 
-	pos.x += vec.x;
-	pos.y += vec.y;
+	Charcter.pos.x += Charcter.speed.x;
+	Charcter.pos.y += Charcter.speed.y;
 
 	//âÊñ äOÇ…èoÇΩÇÁçÌèú
-	if (pos.x<0 || pos.y<0 || pos.x>800 - 32 || pos.y>600 - 32) {
+	if (Charcter.pos.x < 0 || Charcter.pos.y < 0 || Charcter.pos.x>800 - 32 || Charcter.pos.y>600 - 32) {
 		for (auto i = bace.begin(); i != bace.end(); i++)
 		{
-			FLAG = false;
+			Charcter.FLAG = false;
 		}
 	}
 
@@ -46,5 +46,5 @@ int Bullet::Action(list<unique_ptr<Bace>>& bace)
 }
 
 void Bullet::Draw() {
-	DrawGraphF(pos.x, pos.y, img, TRUE);
+	DrawGraphF(Charcter.pos.x, Charcter.pos.y, img, TRUE);
 }

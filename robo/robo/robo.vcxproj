@@ -149,14 +149,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="attacktype.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="selectcursor.cpp" />
-    <ClCompile Include="shieldtype.cpp" />
-    <ClCompile Include="speedtype.cpp" />
-    <ClCompile Include="traptype.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="char.h" />

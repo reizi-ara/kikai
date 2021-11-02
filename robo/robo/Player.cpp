@@ -9,37 +9,27 @@ Player::Player(float _x, float _y)
 	img3 = LoadGraph("image\\ArrowRight.png");
 	img4 = LoadGraph("image\\ArrowLeft.png");
 
-	pos.x = _x;
-	pos.y = _y;
+	Charcter.pos.x = _x;
+	Charcter.pos.y = _y;
 
-	FLAG = true;
-}
+	Charcter.ID = SPEED_PLAYER;
 
-void Player::Init()
-{
-	img1 = -1;
-	img2 = -1;
-	img3 = -1;
-	img4 = -1;
-	pos.x = 0.0f;
-	pos.y = 0.0f;
-	rotate_vx = 0;
-	rotate_vy = 0;
-	img_Vec = 1;
+	Charcter.FLAG = true;
 }
 
 int Player::Action(list<unique_ptr<Bace>>& bace)
 {
-	vec.x = 0.0f; vec.y = 0.0f;
+	Charcter.speed.x = 0.0f; Charcter.speed.y = 0.0f;
+	static int vx, vy;
 
 	//à⁄ìÆï˚å¸ì¸óÕ
 	GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD1));
 
-	vec.x = vx / 250.0f;
-	vec.y = vy / 250.0f;
+	Charcter.speed.x = vx / 250.0f;
+	Charcter.speed.y = vy / 250.0f;
 
-	pos.x += vec.x;
-	pos.y += vec.y;
+	Charcter.pos.x += Charcter.speed.x;
+	Charcter.pos.y += Charcter.speed.y;
 
 	//âÊëúópÇÃï€ë∂ïœêî
 	if (vx != 0 || vy != 0)
@@ -47,17 +37,13 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 		rotate_vx = vx;
 		rotate_vy = vy;
 	}
-	else
-		;
 
 	//íeópÇÃï€ë∂ïœêî
 	if (vx != 0 || vy != 0)
 	{
-		BulletSave_vx = vec.x;
-		BulletSave_vy = vec.y;
+		BulletSave_vx = Charcter.speed.x;
+		BulletSave_vy = Charcter.speed.y;
 	}
-	else
-		;
 
 
 	if (rotate_vx > 0)
@@ -87,11 +73,10 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 	{
 		if (ShotFlag == true)
 		{
-			auto B = (unique_ptr<Bace>)new Bullet(BulletSave_vx, BulletSave_vy, pos.x, pos.y);
+			auto B = (unique_ptr<Bace>)new Bullet(BulletSave_vx, BulletSave_vy, Charcter.pos.x, Charcter.pos.y);
 			bace.emplace_back(move(B));
 
 			ShotFlag = false;
-
 		}
 	}
 	
@@ -102,17 +87,17 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 void Player::Draw() {
 
 	if (img_Vec == 3) {
-		DrawGraph(pos.x, pos.y, img3, TRUE);
+		DrawGraph(Charcter.pos.x, Charcter.pos.y, img3, TRUE);
 		
 	}
 	if (img_Vec == 4) {
-		DrawGraph(pos.x, pos.y, img4, TRUE);
+		DrawGraph(Charcter.pos.x, Charcter.pos.y, img4, TRUE);
 	}
 	if (img_Vec == 2) {
-		DrawGraph(pos.x, pos.y, img2, TRUE);
+		DrawGraph(Charcter.pos.x, Charcter.pos.y, img2, TRUE);
 	}
 	if (img_Vec == 1) {
-		DrawGraph(pos.x, pos.y, img1, TRUE);
+		DrawGraph(Charcter.pos.x, Charcter.pos.y, img1, TRUE);
 	}
 
 	
