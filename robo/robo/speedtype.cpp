@@ -2,7 +2,7 @@
 #include "char.h"
 
 //コンストラクタ
-Player::Player(float _x, float _y)
+speedtype::speedtype(float _x, float _y)
 {
 	img1 = LoadGraph("image\\Arrow.png");
 	img2 = LoadGraph("image\\ArrowDown.png");
@@ -15,7 +15,7 @@ Player::Player(float _x, float _y)
 	FLAG = true;
 }
 
-void Player::Init()
+void speedtype::Init()
 {
 	img1 = -1;
 	img2 = -1;
@@ -25,10 +25,10 @@ void Player::Init()
 	pos.y = 0.0f;
 	rotate_vx = 0;
 	rotate_vy = 0;
-	img_Vec = 1;
+	img_Vec = 4;
 }
 
-int Player::Action(list<unique_ptr<Bace>>& bace)
+int speedtype::Action(list<unique_ptr<Bace>>& bace)
 {
 	vec.x = 0.0f; vec.y = 0.0f;
 
@@ -77,7 +77,7 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 		img_Vec = 1;
 	}
 
-	
+
 
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) == 0)
 	{
@@ -94,16 +94,16 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 
 		}
 	}
-	
+
 	return 0;
 }
 
 // 描画
-void Player::Draw() {
+void speedtype::Draw() {
 
 	if (img_Vec == 3) {
 		DrawGraph(pos.x, pos.y, img3, TRUE);
-		
+
 	}
 	if (img_Vec == 4) {
 		DrawGraph(pos.x, pos.y, img4, TRUE);
@@ -115,5 +115,5 @@ void Player::Draw() {
 		DrawGraph(pos.x, pos.y, img1, TRUE);
 	}
 
-	
+
 }
