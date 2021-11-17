@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	ChangeWindowMode(TRUE);
 
 	//windowサイズ
-	SetGraphMode(800, 600, 32);
+	SetGraphMode(Window_Size_x, Window_Size_y, 32);
 
 	//Dxライブラリの初期化
 	if (DxLib_Init() == -1)return -1;
@@ -27,8 +27,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//リストオブジェクトを生成
-	auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f);
-	bace.emplace_back(move(P));
+	//auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f);
+	//bace.emplace_back(move(P));
 
 	//bace.emplace_back((unique_ptr<Bace>)new Cursor(128.0f, 192.0f));
 

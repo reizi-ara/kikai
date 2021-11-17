@@ -8,7 +8,7 @@ private:
 
 public:
 
-	Player(float _x, float _y);
+	Player(float _x, float _y,int type_nm);
 	int img1{ 0 };
 	int img2{ 0 };
 	int img3{ 0 };
@@ -24,6 +24,14 @@ public:
 
 	float BulletSave_vx = 0.0f;
 	float BulletSave_vy = 0.0f;
+
+	int HP = default_HP;
+	int SP = default_SP;
+	int ATK = default_ATK;
+	int DEF = default_DEF;
+	int CD = default_CD;
+	int SPD_X = default_SPD_X;
+	int SPD_Y = default_SPD_Y;
 
 	bool ShotFlag = false;//”­–Cƒtƒ‰ƒO
 };
