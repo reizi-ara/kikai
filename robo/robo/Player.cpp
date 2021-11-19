@@ -2,7 +2,7 @@
 #include "char.h"
 
 //コンストラクタ
-Player::Player(float _x, float _y)
+Player::Player(float _x, float _y,int type_num)
 {
 	img1 = LoadGraph("image\\Arrow.png");
 	img2 = LoadGraph("image\\ArrowDown.png");
@@ -12,7 +12,59 @@ Player::Player(float _x, float _y)
 	Charcter.pos.x = _x;
 	Charcter.pos.y = _y;
 
-	Charcter.ID = SPEED_PLAYER;
+	if (type_num == SPEED_PLAYER)
+	{
+		Charcter.ID = SPEED_PLAYER;
+
+		HP = default_HP;
+		SP = default_SP;
+		ATK = default_ATK;
+		DEF = default_DEF;
+		CD = default_CD;
+		SPD_X = default_SPD_X;
+		SPD_Y = default_SPD_Y;
+	} 
+
+	if (type_num == DEFENSE_PLAYER)
+	{
+		Charcter.ID = DEFENSE_PLAYER;
+
+		HP = default_HP;
+		SP = default_SP;
+		ATK = default_ATK;
+		DEF = default_DEF * 1.2;
+		CD = default_CD;
+		SPD_X = default_SPD_X * 0.1;
+		SPD_Y = default_SPD_Y * 0.1;
+	}
+
+	if (type_num == SHOOTING_PLAYER)
+	{
+		Charcter.ID = SHOOTING_PLAYER;
+
+		HP = default_HP;
+		SP = default_SP;
+		ATK = default_ATK;
+		DEF = default_DEF;
+		CD = default_CD;
+		SPD_X = default_SPD_X;
+		SPD_Y = default_SPD_Y;
+	}
+
+	if (type_num == TRAP_PLAYER)
+	{
+		Charcter.ID = TRAP_PLAYER;
+
+		HP = default_HP;
+		SP = default_SP;
+		ATK = default_ATK;
+		DEF = default_DEF;
+		CD = default_CD;
+		SPD_X = default_SPD_X;
+		SPD_Y = default_SPD_Y;
+	}
+
+	
 
 	Charcter.FLAG = true;
 }

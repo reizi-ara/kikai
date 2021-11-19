@@ -28,6 +28,9 @@
 
 #define NONE 0.0f
 
+#define Window_Size_x 800
+#define Window_Size_y 600
+
 using namespace std;
 
 enum  mode{
