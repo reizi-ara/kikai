@@ -1,6 +1,7 @@
 #pragma once
 #include "main.h"
 
+
 //ひな形プレイヤー
 class Player :public Bace {
 private:
