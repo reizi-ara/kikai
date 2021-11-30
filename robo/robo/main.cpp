@@ -27,8 +27,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//リストオブジェクトを生成
-	//auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f);
-	//bace.emplace_back(move(P));
+	auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f, SPEED_PLAYER, COMBAT);
+	bace.emplace_back(move(P));
+
+	auto Item = (unique_ptr<Bace>)new Itembox(80.0f, 100.0f);
+	bace.emplace_back(move(Item));
 
 	//bace.emplace_back((unique_ptr<Bace>)new Cursor(128.0f, 192.0f));
 
