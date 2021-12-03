@@ -26,6 +26,13 @@ public:
 	float BulletSave_vx = 0.0f;
 	float BulletSave_vy = 0.0f;
 
+	Point Item{ 0.0f,0.0f };
+
+	int a = 0;
+
+	bool weponget_flag = false;//取得フラグ
+	int wepon_num = -1;//武器種
+
 	bool ShotFlag = false;//発砲フラグ
 };
 
@@ -64,6 +71,20 @@ private:
 public:
 	//コンストラクタ
 	Itembox(float px, float py);
+
+	int img{ 0 };
+	int Action(list<unique_ptr<Bace>>& bace);
+	void Draw();
+};
+
+//wepon
+class wepon :public Bace {
+private:
+public:
+	//コンストラクタ
+	wepon(float px, float py, int wepon_num);
+
+	int set_wepon = 0;//セットする武器番号保存変数
 
 	int img{ 0 };
 	int Action(list<unique_ptr<Bace>>& bace);

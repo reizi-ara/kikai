@@ -8,6 +8,8 @@ Itembox::Itembox(float px, float py)
 
 	img = LoadGraph("image\\ケアパケ.png");
 
+	Charcter.ID = ITEMBOX;
+
 	Charcter.FLAG = true;
 
 }

@@ -5,6 +5,8 @@
 #include <memory>
 #include <math.h>
 
+#include <random>
+
 //Šî‘bƒXƒe
 #define default_HP    100
 #define default_SP     50
@@ -38,8 +40,12 @@ enum ID_NUMBER
 	SPEED_PLAYER,
 	DEFENCE_PLAYER,
 	SHOOTING_PLAYER,
-	TRAP_PLAYER
+	TRAP_PLAYER,
+	ITEMBOX,
+	WEPON,
 };
+
+
 
 enum PILOT_NUMBER
 {

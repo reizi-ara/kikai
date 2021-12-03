@@ -159,6 +159,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="selectcursor.cpp" />
     <ClCompile Include="Status.cpp" />
+    <ClCompile Include="wepon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="char.h" />
