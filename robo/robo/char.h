@@ -9,7 +9,7 @@ private:
 
 public:
 
-	Player(float _x, float _y);
+	Player(float _x, float _y,int type_nm,int pilot);
 	int img1{ 0 };
 	int img2{ 0 };
 	int img3{ 0 };
@@ -52,6 +52,18 @@ public:
 	int select_type = 0;
 
 	bool key_flag = false;
+
+	int img{ 0 };
+	int Action(list<unique_ptr<Bace>>& bace);
+	void Draw();
+};
+
+//itembox
+class Itembox :public Bace {
+private:
+public:
+	//コンストラクタ
+	Itembox(float px, float py);
 
 	int img{ 0 };
 	int Action(list<unique_ptr<Bace>>& bace);

@@ -2,19 +2,33 @@
 #include "char.h"
 
 //コンストラクタ
-Player::Player(float _x, float _y)
+Player::Player(float _x, float _y,int type_num,int pilot)
 {
 	img1 = LoadGraph("image\\Arrow.png");
 	img2 = LoadGraph("image\\ArrowDown.png");
 	img3 = LoadGraph("image\\ArrowRight.png");
 	img4 = LoadGraph("image\\ArrowLeft.png");
 
+	//キャラクター初期化--------------------------------------------------------------
 	Charcter.pos.x = _x;
 	Charcter.pos.y = _y;
 
-	Charcter.ID = SPEED_PLAYER;
+	Charcter.ID = type_num;
+	Charcter.Pilot = pilot;
+
+	Charcter.hp = default_HP;
+	Charcter.sp = default_SP;
+	Charcter.f_atk = default_F_ATK;
+	Charcter.s_atk = default_S_ATK;
+	Charcter.def = default_DEF;
+	Charcter.skill_cooldown = default_CD;
+	Charcter.speed.x = default_SPD_X;
+	Charcter.speed.y = default_SPD_Y;
+	
+	SetMachine(&Charcter, type_num, pilot);//機体情報、パイロット情報挿入
 
 	Charcter.FLAG = true;
+	//-------------------------------------------------------------------------------
 }
 
 int Player::Action(list<unique_ptr<Bace>>& bace)

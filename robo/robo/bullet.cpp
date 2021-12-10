@@ -1,5 +1,7 @@
 #pragma once
 #include "char.h"
+#define b_speedx 5.0f
+#define b_speedy 5.0f
 
 Bullet::Bullet(float vx, float vy, float px, float py)
 {
@@ -17,25 +19,25 @@ Bullet::Bullet(float vx, float vy, float px, float py)
 
 int Bullet::Action(list<unique_ptr<Bace>>& bace)
 {
-	float r = 0.0f;
+	float r = NONE;
 	r = Charcter.speed.x * Charcter.speed.x + Charcter.speed.y * Charcter.speed.y;
 	r = sqrt(r);
 
-	if (r == 0.0f)
+	if (r == NONE)
 	{
 		;
 	}
 	else
 	{
-		Charcter.speed.x = 5.0f / r * Charcter.speed.x;
-		Charcter.speed.y = 5.0f / r * Charcter.speed.y;
+		Charcter.speed.x =  b_speedx / r * Charcter.speed.x;
+		Charcter.speed.y =  b_speedy / r * Charcter.speed.y;
 	}
 
 	Charcter.pos.x += Charcter.speed.x;
 	Charcter.pos.y += Charcter.speed.y;
 
 	//‰æ–ÊŠO‚Éo‚½‚çíœ
-	if (Charcter.pos.x < 0 || Charcter.pos.y < 0 || Charcter.pos.x>800 - 32 || Charcter.pos.y>600 - 32) {
+	if (Charcter.pos.x < NONE || Charcter.pos.y < NONE || Charcter.pos.x>Window_Size_x - 32 || Charcter.pos.y>Window_Size_y - 32) {
 		for (auto i = bace.begin(); i != bace.end(); i++)
 		{
 			Charcter.FLAG = false;
