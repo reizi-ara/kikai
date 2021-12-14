@@ -33,9 +33,6 @@
     <ClCompile Include="itembox.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="function.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="wepon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>

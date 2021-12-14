@@ -2,7 +2,7 @@
 #include "char.h"
 
 //コンストラクタ
-Player::Player(float _x, float _y,int type_num,int pilot)
+Player::Player(float _x, float _y,int type_num,int pilot,int player_num)
 {
 	/*img1 = LoadGraph("image\\Arrow.png");
 	img2 = LoadGraph("image\\ArrowDown.png");
@@ -16,6 +16,7 @@ Player::Player(float _x, float _y,int type_num,int pilot)
 
 	Charcter.ID = type_num;
 	Charcter.Pilot = pilot;
+	Charcter.P_ID = player_num;
 
 	Charcter.hp = default_HP;
 	Charcter.sp = default_SP;
@@ -106,24 +107,10 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 	}
 	
 
-	
+	//wepon_num = 0;
 
-	/*if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) == 0)
-	{
-		ShotFlag = true;
-	}
-	else
-	{
-		if (ShotFlag == true)
-		{
-			auto B = (unique_ptr<Bace>)new Bullet(BulletSave_vx, BulletSave_vy, Charcter.pos.x, Charcter.pos.y);
-			bace.emplace_back(move(B));
 
-			ShotFlag = false;
-		}
-	}*/
-
-	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) == 0)
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) == 0 && wepon_cd >= 60)
 	{
 		ShotFlag = true;
 	}
@@ -133,13 +120,28 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 		{
 			/*auto B = (unique_ptr<Bace>)new Bullet(BulletSave_vx, BulletSave_vy, Charcter.pos.x, Charcter.pos.y);
 			bace.emplace_back(move(B));*/
+			wepon_summary(bace, Charcter.pos.x, Charcter.pos.y, wepon_num, P_ID);
 
-			bace.emplace_back((unique_ptr<Bace>)new wepon(500.0f, 100.0f, 0));
+			if (wepon_num == 0) {
+				w_img = LoadGraph("image\\刀身.png");
+			}
 
 			ShotFlag = false;
+			wepon_cd = 0;
+			wepon_num = -1;
 		}
 	}
-	
+
+	if (ShotFlag == false)
+	{
+		wepon_cd++;
+	}
+
+	if (wepon_cd < 60)
+	{
+		DrawGraphF(Charcter.pos.x + 64, Charcter.pos.y, w_img, TRUE);
+	}
+
 	
 	return 0;
 }

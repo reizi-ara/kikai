@@ -27,7 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//リストオブジェクトを生成
-	auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f, SPEED_PLAYER, COMBAT);
+	auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f, SPEED_PLAYER, COMBAT,PLAYER1);
 	bace.emplace_back(move(P));
 
 	bace.emplace_back((unique_ptr<Bace>)new Itembox(80.0f,100.0f));
@@ -90,8 +90,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				break;
 			}
 		}
-
-		DrawGraphF(Charcter.pos.x, Charcter.pos.y, img, TRUE);
 
 		//ESC終了処理
 		if (CheckHitKey(KEY_INPUT_ESCAPE))

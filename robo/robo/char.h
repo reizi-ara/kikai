@@ -9,11 +9,13 @@ private:
 
 public:
 
-	Player(float _x, float _y,int type_nm,int pilot);
+	Player(float _x, float _y,int type_nm,int pilot,int player_num);
 	int img1{ 0 };
 	int img2{ 0 };
 	int img3{ 0 };
 	int img4{ 0 };
+
+	int w_img{ 0 };//武器イメージ
 
 	int Action(list<unique_ptr<Bace>>& bace);//アクション
 	void Draw();//描画
@@ -28,7 +30,11 @@ public:
 
 	Point Item{ 0.0f,0.0f };
 
-	int a = 0;
+	int a = 0;//動作確認用
+
+	int wepon_cd = 0;//武器クールダウン
+
+
 
 	bool weponget_flag = false;//取得フラグ
 	int wepon_num = -1;//武器種
@@ -71,20 +77,6 @@ private:
 public:
 	//コンストラクタ
 	Itembox(float px, float py);
-
-	int img{ 0 };
-	int Action(list<unique_ptr<Bace>>& bace);
-	void Draw();
-};
-
-//wepon
-class wepon :public Bace {
-private:
-public:
-	//コンストラクタ
-	wepon(float px, float py, int wepon_num);
-
-	int set_wepon = 0;//セットする武器番号保存変数
 
 	int img{ 0 };
 	int Action(list<unique_ptr<Bace>>& bace);

@@ -55,6 +55,14 @@ enum PILOT_NUMBER
 	MECHANIC
 };
 
+enum PLAYER_NUM
+{
+	PLAYER1,
+	PLAYER2,
+	PLAYER3,
+	PLAYER4,
+};
+
 typedef struct Vec {
 	float x, y;
 }Vec;
@@ -68,6 +76,7 @@ typedef struct Status
 {
 	int img;//画像
 	int ID;//リストのID
+	int P_ID;//プレイヤーの番号
 	int Pilot;//パイロットID
 	bool FLAG;//リストの削除フラグ
 	int hp;//HP
@@ -94,13 +103,14 @@ class Bace {
 private:
 public:
 
-	Status Charcter{ 0,0,0,false,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,0 };
+	Status Charcter{ 0,0,0,0,false,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,0 };
 
 	virtual int Action(list<unique_ptr<Bace>>& bace) = 0;
 	virtual void Draw() = 0;
 };
 
+//ステータス関数
 void SetMachine(Status* st, int machine, int pilot);
 
-//指定IDの座標取得(list,オブジェクトID)
-Point Get_Point(list<unique_ptr<Bace>>& base, int _ID);
+//武器関数
+void wepon_summary(list<unique_ptr<Bace>>& bace, float px, float py, int wepon_num,int p_id);
