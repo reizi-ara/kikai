@@ -28,6 +28,16 @@
 #define Window_Size_x 800
 #define Window_Size_y 600
 
+//マップサイズ
+#define MAP_SIZE_X 50
+#define MAP_SIZE_Y 50
+
+//スクロールライン
+#define SCROLL_LINE_X 464
+#define SCROLL_LINE_Y 254
+#define SCROLL_LINE_X_MAX  IMGSIZE64 * 50 - SCROLL_LINE_X
+#define SCROLL_LINE_Y_MAX  IMGSIZE64 * 50 - SCROLL_LINE_Y
+
 using namespace std;
 
 enum  mode{
@@ -45,7 +55,21 @@ enum ID_NUMBER
 	WEPON,
 };
 
+enum WINDOW_NUMBER
+{
+	P1,
+	P2,
+	P3,
+	P4
+};
 
+enum ROBO_NUMBER
+{
+	SPEED,
+	DEFFENSE,
+	ATTACK,
+	TRAP
+};
 
 enum PILOT_NUMBER
 {
@@ -63,14 +87,23 @@ enum PLAYER_NUM
 	PLAYER4,
 };
 
-typedef struct Vec {
+typedef struct Vector {
 	float x, y;
-}Vec;
+}Vector;
 
 
 typedef struct Point {
 	float x, y;
 }Point;
+
+//当たり判定
+typedef struct Hit {
+	bool UP, DOWN, LEFT, RIGHT;
+}Hit;
+
+typedef struct MAP {
+	float x, y;
+}MAP;
 
 typedef struct Status
 {
@@ -82,7 +115,7 @@ typedef struct Status
 	int hp;//HP
 	int sp;//SP
 	Point pos;//位置
-	Vec speed;//スピード
+	Vector speed;//スピード
 	float f_atk;//ATK
 	float s_atk;
 	float def;//DEF

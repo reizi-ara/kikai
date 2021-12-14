@@ -120,7 +120,7 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 		{
 			/*auto B = (unique_ptr<Bace>)new Bullet(BulletSave_vx, BulletSave_vy, Charcter.pos.x, Charcter.pos.y);
 			bace.emplace_back(move(B));*/
-			wepon_summary(bace, Charcter.pos.x, Charcter.pos.y, wepon_num, P_ID);
+			wepon_summary(bace, Charcter.pos.x, Charcter.pos.y, wepon_num, Charcter.P_ID);
 
 			if (wepon_num == 0) {
 				w_img = LoadGraph("image\\ìÅêg.png");
