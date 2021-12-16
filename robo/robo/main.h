@@ -8,7 +8,7 @@
 #include <random>
 
 //基礎ステ
-#define default_HP    100
+#define default_HP    500
 #define default_SP     50
 #define default_S_ATK     10
 #define default_F_ATK     15
@@ -162,8 +162,3 @@ public:
 	}
 };
 
-//ステータス関数
-void SetMachine(Status* st, int machine, int pilot);
-
-//武器関数
-void wepon_summary(list<unique_ptr<Base>>& base, float px, float py, int wepon_num,int p_id);

@@ -54,7 +54,7 @@ Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int win
 	
 	SetMachine(&status, type_num, pilot);//機体情報、パイロット情報挿入
 
-	pri = 999;
+	pri = 990;
 
 	
 	//-------------------------------------------------------------------------------
@@ -130,60 +130,57 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			{
 				if (wepon_num == -1)
 					weponget_flag = true;
-
-				
 			}
 		}
-		switch ((*i)->status.WIN_ID)
-		{
-		case P1:
-			id[P1] = (*i)->status.ID;
-			break;
-		case P2:
-			id[P2] = (*i)->status.ID;
-			break;
-		case P3:
-			id[P3] = (*i)->status.ID;
-			break;
-		case P4:
-			id[P4] = (*i)->status.ID;
-			break;
-		}
 	}
-
-	
 
 	if (weponget_flag == true) {
 		wepon_num = rand() % 2;
 		weponget_flag = false;
 	}
-	
 
-	//wepon_num = 0;
-
-
-	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) == 0 && wepon_cd >= 60)
+	if (wepon_num >= 0)
 	{
-		ShotFlag = true;
-	}
-	else
-	{
-		if (ShotFlag == true)
+		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) == 0 && wepon_cd >= 60)
 		{
-			/*auto B = (unique_ptr<Bace>)new Bullet(BulletSave_vx, BulletSave_vy, Charcter.pos.x, Charcter.pos.y);
-			bace.emplace_back(move(B));*/
-			wepon_summary(base, status.pos.x, status.pos.y, wepon_num, status.P_ID);
+			ShotFlag = true;
+		}
+		else
+		{
+			if (ShotFlag == true)
+			{
+				//ブロックに接触していると弾を発射できないため解決用（仮）
+				if (h_player.LEFT == true)
+				{
+					bullet.x = IMGSIZE64 / 8;
+				}
+				if (h_player.RIGHT == true)
+				{
+					bullet.x = -IMGSIZE64 / 4;
+				}
+				if (h_player.DOWN == true)
+				{
+					bullet.y = -IMGSIZE64 / 2;
+				}
+				if (h_player.UP == true)
+				{
+					bullet.y = IMGSIZE64 / 8;
+				}
 
-			if (wepon_num == 0) {
-				w_img = LoadGraph("image\\刀身.png");
+				base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y));
+				//wepon_summary(base, status.pos.x, status.pos.y, wepon_num, status.P_ID);
+
+				/*	if (wepon_num == 0) {
+						w_img = LoadGraph("image\\刀身.png");
+					}*/
+
+				ShotFlag = false;
+				wepon_cd = 0;
+				wepon_num = -1;
 			}
-
-			ShotFlag = false;
-			wepon_cd = 0;
-			wepon_num = -1;
 		}
 	}
-
+	
 	if (ShotFlag == false)
 	{
 		wepon_cd++;
@@ -191,11 +188,11 @@ int Player::Action(list<unique_ptr<Base>>& base)
 
 	if (wepon_cd < 60)
 	{
-		DrawGraphF(status.pos.x + 64, status.pos.y, w_img, TRUE);
+		//DrawGraphF(status.pos.x + 64, status.pos.y, w_img, TRUE);
 	}
 
 	GetScroll(&status.pos, &scroll, status.WIN_ID);
-	BlockHit(&h_player, &status.pos, &status.speed);
+	BlockHit(&h_player, &status.pos, &status.speed, IMGSIZE64);
 	ScrollSet(e_scroll, e_pos, base);
 
 	return 0;

@@ -16,6 +16,8 @@ int Block::Action(list<unique_ptr<Base>>& base)
 	ScrollSet(scroll, p_pos, base);
 
 	Getimg(base, p_img);
+
+	//アイテムボックスをプレイヤーがとった際アイテムボックスを再生成するための位置を持ってくる
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
 		if ((*i)->status.FLAG == false && (*i)->status.ID == ITEMBOX)
@@ -23,6 +25,7 @@ int Block::Action(list<unique_ptr<Base>>& base)
 			Item_time_flag = true;
 			for (int z = 0; z < 10; z++)
 			{
+				//配列の数値が入っていない場所に格納
 				if (Item_pos[z].x == 0.0f && Item_pos[z].y == 0.0f)
 				{
 					Item_pos[z].x = (*i)->status.pos.x;
@@ -34,9 +37,11 @@ int Block::Action(list<unique_ptr<Base>>& base)
 		}
 	}
 
+	//アイテムボックス再生成処理
 	if (Item_time_flag == true)
 	{
 		Item_time++;
+		//10秒後に生成
 		if (Item_time > 600)
 		{
 			for (int z = 0; z < 10; z++)
@@ -45,12 +50,12 @@ int Block::Action(list<unique_ptr<Base>>& base)
 				{
 					base.emplace_back((unique_ptr<Base>)new Itembox(Item_pos[z].x, Item_pos[z].y));
 					SetMap(Item_pos[z].x/IMGSIZE64, Item_pos[z].y/IMGSIZE64, 2);
+					Item_pos[z].x = 0.0f; Item_pos[z].y = 0.0f;
 				}
 				else
 				{
 					Item_time = 0;
 					Item_time_flag = false;
-					break;
 				}
 			}
 		}
@@ -222,6 +227,5 @@ void Block::Draw()
 			}
 		}
 	}
-	//（Blockめり込み対策）UI表示
-	DrawGraph(0, 0, img_back, TRUE);
+
 }

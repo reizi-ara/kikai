@@ -19,6 +19,9 @@
     <Filter Include="ソース ファイル\マップ">
       <UniqueIdentifier>{92a86871-a8b6-42f3-80ac-158a8820be3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\武器">
+      <UniqueIdentifier>{efe2ba78-98a4-47d6-9e60-3573733d0a5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,19 +30,10 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="selectcursor.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Status.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="itembox.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="wepon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="function.cpp">
@@ -47,6 +41,15 @@
     </ClCompile>
     <ClCompile Include="block.cpp">
       <Filter>ソース ファイル\マップ</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル\武器</Filter>
+    </ClCompile>
+    <ClCompile Include="wepon.cpp">
+      <Filter>ソース ファイル\武器</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

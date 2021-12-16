@@ -64,6 +64,8 @@ public:
 	Hit h_player;//当たり判定
 
 	Vector scroll{ 0.0f,0.0f };//スクロール
+
+	Point bullet{ 0.0f,0.0f };
 };
 
 //弾
@@ -76,6 +78,23 @@ public:
 	int img{ 0 };
 	int Action(list<unique_ptr<Base>>& base);
 	void Draw();
+
+	Vector scroll[4]{
+		{0.0f,0.0f},
+		{0.0f,0.0f},
+		{0.0f,0.0f},
+		{0.0f,0.0f}
+	};
+	Point p_pos[4]{
+	{0.0f,0.0f},
+	{0.0f,0.0f},
+	{0.0f,0.0f},
+	{0.0f,0.0f}
+	};
+
+	int delete_time = 0;
+
+	Hit h_bullet;//当たり判定
 };
 
 //セレクトカーソル
@@ -159,7 +178,7 @@ public:
 
 	int img = LoadGraph("image\\block.png", 0);
 	int img_green = LoadGraph("image\\green.png", 0);
-	int img_back = LoadGraph("image\\UI.png", 0);
+	int img_back = LoadGraph("image\\UI\\UI.png", 0);
 	int img_speed = LoadGraph("image\\robo.png", 0);
 	int img_attack = LoadGraph("image\\attack.png", 0);
 	int img_deffense = LoadGraph("image\\deffense.png", 0);
@@ -185,4 +204,31 @@ public:
 		{0.0f,0.0f}
 	};
 
+};
+
+//UI
+class UI :public Base {
+private:
+public:
+	//コンストラクタ
+	UI();
+
+	int img{ 0 };
+	int Action(list<unique_ptr<Base>>& base);
+	void Draw();
+
+	int HP[4] = { 0,0,0,0 };
+
+	int WEPON[4] = { 0,0,0,0 };
+
+	int img_Item =		LoadGraph("image\\UI\\Item_UI.png", 0);
+	int img_Item_UI =	LoadGraph("image\\UI\\Item_UI.png", 0);
+	int img_HP =		LoadGraph("image\\UI\\HP.png", 0);
+	int img_HP_UI =		LoadGraph("image\\UI\\HP_UI.png", 0);
+	int img_Skill_UI =	LoadGraph("image\\UI\\Skill_UI.png", 0);
+	int img_Skill =		LoadGraph("image\\UI\\Skill.png", 0);
+	int img_rifle =		LoadGraph("image\\UI\\rifle.png", 0);
+	int img_katana =	LoadGraph("image\\UI\\katana.png", 0);
+	int img_missile =	LoadGraph("image\\UI\\missile.png", 0);
+	int img_rerugan =	LoadGraph("image\\UI\\rerugan.png", 0);
 };

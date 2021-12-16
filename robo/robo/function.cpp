@@ -126,7 +126,7 @@ void SetMap(int x, int y,int NUM)
 }
 
 //ブロックの当たり判定
-void BlockHit(Hit* player, Point* _pos, Vector* _vec)
+void BlockHit(Hit* player, Point* _pos, Vector* _vec,int IMGSIZE)
 {
 	//マップ
 	int map[MAP_SIZE_Y][MAP_SIZE_X];
@@ -146,39 +146,40 @@ void BlockHit(Hit* player, Point* _pos, Vector* _vec)
 			if (map[y][x] == 1)
 			{
 				//キャラクターの右側が当たった時
-				if ((x * IMGSIZE64) + IMGSIZE64 >= _pos->x + IMGSIZE64 &&
+				if ((x * IMGSIZE64) + IMGSIZE64 >= _pos->x + IMGSIZE &&
 					(x * IMGSIZE64) - IMGSIZE64 <= _pos->x &&
-					y * IMGSIZE64 - 1 < _pos->y + (IMGSIZE64 / 2) &&
-					(y * IMGSIZE64) + IMGSIZE64 > _pos->y + (IMGSIZE64 / 2))
+					y * IMGSIZE64 - 1 < _pos->y + (IMGSIZE / 2) &&
+					(y * IMGSIZE64) + IMGSIZE64 > _pos->y + (IMGSIZE / 2))
 				{
-					_pos->x = x * IMGSIZE64 - IMGSIZE64;//位置を右側にする 
+					
+					_pos->x = x * IMGSIZE64 - IMGSIZE;//位置を右側にする 
 					player->RIGHT = true;
 				}
 				//キャラクターの左側が当たった時
 				if ((x * IMGSIZE64) <= _pos->x &&
-					(x * IMGSIZE64) + (IMGSIZE64 * 2) >= _pos->x + IMGSIZE64 &&
-					y * IMGSIZE64 - 1 < _pos->y + (IMGSIZE64 / 2) &&
-					(y * IMGSIZE64) + IMGSIZE64 > _pos->y + (IMGSIZE64 / 2))
+					(x * IMGSIZE64) + (IMGSIZE64 * 2) >= _pos->x + IMGSIZE &&
+					y * IMGSIZE64 - 1 < _pos->y + (IMGSIZE / 2) &&
+					(y * IMGSIZE64) + IMGSIZE64 > _pos->y + (IMGSIZE / 2))
 				{
-					_pos->x = x * IMGSIZE64 + IMGSIZE64;//位置を左側にする
+					_pos->x = x * IMGSIZE64 + IMGSIZE;//位置を左側にする
 					player->LEFT = true;
 				}
 				//キャラクターの上側が当たった時
 				if ((y * IMGSIZE64) + IMGSIZE64 >= _pos->y &&
 					(y * IMGSIZE64) <= _pos->y &&
-					(x * IMGSIZE64) + IMGSIZE64 >= _pos->x + (IMGSIZE64 / 2) &&
-					(x * IMGSIZE64) <= _pos->x + (IMGSIZE64 / 2))
+					(x * IMGSIZE64) + IMGSIZE64 >= _pos->x + (IMGSIZE / 2) &&
+					(x * IMGSIZE64) <= _pos->x + (IMGSIZE / 2))
 				{
-					_pos->y = (y * IMGSIZE64) + IMGSIZE64;//位置をブロックの上にする
+					_pos->y = (y * IMGSIZE64) + IMGSIZE;//位置をブロックの上にする
 					player->UP = true;
 				}
 				////キャラクターの下側が当たった時
 				if ((y * IMGSIZE64) >= _pos->y &&
 					(y * IMGSIZE64) - (IMGSIZE64) <= _pos->y &&
-					(x * IMGSIZE64) + IMGSIZE64 >= _pos->x + (IMGSIZE64 / 2) &&
-					(x * IMGSIZE64) <= _pos->x + (IMGSIZE64 / 2))
+					(x * IMGSIZE64) + IMGSIZE64 >= _pos->x + (IMGSIZE / 2) &&
+					(x * IMGSIZE64) <= _pos->x + (IMGSIZE / 2))
 				{
-					_pos->y = (y * IMGSIZE64) - IMGSIZE64 - 2;//位置をブロックの上にする
+					_pos->y = (y * IMGSIZE64) - IMGSIZE - 2;//位置をブロックの上にする
 					player->DOWN = true;
 				}
 			}
@@ -284,6 +285,7 @@ int BlockDraw(Vector scroll[4], Point pos[4], int WIN_ID, int x, int y)
 	return -99;
 }
 
+//プレイヤーの画像取得関数
 void Getimg(list<unique_ptr<Base>>& base, int img[4])
 {
 	for (auto i = base.begin(); i != base.end(); i++)
@@ -309,6 +311,7 @@ void Getimg(list<unique_ptr<Base>>& base, int img[4])
 	}
 }
 
+//プレイヤーとの当たり判定関数
 void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int IMGSIZE, bool* FLAG)
 {
 	for (auto i = base.begin(); i != base.end(); i++)
@@ -355,5 +358,45 @@ void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int
 				break;
 			}
 		}
+	}
+}
+
+void SetMachine(Status* st, int machine, int pilot)
+{
+	if (machine == SPEED_PLAYER)
+	{
+		st->speed.x += default_SPD_X * 0.5f;
+		st->speed.y += default_SPD_Y * 0.5f;
+	}
+	if (machine == DEFFENSE_PLAYER)
+	{
+		st->def += default_DEF * 0.1f;
+		st->speed.x += default_SPD_X * -0.1f;
+		st->speed.y += default_SPD_X * -0.1f;
+	}
+	if (machine == ATTACK_PLAYER)
+	{
+		;
+	}
+	if (machine == TRAP_PLAYER)
+	{
+		;
+	}
+	if (pilot == COMBAT)
+	{
+		st->f_atk += default_F_ATK * 0.5f;
+	}
+	if (pilot == SHOOT)
+	{
+		st->s_atk += default_S_ATK * 0.2f;
+	}
+	if (pilot == RUN)
+	{
+		st->speed.x += default_SPD_X * 0.3f;
+		st->speed.y += default_SPD_Y * 0.3f;
+	}
+	if (pilot == MECHANIC)
+	{
+		;
 	}
 }

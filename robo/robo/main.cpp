@@ -44,6 +44,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//É}ÉbÉvçÏê¨
 	base.emplace_back((unique_ptr<Base>)new Block());
 
+	//UIçÏê¨
+	base.emplace_back((unique_ptr<Base>)new UI());
+
 	GetMap(map);
 	for (int y = 0; y < MAP_SIZE_Y; y++)
 	{

@@ -159,7 +159,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="selectcursor.cpp" />
-    <ClCompile Include="Status.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="wepon.cpp" />
   </ItemGroup>
   <ItemGroup>
