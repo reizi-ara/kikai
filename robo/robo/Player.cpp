@@ -2,52 +2,92 @@
 #include "char.h"
 
 //コンストラクタ
-Player::Player(float _x, float _y,int type_num,int pilot,int player_num)
+Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int window_num, Point Pos)
 {
 	/*img1 = LoadGraph("image\\Arrow.png");
 	img2 = LoadGraph("image\\ArrowDown.png");
 	img3 = LoadGraph("image\\ArrowRight.png");
 	img4 = LoadGraph("image\\ArrowLeft.png");*/
-	img1 = LoadGraph("image\\square64.png");
+	img1 = LoadGraph("image\\Cube_Speed.png");
+	img2 = LoadGraph("image\\Cube_Deffense.png");
+	img3 = LoadGraph("image\\Cube_Attack.png");
+	img4 = LoadGraph("image\\Cube_Trap.png");
+
+	status.WIN_ID = window_num;
 
 	//キャラクター初期化--------------------------------------------------------------
-	Charcter.pos.x = _x;
-	Charcter.pos.y = _y;
+	status.pos.x = Pos.x;
+	status.pos.y = Pos.y;
 
-	Charcter.ID = type_num;
-	Charcter.Pilot = pilot;
-	Charcter.P_ID = player_num;
+	switch (type_num)
+	{
+	case SPEED_PLAYER:
+		status.img = img1;
+		break;
+	case DEFFENSE_PLAYER:
+		status.img = img2;
+		break;
+	case TRAP_PLAYER:
+		status.img = img4;
+		break;
+	case ATTACK_PLAYER:
+		status.img = img3;
+		break;
+	}
 
-	Charcter.hp = default_HP;
-	Charcter.sp = default_SP;
-	Charcter.f_atk = default_F_ATK;
-	Charcter.s_atk = default_S_ATK;
-	Charcter.def = default_DEF;
-	Charcter.skill_cooldown = default_CD;
-	Charcter.speed.x = default_SPD_X;
-	Charcter.speed.y = default_SPD_Y;
+	img = img1;
+
 	
-	SetMachine(&Charcter, type_num, pilot);//機体情報、パイロット情報挿入
 
-	Charcter.FLAG = true;
+	status.ID = type_num;
+	status.Pilot = pilot;
+	status.P_ID = player_num;
+
+	status.hp = default_HP;
+	status.sp = default_SP;
+	status.f_atk = default_F_ATK;
+	status.s_atk = default_S_ATK;
+	status.def = default_DEF;
+	status.skill_cooldown = default_CD;
+	status.speed.x = default_SPD_X;
+	status.speed.y = default_SPD_Y;
+	
+	SetMachine(&status, type_num, pilot);//機体情報、パイロット情報挿入
+
+	pri = 999;
 
 	
 	//-------------------------------------------------------------------------------
 }
 
-int Player::Action(list<unique_ptr<Bace>>& bace)
+int Player::Action(list<unique_ptr<Base>>& base)
 {
-	Charcter.speed.x = 0.0f; Charcter.speed.y = 0.0f;
+	status.speed.x = 0.0f; status.speed.y = 0.0f;
 	static int vx, vy;
 
 	//移動方向入力
-	GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD1));
+	switch (status.WIN_ID)
+	{
+	case P1:
+		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD1));
+		break;
+	case P2:
+		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD2));
+		break;
+	case P3:
+		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD3));
+		break;
+	case P4:
+		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD4));
+		break;
+	}
+	
 
-	Charcter.speed.x = vx / 250.0f;
-	Charcter.speed.y = vy / 250.0f;
+	status.speed.x = vx / 250.0f;
+	status.speed.y = vy / 250.0f;
 
-	Charcter.pos.x += Charcter.speed.x;
-	Charcter.pos.y += Charcter.speed.y;
+	status.pos.x += status.speed.x;
+	status.pos.y += status.speed.y;
 
 	//画像用の保存変数
 	if (vx != 0 || vy != 0)
@@ -59,8 +99,8 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 	//弾用の保存変数
 	if (vx != 0 || vy != 0)
 	{
-		BulletSave_vx = Charcter.speed.x;
-		BulletSave_vy = Charcter.speed.y;
+		BulletSave_vx = status.speed.x;
+		BulletSave_vy = status.speed.y;
 	}
 
 
@@ -82,21 +122,33 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 	}
 
 
-	for (auto i = bace.begin(); i != bace.end(); i++)
+	for (auto i = base.begin(); i != base.end(); i++)
 	{
-		if ((*i)->Charcter.ID == ITEMBOX) {
-			Item = ((Itembox*)(*i).get())->Charcter.pos;
-			if (Item.x < Charcter.pos.x + 64 && Item.x + 64 > Charcter.pos.x && Item.y < Charcter.pos.y + 64 && Item.y + 64 > Charcter.pos.y)
+		if ((*i)->status.ID == ITEMBOX) {
+			Item = ((Itembox*)(*i).get())->status.pos;
+			if (Item.x < status.pos.x + 64 && Item.x + 64 > status.pos.x && Item.y < status.pos.y + 64 && Item.y + 64 > status.pos.y)
 			{
 				if (wepon_num == -1)
 					weponget_flag = true;
 
-				((Itembox*)(*i).get())->Charcter.FLAG = false;
+				
 			}
 		}
-
-		
-
+		switch ((*i)->status.WIN_ID)
+		{
+		case P1:
+			id[P1] = (*i)->status.ID;
+			break;
+		case P2:
+			id[P2] = (*i)->status.ID;
+			break;
+		case P3:
+			id[P3] = (*i)->status.ID;
+			break;
+		case P4:
+			id[P4] = (*i)->status.ID;
+			break;
+		}
 	}
 
 	
@@ -120,7 +172,7 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 		{
 			/*auto B = (unique_ptr<Bace>)new Bullet(BulletSave_vx, BulletSave_vy, Charcter.pos.x, Charcter.pos.y);
 			bace.emplace_back(move(B));*/
-			wepon_summary(bace, Charcter.pos.x, Charcter.pos.y, wepon_num, Charcter.P_ID);
+			wepon_summary(base, status.pos.x, status.pos.y, wepon_num, status.P_ID);
 
 			if (wepon_num == 0) {
 				w_img = LoadGraph("image\\刀身.png");
@@ -139,29 +191,32 @@ int Player::Action(list<unique_ptr<Bace>>& bace)
 
 	if (wepon_cd < 60)
 	{
-		DrawGraphF(Charcter.pos.x + 64, Charcter.pos.y, w_img, TRUE);
+		DrawGraphF(status.pos.x + 64, status.pos.y, w_img, TRUE);
 	}
 
-	
+	GetScroll(&status.pos, &scroll, status.WIN_ID);
+	BlockHit(&h_player, &status.pos, &status.speed);
+	ScrollSet(e_scroll, e_pos, base);
+
 	return 0;
 }
 
 // 描画
 void Player::Draw() {
 
-	/*if (img_Vec == 3) {
-		DrawGraph(Charcter.pos.x, Charcter.pos.y, img3, TRUE);
-		
+	switch (status.WIN_ID)
+	{
+	case P1:
+		DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.img, TRUE);
+		break;
+	case P2:
+		DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.img, TRUE);
+		break;
+	case P3:
+		DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+		break;
+	case P4:
+		DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+		break;
 	}
-	if (img_Vec == 4) {
-		DrawGraph(Charcter.pos.x, Charcter.pos.y, img4, TRUE);
-	}
-	if (img_Vec == 2) {
-		DrawGraph(Charcter.pos.x, Charcter.pos.y, img2, TRUE);
-	}
-	if (img_Vec == 1) {
-		DrawGraph(Charcter.pos.x, Charcter.pos.y, img1, TRUE);
-	}*/
-	DrawGraph(Charcter.pos.x, Charcter.pos.y, img1, TRUE);
-	
 }

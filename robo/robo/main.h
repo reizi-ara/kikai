@@ -25,8 +25,9 @@
 
 #define NONE 0.0f
 
-#define Window_Size_x 800
-#define Window_Size_y 600
+//windowサイズ
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
 
 //マップサイズ
 #define MAP_SIZE_X 50
@@ -38,6 +39,9 @@
 #define SCROLL_LINE_X_MAX  IMGSIZE64 * 50 - SCROLL_LINE_X
 #define SCROLL_LINE_Y_MAX  IMGSIZE64 * 50 - SCROLL_LINE_Y
 
+//イメージサイズ
+#define IMGSIZE64 64
+
 using namespace std;
 
 enum  mode{
@@ -48,11 +52,12 @@ enum  mode{
 enum ID_NUMBER
 {
 	SPEED_PLAYER,
-	DEFENCE_PLAYER,
-	SHOOTING_PLAYER,
+	DEFFENSE_PLAYER,
+	ATTACK_PLAYER,
 	TRAP_PLAYER,
 	ITEMBOX,
 	WEPON,
+	BLOCK
 };
 
 enum WINDOW_NUMBER
@@ -110,6 +115,7 @@ typedef struct Status
 	int img;//画像
 	int ID;//リストのID
 	int P_ID;//プレイヤーの番号
+	int WIN_ID;//window ID
 	int Pilot;//パイロットID
 	bool FLAG;//リストの削除フラグ
 	int hp;//HP
@@ -132,18 +138,32 @@ typedef struct Pilot
 };
 
 //ベースクラス
-class Bace {
+class Base {
 private:
 public:
 
-	Status Charcter{ 0,0,0,0,false,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,0 };
+	int pri{ 0 };//描画の順番
 
-	virtual int Action(list<unique_ptr<Bace>>& bace) = 0;
+	Status status{ 0,0,0,-1,0,TRUE,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,0 };
+
+	virtual int Action(list<unique_ptr<Base>>& base) = 0;
 	virtual void Draw() = 0;
+};
+
+//比較用クラス(ソート）
+class Pr
+{
+private:
+public:
+	//ここで比較する要素を決める
+	bool operator()(const unique_ptr<Base>& x, const unique_ptr<Base>& y) const
+	{
+		return x.get()->pri < y.get()->pri;
+	}
 };
 
 //ステータス関数
 void SetMachine(Status* st, int machine, int pilot);
 
 //武器関数
-void wepon_summary(list<unique_ptr<Bace>>& bace, float px, float py, int wepon_num,int p_id);
+void wepon_summary(list<unique_ptr<Base>>& base, float px, float py, int wepon_num,int p_id);

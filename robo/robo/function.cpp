@@ -2,6 +2,8 @@
 #include"char.h"
 #include"Function.h"
 
+int time_count = 0;
+
 //マップ変数
 int map[MAP_SIZE_Y][MAP_SIZE_X]
 {
@@ -9,12 +11,12 @@ int map[MAP_SIZE_Y][MAP_SIZE_X]
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -46,9 +48,9 @@ int map[MAP_SIZE_Y][MAP_SIZE_X]
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -119,6 +121,11 @@ void GetMap(int _map[MAP_SIZE_Y][MAP_SIZE_X])
 	}
 }
 
+void SetMap(int x, int y,int NUM)
+{
+	map[y][x] = NUM;
+}
+
 //ブロックの当たり判定
 void BlockHit(Hit* player, Point* _pos, Vector* _vec)
 {
@@ -178,5 +185,176 @@ void BlockHit(Hit* player, Point* _pos, Vector* _vec)
 			}
 		}
 
+	}
+}
+
+//プレイヤーのスクロール情報取得関数
+void ScrollSet(Vector _scroll[4],Point pos[4], list<unique_ptr<Base>>& base)
+{
+	//プレイヤーごとの位置取得
+	for (auto i = base.begin(); i != base.end(); i++)
+	{
+		if ((*i)->status.ID == SPEED_PLAYER || (*i)->status.ID == DEFFENSE_PLAYER || (*i)->status.ID == ATTACK_PLAYER || (*i)->status.ID == TRAP_PLAYER)
+		{
+			switch ((*i)->status.WIN_ID)
+			{
+				//WINDOW 1のプレイヤーの位置,スクロール情報取得
+			case P1:
+				pos[P1].x = (*i)->status.pos.x;
+				pos[P1].y = (*i)->status.pos.y;
+				_scroll[P1].x = ((Player*)(*i).get())->scroll.x;
+				_scroll[P1].y = ((Player*)(*i).get())->scroll.y;
+				break;
+				//WINDOW 2のプレイヤーの位置,スクロール情報取得
+			case P2:
+				pos[P2].x = (*i)->status.pos.x;
+				pos[P2].y = (*i)->status.pos.y;
+				_scroll[P2].x = ((Player*)(*i).get())->scroll.x;
+				_scroll[P2].y = ((Player*)(*i).get())->scroll.y;
+				break;
+				//WINDOW 2のプレイヤーの位置,スクロール情報取得
+			case P3:
+				pos[P3].x = (*i)->status.pos.x;
+				pos[P3].y = (*i)->status.pos.y;
+				_scroll[P3].x = ((Player*)(*i).get())->scroll.x;
+				_scroll[P3].y = ((Player*)(*i).get())->scroll.y;
+				break;
+				//WINDOW 2のプレイヤーの位置,スクロール情報取得
+			case P4:
+				pos[P4].x = (*i)->status.pos.x;
+				pos[P4].y = (*i)->status.pos.y;
+				_scroll[P4].x = ((Player*)(*i).get())->scroll.x;
+				_scroll[P4].y = ((Player*)(*i).get())->scroll.y;
+				break;
+			}
+		}
+	}
+}
+
+//ブロックDraw関数
+//DrawするBlockの番号を返す
+int BlockDraw(Vector scroll[4], Point pos[4], int WIN_ID, int x, int y)
+{
+	//画面分割処理開始------------------------------------------------------------------------------------
+	//WINDOWごとのBlock描画実行
+	switch (WIN_ID)
+	{
+		//WINDOW 1
+	case P1:
+		if (x * IMGSIZE64 - scroll[P1].x >= -IMGSIZE64 &&
+			x * IMGSIZE64 + IMGSIZE64 - scroll[P1].x <= 992 &&
+			y * IMGSIZE64 - scroll[P1].y >= 0 - IMGSIZE64 &&
+			y * IMGSIZE64 + IMGSIZE64 - scroll[P1].y <= 508 + IMGSIZE64)
+		{
+			return map[y][x];
+		}
+		break;
+		//WINDOW 2
+	case P2:
+		if (x * IMGSIZE64 - scroll[P2].x + 992 >= 928 &&
+			x * IMGSIZE64 + IMGSIZE64 - scroll[P2].x + 992 <= WINDOW_WIDTH + IMGSIZE64 &&
+			y * IMGSIZE64 - scroll[P2].y >= 0 - IMGSIZE64 &&
+			y * IMGSIZE64 + IMGSIZE64 - scroll[P2].y <= 508 + IMGSIZE64)
+		{
+			return map[y][x];
+
+		}
+		break;
+		//WINDOW 3
+	case P3:
+		if (x * IMGSIZE64 - scroll[P3].x >= -IMGSIZE64 &&
+			x * IMGSIZE64 + IMGSIZE64 - scroll[P3].x <= 928 + IMGSIZE64 &&
+			y * IMGSIZE64 - scroll[P3].y + 572 >= 572 - IMGSIZE64 &&
+			y * IMGSIZE64 + IMGSIZE64 - scroll[P3].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
+		{
+			return map[y][x];
+		}
+		break;
+		//WINDOW 4
+	case P4:
+		if (x * IMGSIZE64 - scroll[P4].x + 992 >= 992 - IMGSIZE64 &&
+			x * IMGSIZE64 + IMGSIZE64 - scroll[P4].x + 992 <= WINDOW_WIDTH + IMGSIZE64 &&
+			y * IMGSIZE64 - scroll[P4].y + 572 >= 572 - IMGSIZE64 &&
+			y * IMGSIZE64 + IMGSIZE64 - scroll[P4].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
+		{
+			return map[y][x];
+		}
+		break;
+	}
+
+	return -99;
+}
+
+void Getimg(list<unique_ptr<Base>>& base, int img[4])
+{
+	for (auto i = base.begin(); i != base.end(); i++)
+	{
+		if ((*i)->status.WIN_ID >= 0)
+		{
+			switch ((*i)->status.WIN_ID)
+			{
+			case P1:
+				img[P1] = (*i)->status.img;
+				break;
+			case P2:
+				img[P2] = (*i)->status.img;
+				break;
+			case P3:
+				img[P3] = (*i)->status.img;
+				break;
+			case P4:
+				img[P4] = (*i)->status.img;
+				break;
+			}
+		}
+	}
+}
+
+void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int IMGSIZE, bool* FLAG)
+{
+	for (auto i = base.begin(); i != base.end(); i++)
+	{
+		if ((*i)->status.WIN_ID >= 0)
+		{
+			switch ((*i)->status.WIN_ID)
+			{
+			case P1:
+				if (p_pos.x - scroll[P1].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
+					p_pos.x + IMGSIZE - scroll[P1].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
+					p_pos.y - scroll[P1].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
+					p_pos.y + IMGSIZE - scroll[P1].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
+				{
+					*FLAG = false;
+				}
+				break;
+			case P2:
+				if (p_pos.x - scroll[P2].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
+					p_pos.x + IMGSIZE - scroll[P2].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
+					p_pos.y - scroll[P2].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
+					p_pos.y + IMGSIZE - scroll[P2].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
+				{
+					*FLAG = false;
+				}
+				break;
+			case P3:
+				if (p_pos.x - scroll[P3].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
+					p_pos.x + IMGSIZE - scroll[P3].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
+					p_pos.y - scroll[P3].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
+					p_pos.y + IMGSIZE - scroll[P3].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
+				{
+					*FLAG = false;
+				}
+				break;
+			case P4:
+				if (p_pos.x - scroll[P4].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
+					p_pos.x + IMGSIZE - scroll[P4].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
+					p_pos.y - scroll[P4].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
+					p_pos.y + IMGSIZE - scroll[P4].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
+				{
+					*FLAG = false;
+				}
+				break;
+			}
+		}
 	}
 }

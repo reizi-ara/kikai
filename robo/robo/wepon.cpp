@@ -2,7 +2,7 @@
 #include"char.h"
 
 
-void wepon_summary(list<unique_ptr<Bace>>& bace, float px, float py, int wepon_num,int p_id)
+void wepon_summary(list<unique_ptr<Base>>& base, float px, float py, int wepon_num,int p_id)
 {
 	int set_wepon = wepon_num;
 
