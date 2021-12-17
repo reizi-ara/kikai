@@ -18,7 +18,8 @@ int Itembox::Action(list<unique_ptr<Base>>& base)
 {
 	ScrollSet(scroll,p_pos, base);
 
-	Hit_Player(status.pos,scroll, base, IMGSIZE64, &status.FLAG);
+	//プレイヤーとの当たり判定実行（WINDOW＿IDは必要ないのでー１を入れる）
+	Hit_Player(status.pos, scroll, base, IMGSIZE64, &status.FLAG, -1);
 	if (status.FLAG == false)
 	{
 		SetMap(status.pos.x / IMGSIZE64, status.pos.y / IMGSIZE64, 0);
@@ -28,25 +29,6 @@ int Itembox::Action(list<unique_ptr<Base>>& base)
 }
 
 void Itembox::Draw() {
-	/*for (int i = 0; i < 4; i++)
-	{
-		switch (i)
-		{
-		case P1:
-			DrawGraphF(status.pos.x - scroll[P1].x, status.pos.y - scroll[P1].y, img, TRUE);
-			break;
-		case P2:
-			DrawGraphF(status.pos.x + 928.0f - scroll[P2].x, status.pos.y - scroll[P2].y, img, TRUE);
-			break;
-		case P3:
-			DrawGraphF(status.pos.x - scroll[P3].x, status.pos.y + 508.0f - scroll[P3].y, img, TRUE);
-			break;
-		case P4:
-			DrawGraphF(status.pos.x + 928.0f - scroll[P4].x, status.pos.y + 508.0f - scroll[P4].y, img, TRUE);
-			break;
-		}
-	}*/
-	
 
 	for (int i = 0; i < 4; i++)
 	{

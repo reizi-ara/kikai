@@ -12,10 +12,8 @@ public:
 
 	Player(float _x, float _y,int type_nm,int pilot,int player_num, int window_num, Point Pos);
 	int img{ 0 };
-	int img1{ 0 };
-	int img2{ 0 };
-	int img3{ 0 };
-	int img4{ 0 };
+
+	int img_player[4]{ -1,-1,-1,-1 };
 
 	Point e_pos[4]
 	{
@@ -40,7 +38,7 @@ public:
 	int Action(list<unique_ptr<Base>>& base);//アクション
 	void Draw();//描画
 
-	int img_Vec = 1;
+	int img_Vec = 0;
 
 	int rotate_vx = 0;
 	int rotate_vy = 0;
@@ -54,7 +52,7 @@ public:
 
 	int wepon_cd = 0;//武器クールダウン
 
-
+	int Con[4] = { DX_INPUT_PAD1, DX_INPUT_PAD2, DX_INPUT_PAD3, DX_INPUT_PAD4 };
 
 	bool weponget_flag = false;//取得フラグ
 	int wepon_num = -1;//武器種
@@ -73,7 +71,7 @@ class Bullet :public Base {
 private:
 public:
 	//コンストラクタ
-	Bullet(float vx, float vy, float px, float py);
+	Bullet(float vx, float vy, float px, float py,int WIN_ID);
 
 	int img{ 0 };
 	int Action(list<unique_ptr<Base>>& base);
@@ -91,6 +89,8 @@ public:
 	{0.0f,0.0f},
 	{0.0f,0.0f}
 	};
+
+	int hit_player = -1;
 
 	int delete_time = 0;
 

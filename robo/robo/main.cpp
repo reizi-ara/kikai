@@ -39,7 +39,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	//プレイヤー作成
 	for (int i = 0; i < 4; i++)//i->WINDOW番号
-		base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, i, COMBAT, PLAYER1, i, pos[i]));
+		base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, i, SPEED, PLAYER1, i, pos[i]));
 
 	//マップ作成
 	base.emplace_back((unique_ptr<Base>)new Block());
@@ -119,6 +119,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			if ((*i)->status.FLAG == false) {
 				i = base.erase(i);
 				break;
+				DeleteGraph((*i)->status.img, 0);
 			}
 		}
 		

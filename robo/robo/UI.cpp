@@ -12,7 +12,7 @@ int UI::Action(list<unique_ptr<Base>>& base)
 {
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
-		if ((*i)->status.WIN_ID >= 0)
+		if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
 		{
 			switch ((*i)->status.WIN_ID)
 			{
@@ -48,35 +48,35 @@ void UI::Draw()
 			DrawGraph(928 - IMGSIZE64 * 2, 0, img_Item_UI, TRUE);
 			DrawGraph(0, 0, img_HP_UI, TRUE);
 			DrawGraph(0, 508 - IMGSIZE64, img_Skill_UI, TRUE);
-			for (int i = 0; i < HP[P1] / 4; i++)
+			for (int i = 1; i < HP[P1] / 4; i++)
 			{
-				DrawGraph(i * 4, 0 + 1, img_HP, TRUE);
+				DrawGraph(2 + i * 4-4, 0 + 1, img_HP, TRUE);
 			}
 			switch (WEPON[P1])
 			{
 			case 0:
-				//DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
 				break;
 			case 1:
-				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_katana, TRUE);
 				break;
 			}
 			break;
 		case P2:
 			DrawGraph(WINDOW_WIDTH - IMGSIZE64*2, 0, img_Item_UI, TRUE);
 			DrawGraph(928 + IMGSIZE64, 0, img_HP_UI, TRUE);
-			DrawGraph(WINDOW_WIDTH - IMGSIZE64, 508 - IMGSIZE64 * 2, img_Skill_UI, TRUE);
-			for (int i = 0; i < HP[P2] / 4; i++)
+			DrawGraph(WINDOW_WIDTH - IMGSIZE64, 508 - IMGSIZE64, img_Skill_UI, TRUE);
+			for (int i = 1; i < HP[P2] / 4; i++)
 			{
-				DrawGraph(928 + IMGSIZE64 + i * 4, 0+1, img_HP, TRUE);
+				DrawGraph(928 + 2 + IMGSIZE64 + i * 4-4, 0 + 1, img_HP, TRUE);
 			}
 			switch (WEPON[P2])
 			{
 			case 0:
-				//DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
 				break;
 			case 1:
-				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_katana, TRUE);
 				break;
 			}
 			break;
@@ -84,17 +84,17 @@ void UI::Draw()
 			DrawGraph(928 - IMGSIZE64 * 2, 508 + IMGSIZE64, img_Item_UI, TRUE);
 			DrawGraph(0, 508 + IMGSIZE64, img_HP_UI, TRUE);
 			DrawGraph(0, WINDOW_HEIGHT - IMGSIZE64, img_Skill_UI, TRUE);
-			for (int i = 0; i < HP[P3] / 4; i++)
+			for (int i = 1; i < HP[P3] / 4; i++)
 			{
-				DrawGraph(i * 4, 508 + IMGSIZE64+1, img_HP, TRUE);
+				DrawGraph(2 + i * 4-4, 508 + IMGSIZE64 + 1, img_HP, TRUE);
 			}
-			switch (WEPON[P4])
+			switch (WEPON[P3])
 			{
 			case 0:
-				//DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
 				break;
 			case 1:
-				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_katana, TRUE);
 				break;
 			}
 			break;
@@ -102,17 +102,17 @@ void UI::Draw()
 			DrawGraph(WINDOW_WIDTH - IMGSIZE64*2, 508 + IMGSIZE64, img_Item_UI, TRUE);
 			DrawGraph(928 + IMGSIZE64, 508 + IMGSIZE64, img_HP_UI, TRUE);
 			DrawGraph(WINDOW_WIDTH - IMGSIZE64, WINDOW_HEIGHT - IMGSIZE64, img_Skill_UI, TRUE);
-			for (int i = 0; i < HP[P4] / 4; i++)
+			for (int i = 1; i < HP[P4] / 4; i++)
 			{
-				DrawGraph(928 + IMGSIZE64 + i * 4, 508 + IMGSIZE64+1, img_HP, TRUE);
+				DrawGraph(2 + 928 + IMGSIZE64 + i * 4-4, 508 + IMGSIZE64 + 1, img_HP, TRUE);
 			}
 			switch (WEPON[P4])
 			{
 			case 0:
-				//DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
 				break;
 			case 1:
-				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_katana, TRUE);
 				break;
 			}
 			break;

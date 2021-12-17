@@ -16,7 +16,7 @@ int BlockDraw(Vector scroll[4], Point pos[4], int WIN_ID, int x, int y);
 
 void Getimg(list<unique_ptr<Base>>& base, int img[4]);
 
-void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int IMGSIZE, bool* FLAG);
+int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int IMGSIZE, bool* FLAG, int WIN_ID);
 
 void SetMap(int x, int y, int NUM);
 

@@ -4,14 +4,33 @@
 //コンストラクタ
 Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int window_num, Point Pos)
 {
-	/*img1 = LoadGraph("image\\Arrow.png");
-	img2 = LoadGraph("image\\ArrowDown.png");
-	img3 = LoadGraph("image\\ArrowRight.png");
-	img4 = LoadGraph("image\\ArrowLeft.png");*/
-	img1 = LoadGraph("image\\Cube_Speed.png");
-	img2 = LoadGraph("image\\Cube_Deffense.png");
-	img3 = LoadGraph("image\\Cube_Attack.png");
-	img4 = LoadGraph("image\\Cube_Trap.png");
+	switch (type_num)
+	{
+	case SPEED_PLAYER:
+		img_player[0] = LoadGraph("image\\Cube_Speed.png");
+		img_player[1] = LoadGraph("image\\Cube_Speed_LEFT.png");
+		img_player[2] = LoadGraph("image\\Cube_Speed_BACK.png");
+		img_player[3] = LoadGraph("image\\Cube_Speed_RIGHT.png");
+		break;
+	case DEFFENSE_PLAYER:
+		img_player[0] = LoadGraph("image\\Cube_Deffense.png");
+		img_player[1] = LoadGraph("image\\Cube_Deffense_LEFT.png");
+		img_player[2] = LoadGraph("image\\Cube_Deffense_BACK.png");
+		img_player[3] = LoadGraph("image\\Cube_Deffense_RIGHT.png");
+		break;
+	case TRAP_PLAYER:
+		img_player[0] = LoadGraph("image\\Cube_Trap.png");
+		img_player[1] = LoadGraph("image\\Cube_Trap_LEFT.png");
+		img_player[2] = LoadGraph("image\\Cube_Trap_BACK.png");
+		img_player[3] = LoadGraph("image\\Cube_Trap_RIGHT.png");
+		break;
+	case ATTACK_PLAYER:
+		img_player[0] = LoadGraph("image\\Cube_Attack.png");
+		img_player[1] = LoadGraph("image\\Cube_Attack_LEFT.png");
+		img_player[2] = LoadGraph("image\\Cube_Attack_BACK.png");
+		img_player[3] = LoadGraph("image\\Cube_Attack_RIGHT.png");
+		break;
+	}
 
 	status.WIN_ID = window_num;
 
@@ -19,25 +38,24 @@ Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int win
 	status.pos.x = Pos.x;
 	status.pos.y = Pos.y;
 
-	switch (type_num)
+	for (int i = 0; i < 4; i++)
 	{
-	case SPEED_PLAYER:
-		status.img = img1;
-		break;
-	case DEFFENSE_PLAYER:
-		status.img = img2;
-		break;
-	case TRAP_PLAYER:
-		status.img = img4;
-		break;
-	case ATTACK_PLAYER:
-		status.img = img3;
-		break;
+		switch (type_num)
+		{
+		case SPEED_PLAYER:
+			status.p_img[i] = img_player[i];
+			break;
+		case DEFFENSE_PLAYER:
+			status.p_img[i] = img_player[i];
+			break;
+		case TRAP_PLAYER:
+			status.p_img[i] = img_player[i];
+			break;
+		case ATTACK_PLAYER:
+			status.p_img[i] = img_player[i];
+			break;
+		}
 	}
-
-	img = img1;
-
-	
 
 	status.ID = type_num;
 	status.Pilot = pilot;
@@ -62,32 +80,26 @@ Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int win
 
 int Player::Action(list<unique_ptr<Base>>& base)
 {
-	status.speed.x = 0.0f; status.speed.y = 0.0f;
 	static int vx, vy;
 
-	//移動方向入力
-	switch (status.WIN_ID)
+	GetJoypadAnalogInput(&vx, &vy, (Con[status.WIN_ID]));
+
+	if (vx > 0)
 	{
-	case P1:
-		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD1));
-		break;
-	case P2:
-		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD2));
-		break;
-	case P3:
-		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD3));
-		break;
-	case P4:
-		GetJoypadAnalogInput(&vx, &vy, (DX_INPUT_PAD4));
-		break;
+		status.pos.x += status.speed.x;
 	}
-	
-
-	status.speed.x = vx / 250.0f;
-	status.speed.y = vy / 250.0f;
-
-	status.pos.x += status.speed.x;
-	status.pos.y += status.speed.y;
+	if (vx < 0)
+	{
+		status.pos.x -= status.speed.x;
+	}
+	if (vy > 0)
+	{
+		status.pos.y += status.speed.y;
+	}
+	if (vy < 0)
+	{
+		status.pos.y -= status.speed.y;
+	}
 
 	//画像用の保存変数
 	if (vx != 0 || vy != 0)
@@ -99,8 +111,8 @@ int Player::Action(list<unique_ptr<Base>>& base)
 	//弾用の保存変数
 	if (vx != 0 || vy != 0)
 	{
-		BulletSave_vx = status.speed.x;
-		BulletSave_vy = status.speed.y;
+		BulletSave_vx = vx / 250.0f;
+		BulletSave_vy = vy / 250.0f;
 	}
 
 
@@ -110,44 +122,53 @@ int Player::Action(list<unique_ptr<Base>>& base)
 	}
 	if (rotate_vx < 0)
 	{
-		img_Vec = 4;
+		img_Vec = 1;
 	}
 	if (rotate_vy > 0)
 	{
-		img_Vec = 2;
+		img_Vec = 0;
 	}
 	if (rotate_vy < 0)
 	{
-		img_Vec = 1;
+		img_Vec = 2;
 	}
 
-
+	//アイテムボックス取得処理
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
 		if ((*i)->status.ID == ITEMBOX) {
 			Item = ((Itembox*)(*i).get())->status.pos;
 			if (Item.x < status.pos.x + 64 && Item.x + 64 > status.pos.x && Item.y < status.pos.y + 64 && Item.y + 64 > status.pos.y)
 			{
-				if (wepon_num == -1)
+				if (status.wepon_num == -1)
 					weponget_flag = true;
 			}
 		}
 	}
 
 	if (weponget_flag == true) {
-		wepon_num = rand() % 2;
+		status.wepon_num = rand() % 2;
 		weponget_flag = false;
 	}
 
-	if (wepon_num >= 0)
+	//ライフル処理
+	if (status.wepon_num == 0)
 	{
-		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) == 0 && wepon_cd >= 60)
+		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_B) == 0 && wepon_cd == 0)
 		{
 			ShotFlag = true;
 		}
 		else
 		{
-			if (ShotFlag == true)
+			if (ShotFlag == true && wepon_cd == 0)
+			{
+				ShotFlag = false;
+			}
+		}
+		if (ShotFlag == false)
+		{
+			wepon_cd++;
+			if (wepon_cd % 20== 0)
 			{
 				//ブロックに接触していると弾を発射できないため解決用（仮）
 				if (h_player.LEFT == true)
@@ -166,24 +187,21 @@ int Player::Action(list<unique_ptr<Base>>& base)
 				{
 					bullet.y = IMGSIZE64 / 8;
 				}
-
-				base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y));
-				//wepon_summary(base, status.pos.x, status.pos.y, wepon_num, status.P_ID);
-
-				/*	if (wepon_num == 0) {
-						w_img = LoadGraph("image\\刀身.png");
-					}*/
-
-				ShotFlag = false;
+				base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID));
+			}
+				
+			if (wepon_cd > 60)
+			{
 				wepon_cd = 0;
-				wepon_num = -1;
+				status.wepon_num = -1;
 			}
 		}
 	}
 	
-	if (ShotFlag == false)
+	if (CheckHitKey(KEY_INPUT_Y))
 	{
-		wepon_cd++;
+		wepon_cd = 0;
+		status.wepon_num = -1;
 	}
 
 	if (wepon_cd < 60)
@@ -204,16 +222,16 @@ void Player::Draw() {
 	switch (status.WIN_ID)
 	{
 	case P1:
-		DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.img, TRUE);
+		DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
 		break;
 	case P2:
-		DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.img, TRUE);
+		DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
 		break;
 	case P3:
-		DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+		DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
 		break;
 	case P4:
-		DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+		DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
 		break;
 	}
 }

@@ -8,7 +8,7 @@
 #include <random>
 
 //基礎ステ
-#define default_HP    500
+#define default_HP    400
 #define default_SP     50
 #define default_S_ATK     10
 #define default_F_ATK     15
@@ -57,7 +57,8 @@ enum ID_NUMBER
 	TRAP_PLAYER,
 	ITEMBOX,
 	WEPON,
-	BLOCK
+	BLOCK,
+	BULLET
 };
 
 enum WINDOW_NUMBER
@@ -113,6 +114,7 @@ typedef struct MAP {
 typedef struct Status
 {
 	int img;//画像
+	int p_img[4];
 	int ID;//リストのID
 	int P_ID;//プレイヤーの番号
 	int WIN_ID;//window ID
@@ -144,7 +146,7 @@ public:
 
 	int pri{ 0 };//描画の順番
 
-	Status status{ 0,0,0,-1,0,TRUE,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,0 };
+	Status status{ 0,{0,0,0,0},0,0,-1,0,TRUE,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,-1 };
 
 	virtual int Action(list<unique_ptr<Base>>& base) = 0;
 	virtual void Draw() = 0;

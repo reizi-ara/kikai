@@ -290,21 +290,25 @@ void Getimg(list<unique_ptr<Base>>& base, int img[4])
 {
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
-		if ((*i)->status.WIN_ID >= 0)
+		if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
 		{
+			if (((Player*)(*i).get())->img_Vec < 0 || ((Player*)(*i).get())->img_Vec>3)
+			{
+				break;
+			}
 			switch ((*i)->status.WIN_ID)
 			{
 			case P1:
-				img[P1] = (*i)->status.img;
+				img[P1] = (*i)->status.p_img[((Player*)(*i).get())->img_Vec];
 				break;
 			case P2:
-				img[P2] = (*i)->status.img;
+				img[P2] = (*i)->status.p_img[((Player*)(*i).get())->img_Vec];
 				break;
 			case P3:
-				img[P3] = (*i)->status.img;
+				img[P3] = (*i)->status.p_img[((Player*)(*i).get())->img_Vec];
 				break;
 			case P4:
-				img[P4] = (*i)->status.img;
+				img[P4] = (*i)->status.p_img[((Player*)(*i).get())->img_Vec];
 				break;
 			}
 		}
@@ -312,11 +316,11 @@ void Getimg(list<unique_ptr<Base>>& base, int img[4])
 }
 
 //ÉvÉåÉCÉÑÅ[Ç∆ÇÃìñÇΩÇËîªíËä÷êî
-void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int IMGSIZE, bool* FLAG)
+int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int IMGSIZE, bool* FLAG,int WIN_ID)
 {
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
-		if ((*i)->status.WIN_ID >= 0)
+		if ((*i)->status.WIN_ID >= 0 && (*i)->status.WIN_ID != WIN_ID && (*i)->status.ID != BULLET)
 		{
 			switch ((*i)->status.WIN_ID)
 			{
@@ -327,6 +331,7 @@ void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int
 					p_pos.y + IMGSIZE - scroll[P1].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 				{
 					*FLAG = false;
+					return P1;
 				}
 				break;
 			case P2:
@@ -336,6 +341,7 @@ void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int
 					p_pos.y + IMGSIZE - scroll[P2].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 				{
 					*FLAG = false;
+					return P2;
 				}
 				break;
 			case P3:
@@ -345,6 +351,7 @@ void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int
 					p_pos.y + IMGSIZE - scroll[P3].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 				{
 					*FLAG = false;
+					return P3;
 				}
 				break;
 			case P4:
@@ -354,11 +361,14 @@ void Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int
 					p_pos.y + IMGSIZE - scroll[P4].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 				{
 					*FLAG = false;
+
+					return P4;
 				}
 				break;
 			}
 		}
 	}
+	return -1;
 }
 
 void SetMachine(Status* st, int machine, int pilot)
@@ -370,9 +380,9 @@ void SetMachine(Status* st, int machine, int pilot)
 	}
 	if (machine == DEFFENSE_PLAYER)
 	{
-		st->def += default_DEF * 0.1f;
-		st->speed.x += default_SPD_X * -0.1f;
-		st->speed.y += default_SPD_X * -0.1f;
+		st->def += default_DEF * 1.0f;
+		st->speed.x += default_SPD_X * -0.3f;
+		st->speed.y += default_SPD_X * -0.3f;
 	}
 	if (machine == ATTACK_PLAYER)
 	{
