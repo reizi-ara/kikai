@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\分割">
+      <UniqueIdentifier>{86fb6a96-e39b-4a72-b1c9-284687869681}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\マップ">
+      <UniqueIdentifier>{92a86871-a8b6-42f3-80ac-158a8820be3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\武器">
+      <UniqueIdentifier>{efe2ba78-98a4-47d6-9e60-3573733d0a5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,19 +30,25 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="selectcursor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Status.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="itembox.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="function.cpp">
+      <Filter>ソース ファイル\分割</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>ソース ファイル\マップ</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル\武器</Filter>
+    </ClCompile>
+    <ClCompile Include="wepon.cpp">
+      <Filter>ソース ファイル\武器</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,6 +57,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="char.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

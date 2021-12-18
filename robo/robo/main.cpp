@@ -3,7 +3,7 @@
 #include "char.h"
 
 //リスト
-list<unique_ptr<Bace>> bace;
+list<unique_ptr<Base>> base;
 
 
 
@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	ChangeWindowMode(TRUE);
 
 	//windowサイズ
-	SetGraphMode(Window_Size_x, Window_Size_y, 32);
+	SetGraphMode(WINDOW_WIDTH - 10, WINDOW_HEIGHT - 10, 32);
 
 	//Dxライブラリの初期化
 	if (DxLib_Init() == -1)return -1;
@@ -26,12 +26,48 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//バックバッファを使用
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	//リストオブジェクトを生成
-	auto P = (unique_ptr<Bace>)new Player(0.0f, 0.0f, SPEED_PLAYER, COMBAT);
-	bace.emplace_back(move(P));
+	int map[MAP_SIZE_Y][MAP_SIZE_X];
 
-	auto Item = (unique_ptr<Bace>)new Itembox(80.0f, 100.0f);
-	bace.emplace_back(move(Item));
+	//プレイヤーの座標指定
+	Point pos[4]
+	{
+		{ IMGSIZE64							,IMGSIZE64 },
+		{ MAP_SIZE_X * IMGSIZE64 - IMGSIZE64,IMGSIZE64 },
+		{ IMGSIZE64							,(MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 2 },
+		{ MAP_SIZE_X * IMGSIZE64 - IMGSIZE64,(MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 2 }
+	};
+
+	//プレイヤー作成
+	for (int i = 0; i < 4; i++)//i->WINDOW番号
+		base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, i, SPEED, PLAYER1, i, pos[i]));
+
+	//マップ作成
+	base.emplace_back((unique_ptr<Base>)new Block());
+
+	//UI作成
+	base.emplace_back((unique_ptr<Base>)new UI());
+
+	GetMap(map);
+	for (int y = 0; y < MAP_SIZE_Y; y++)
+	{
+		for (int x = 0; x < MAP_SIZE_X; x++)
+		{
+			switch (map[y][x])
+			{
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				base.emplace_back((unique_ptr<Base>)new Itembox(x * IMGSIZE64, y * IMGSIZE64));
+				break;
+			case 3:
+				break;
+			}
+		}
+	}
+
+	
 
 	//bace.emplace_back((unique_ptr<Bace>)new Cursor(128.0f, 192.0f));
 
@@ -42,18 +78,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	{
 		ClearDrawScreen();//画面クリア
 
-		
-		for (auto i = bace.begin(); i != bace.end(); i++)
+		for (auto i = base.begin(); i != base.end(); i++)
 		{
-			if ((*i)->Charcter.ID == 1)
+			if ((*i)->status.ID == 1)
 			{
-				(*i)->Action(bace);//各オブジェクトの処理
-			}
-		}
-		for (auto i = bace.begin(); i != bace.end(); i++)
-		{
-			if ((*i)->Charcter.ID == 1)
-			{
+				(*i)->Action(base);//各オブジェクトの処理
 				(*i)->Draw();//各オブジェクトの処理
 			}
 		}
@@ -72,24 +101,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	while (scene == GAME) {
 		ClearDrawScreen();//画面クリア
 
+			//ソート
+		Pr pr;
+		if (base.size() >= 2)
+			base.sort(pr);//リストのソートメソッドの引数にソート条件クラスを入れる
 
-		//リストのメソッドを実行
-		for (auto i = bace.begin(); i != bace.end(); i++)
+		for (auto i = base.begin(); i != base.end(); i++)
 		{
-			(*i)->Action(bace);//各オブジェクトの処理
-		}
-		for (auto i = bace.begin(); i != bace.end(); i++)
-		{
+			(*i)->Action(base);//各オブジェクトの処理
 			(*i)->Draw();//各オブジェクトの処理
-		}
 
-		//リストから不要オブジェクトを削除（弾）
-		for (auto i = bace.begin(); i != bace.end(); i++) {
-			if ((*i)->Charcter.FLAG == false) {
-				i = bace.erase(i);
+		
+		}
+		for (auto i = base.begin(); i != base.end(); i++)
+		{
+			//リストから不要オブジェクトを削除（弾）
+			if ((*i)->status.FLAG == false) {
+				i = base.erase(i);
 				break;
+				DeleteGraph((*i)->status.img, 0);
 			}
 		}
+		
 
 		//ESC終了処理
 		if (CheckHitKey(KEY_INPUT_ESCAPE))

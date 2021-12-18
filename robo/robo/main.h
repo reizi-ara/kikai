@@ -5,8 +5,10 @@
 #include <memory>
 #include <math.h>
 
+#include <random>
+
 //基礎ステ
-#define default_HP    100
+#define default_HP    400
 #define default_SP     50
 #define default_S_ATK     10
 #define default_F_ATK     15
@@ -23,8 +25,22 @@
 
 #define NONE 0.0f
 
-#define Window_Size_x 800
-#define Window_Size_y 600
+//windowサイズ
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
+
+//マップサイズ
+#define MAP_SIZE_X 50
+#define MAP_SIZE_Y 50
+
+//スクロールライン
+#define SCROLL_LINE_X 464
+#define SCROLL_LINE_Y 254
+#define SCROLL_LINE_X_MAX  IMGSIZE64 * 50 - SCROLL_LINE_X
+#define SCROLL_LINE_Y_MAX  IMGSIZE64 * 50 - SCROLL_LINE_Y
+
+//イメージサイズ
+#define IMGSIZE64 64
 
 using namespace std;
 
@@ -36,9 +52,29 @@ enum  mode{
 enum ID_NUMBER
 {
 	SPEED_PLAYER,
-	DEFENCE_PLAYER,
-	SHOOTING_PLAYER,
-	TRAP_PLAYER
+	DEFFENSE_PLAYER,
+	ATTACK_PLAYER,
+	TRAP_PLAYER,
+	ITEMBOX,
+	WEPON,
+	BLOCK,
+	BULLET
+};
+
+enum WINDOW_NUMBER
+{
+	P1,
+	P2,
+	P3,
+	P4
+};
+
+enum ROBO_NUMBER
+{
+	SPEED,
+	DEFFENSE,
+	ATTACK,
+	TRAP
 };
 
 enum PILOT_NUMBER
@@ -49,25 +85,45 @@ enum PILOT_NUMBER
 	MECHANIC
 };
 
-typedef struct Vec {
+enum PLAYER_NUM
+{
+	PLAYER1,
+	PLAYER2,
+	PLAYER3,
+	PLAYER4,
+};
+
+typedef struct Vector {
 	float x, y;
-}Vec;
+}Vector;
 
 
 typedef struct Point {
 	float x, y;
 }Point;
 
+//当たり判定
+typedef struct Hit {
+	bool UP, DOWN, LEFT, RIGHT;
+}Hit;
+
+typedef struct MAP {
+	float x, y;
+}MAP;
+
 typedef struct Status
 {
 	int img;//画像
+	int p_img[4];
 	int ID;//リストのID
+	int P_ID;//プレイヤーの番号
+	int WIN_ID;//window ID
 	int Pilot;//パイロットID
 	bool FLAG;//リストの削除フラグ
 	int hp;//HP
 	int sp;//SP
 	Point pos;//位置
-	Vec speed;//スピード
+	Vector speed;//スピード
 	float f_atk;//ATK
 	float s_atk;
 	float def;//DEF
@@ -84,17 +140,27 @@ typedef struct Pilot
 };
 
 //ベースクラス
-class Bace {
+class Base {
 private:
 public:
 
-	Status Charcter{ 0,0,0,false,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,0 };
+	int pri{ 0 };//描画の順番
 
-	virtual int Action(list<unique_ptr<Bace>>& bace) = 0;
+	Status status{ 0,{0,0,0,0},0,0,-1,0,TRUE,0,0,{0.0f,0.0f},{0.0f,0.0f},0.0f,0.0f,0.0f,0.0f,-1 };
+
+	virtual int Action(list<unique_ptr<Base>>& base) = 0;
 	virtual void Draw() = 0;
 };
 
-void SetMachine(Status* st, int machine, int pilot);
+//比較用クラス(ソート）
+class Pr
+{
+private:
+public:
+	//ここで比較する要素を決める
+	bool operator()(const unique_ptr<Base>& x, const unique_ptr<Base>& y) const
+	{
+		return x.get()->pri < y.get()->pri;
+	}
+};
 
-//指定IDの座標取得(list,オブジェクトID)
-Point Get_Point(list<unique_ptr<Bace>>& base, int _ID);

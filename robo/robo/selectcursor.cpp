@@ -8,27 +8,27 @@ Cursor::Cursor(float _x, float _y) {
 
 	img = LoadGraph("image\\ArrowDown.png");
 
-	Charcter.pos.x = _x;
-	Charcter.pos.y = _y;
+	status.pos.x = _x;
+	status.pos.y = _y;
 
-	Charcter.ID = 1;
+	status.ID = 1;
 
-	Charcter.FLAG = true;
+	status.FLAG = true;
 }
 
 //èàóù
-int Cursor::Action(list<unique_ptr<Bace>>& bace) 
+int Cursor::Action(list<unique_ptr<Base>>& base) 
 {
 	if (CheckHitKey(KEY_INPUT_RIGHT) && key_flag == false)
 	{
-		if (Charcter.pos.x == 512.0f)
+		if (status.pos.x == 512.0f)
 		{
-			Charcter.pos.x = 128.0f;
+			status.pos.x = 128.0f;
 			key_flag = true;
 		}
 		else
 		{
-			Charcter.pos.x += 128.0f;
+			status.pos.x += 128.0f;
 			key_flag = true;
 		}
 
@@ -37,14 +37,14 @@ int Cursor::Action(list<unique_ptr<Bace>>& bace)
 
 	if (CheckHitKey(KEY_INPUT_LEFT) && key_flag == false)
 	{
-		if (Charcter.pos.x == 128.0f)
+		if (status.pos.x == 128.0f)
 		{
-			Charcter.pos.x = 512.0f;
+			status.pos.x = 512.0f;
 			key_flag = true;
 		}
 		else
 		{
-			Charcter.pos.x -= 128.0f;
+			status.pos.x -= 128.0f;
 			key_flag = true;
 		}
 	}
@@ -56,31 +56,31 @@ int Cursor::Action(list<unique_ptr<Bace>>& bace)
 
 	if (CheckHitKey(KEY_INPUT_RETURN))
 	{
-		for (auto i = bace.begin(); i != bace.end(); i++)
+		for (auto i = base.begin(); i != base.end(); i++)
 		{
-			if ((*i)->Charcter.ID == 1)
+			if ((*i)->status.ID == 1)
 			{
-				if (Charcter.pos.x == 128.0f)
+				if (status.pos.x == 128.0f)
 				{
 					select_type = 1;
 				}
-				else if (Charcter.pos.x == 256.0f)
+				else if (status.pos.x == 256.0f)
 				{
 					select_type = 2;
 				}
-				else if (Charcter.pos.x == 384.0f)
+				else if (status.pos.x == 384.0f)
 				{
 					select_type = 3;
 				}
-				else if (Charcter.pos.x == 512.0f)
+				else if (status.pos.x == 512.0f)
 				{
 					select_type = 4;
 				}
 			}
 
-			if ((*i)->Charcter.ID == 1)
+			if ((*i)->status.ID == 1)
 			{
-				Charcter.FLAG = false;
+				status.FLAG = false;
 			}
 		}
 	}
@@ -90,6 +90,6 @@ int Cursor::Action(list<unique_ptr<Bace>>& bace)
 }
 //ï`âÊ
 void Cursor::Draw() {
-	DrawGraphF(Charcter.pos.x, Charcter.pos.y, img, TRUE);
+	DrawGraphF(status.pos.x, status.pos.y, img, TRUE);
 
 }

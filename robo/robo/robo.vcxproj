@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="block.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="function.cpp" />
     <ClCompile Include="itembox.cpp">
@@ -158,10 +159,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="selectcursor.cpp" />
-    <ClCompile Include="Status.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="wepon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="char.h" />
+    <ClInclude Include="function.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
