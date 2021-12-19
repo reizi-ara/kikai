@@ -64,6 +64,10 @@ public:
 	Vector scroll{ 0.0f,0.0f };//スクロール
 
 	Point bullet{ 0.0f,0.0f };
+
+	//プレイヤー生成フラグ
+	bool r_flag = true;
+	int r_time = 0;
 };
 
 //弾
