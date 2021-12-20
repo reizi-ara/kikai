@@ -233,7 +233,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			}
 			if (ShotFlag == false)
 			{
-				wepon_summary(base, status.pos, wepon_num, status.WIN_ID);
+				wepon_summary(base, status.pos, e_scroll, wepon_num, status.WIN_ID);
 			}
 		}
 
