@@ -27,11 +27,11 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 
 	hit_player = Hit_Player(status.pos, scroll, base, IMGSIZE64 / 4, &status.FLAG, status.WIN_ID);
 	
-	if (hit_player >= 0)
+	if (hit_player >= 0 && hit_player <= 3)
 	{
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
-			if ((*i)->status.WIN_ID == hit_player)
+			if ((*i)->status.WIN_ID == hit_player && ((Player*)(*i).get())->r_flag == false)
 			{
 				(*i)->status.hp -= 50.0f * (*i)->status.s_atk - (50.0f * (*i)->status.s_atk * (*i)->status.def);
 			}

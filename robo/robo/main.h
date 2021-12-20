@@ -42,6 +42,8 @@
 //イメージサイズ
 #define IMGSIZE64 64
 
+#define TIME1 60
+
 using namespace std;
 
 enum  mode{
