@@ -33,7 +33,7 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 		{
 			if ((*i)->status.WIN_ID == hit_player)
 			{
-				(*i)->status.hp -=  50.0f - (*i)->status.def;
+				(*i)->status.hp -= 50.0f * (*i)->status.s_atk - (50.0f * (*i)->status.s_atk * (*i)->status.def);
 			}
 		}
 	}

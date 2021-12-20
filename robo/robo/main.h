@@ -10,9 +10,9 @@
 //Šî‘bƒXƒe
 #define default_HP    400
 #define default_SP     50
-#define default_S_ATK     10
-#define default_F_ATK     15
-#define default_DEF    10
+#define default_S_ATK     1.5
+#define default_F_ATK     1.5
+#define default_DEF    0.2
 #define default_CD     25
 #define default_SPD_X   5
 #define default_SPD_Y   5

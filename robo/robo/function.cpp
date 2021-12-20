@@ -380,7 +380,7 @@ void SetMachine(Status* st, int machine, int pilot)
 	}
 	if (machine == DEFFENSE_PLAYER)
 	{
-		st->def += default_DEF * 1.0f;
+		st->def += default_DEF * 2.0f;
 		st->speed.x += default_SPD_X * -0.3f;
 		st->speed.y += default_SPD_X * -0.3f;
 	}
