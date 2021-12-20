@@ -1,6 +1,9 @@
 #pragma once
 #include "char.h"
 
+#define PI  3.1415926535897932384626433832795f
+
+
 //コンストラクタ
 Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int window_num, Point Pos)
 {
@@ -33,6 +36,8 @@ Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int win
 	}
 
 	status.img= LoadGraph("image\\square64.png");
+	img = LoadGraph("image\\UI\\katana.png");
+	w_img = LoadGraph("image\\bakuhatsu.png");
 
 	status.WIN_ID = window_num;
 
@@ -68,7 +73,7 @@ Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int win
 	status.f_atk = default_F_ATK;
 	status.s_atk = default_S_ATK;
 	status.def = default_DEF;
-	status.skill_cooldown = default_CD;
+	status.skill_cooldown = 0;
 	status.speed.x = default_SPD_X;
 	status.speed.y = default_SPD_Y;
 	
@@ -85,11 +90,44 @@ int Player::Action(list<unique_ptr<Base>>& base)
 	if (r_flag == true)
 	{
 		r_time++;
-		
 		if (status.hp < 400)
 		{
 			status.hp += 4;
 		}
+		if (status.hp >= 200)
+		{
+			p_flag = true;
+
+			switch (status.WIN_ID)
+			{
+			case P1:
+				status.pos.x = IMGSIZE64 * 2;
+				status.pos.y = IMGSIZE64 * 2;
+				break;
+			case P2:
+				status.pos.x = MAP_SIZE_X * IMGSIZE64 - IMGSIZE64 * 3;
+				status.pos.y = IMGSIZE64 * 2;
+				break;
+			case P3:
+				status.pos.x = IMGSIZE64 * 2;
+				status.pos.y = (MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3;
+				break;
+			case P4:
+				status.pos.x = MAP_SIZE_X * IMGSIZE64 - IMGSIZE64 * 3;
+				status.pos.y = (MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3;
+				break;
+			}
+
+			BulletSave_vx = 0;
+			BulletSave_vy = 0;
+
+			wepon_cd = 0;
+			status.wepon_num = -1;
+			img_Vec = 0;
+			status.skill_cooldown = 0;
+		}
+
+		
 		if (r_time >= TIME1*3)
 		{
 			r_flag = false;
@@ -133,23 +171,52 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			BulletSave_vy = vy / 250.0f;
 		}
 
-
+		//右
 		if (rotate_vx > 0)
 		{
 			img_Vec = 3;
 		}
+		//左
 		if (rotate_vx < 0)
 		{
 			img_Vec = 1;
 		}
+		//下
 		if (rotate_vy > 0)
 		{
 			img_Vec = 0;
 		}
+		//上
 		if (rotate_vy < 0)
 		{
 			img_Vec = 2;
 		}
+
+		//スキルゲージ
+		if (status.skill_cooldown < 400 && (status.ID == TRAP_PLAYER || status.ID == ATTACK_PLAYER))
+		{
+			status.skill_cooldown++;
+		}
+		if (status.skill_cooldown == 400)
+		{
+			if (status.ID == ATTACK_PLAYER)
+			{
+				if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_X) != 0)
+				{
+					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64));
+					status.skill_cooldown = 0;
+				}
+			}
+			if (status.ID == TRAP_PLAYER)
+			{
+				if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_X) != 0)
+				{
+					base.emplace_back((unique_ptr<Base>)new Trap(BulletSave_vx, BulletSave_vy, status.pos.x , status.pos.y, status.WIN_ID, IMGSIZE64));
+					status.skill_cooldown = 0;
+				}
+			}
+		}
+		
 
 		//アイテムボックス取得処理
 		for (auto i = base.begin(); i != base.end(); i++)
@@ -163,10 +230,10 @@ int Player::Action(list<unique_ptr<Base>>& base)
 				}
 			}
 		}
-
+		//武器取得
 		if (weponget_flag == true) {
-			//status.wepon_num = rand() % 2;
-			status.wepon_num = 0;
+			status.wepon_num = rand() % 2;
+			//status.wepon_num = 0;
 			ShotFlag = true;
 			weponget_flag = false;
 		}
@@ -207,7 +274,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 					{
 						bullet.y = IMGSIZE64 / 8;
 					}
-					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID));
+					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64 / 4));
 				}
 
 				if (wepon_cd > 60)
@@ -233,13 +300,14 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			}
 			if (ShotFlag == false)
 			{
-				wepon_summary(base, status.pos, e_scroll, wepon_num, status.WIN_ID);
+				wepon_summary(base, status.pos, e_scroll, status.wepon_num, status.WIN_ID, img_Vec, &kill);
+				wepon_cd++;
+				if (wepon_cd >= 20)
+				{
+					wepon_cd = 0;
+					status.wepon_num = -1;
+				}
 			}
-		}
-
-		if (CheckHitKey(KEY_INPUT_Y))
-		{
-			status.hp = 0;
 		}
 
 		if (wepon_cd < 60)
@@ -249,26 +317,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 
 		if (status.hp <= 0)
 		{
-			switch (status.WIN_ID)
-			{
-			case P1:
-				status.pos.x = IMGSIZE64 * 2;
-				status.pos.y = IMGSIZE64 * 2;
-				break;
-			case P2:
-				status.pos.x = MAP_SIZE_X * IMGSIZE64 - IMGSIZE64 * 3;
-				status.pos.y = IMGSIZE64 * 2;
-				break;
-			case P3:
-				status.pos.x = IMGSIZE64 * 2;
-				status.pos.y = (MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3;
-				break;
-			case P4:
-				status.pos.x = MAP_SIZE_X * IMGSIZE64 - IMGSIZE64 * 3;
-				status.pos.y = (MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3;
-				break;
-			}
-			
+			p_flag = false;
 			r_flag = true;
 		}
 	}
@@ -282,36 +331,134 @@ int Player::Action(list<unique_ptr<Base>>& base)
 // 描画
 void Player::Draw() {
 
+	
 	switch (status.WIN_ID)
 	{
 	case P1:
-		if (r_flag == false)
-			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+		if (p_flag == true)
+		{
+			if (r_flag == false)
+				DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+			else
+				DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.img, TRUE);
+			if (status.wepon_num == 1 && ShotFlag == false)
+			{
+				switch (img_Vec)
+				{
+				case 0:
+					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
+					break;
+				case 1:
+					DrawRotaGraph(status.pos.x - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
+					break;
+				case 2:
+					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI / 2, img, TRUE, FALSE, FALSE);
+					break;
+				case 3:
+					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
+					break;
+				}
+			}
+		}
 		else
-			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.img, TRUE);
+		{
+			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, w_img, TRUE);
+		}
 		break;
 	case P2:
-		if (r_flag == false)
-			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+		if (p_flag == true) 
+		{
+			if (r_flag == false)
+				DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+			else
+				DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.img, TRUE);
+			if (status.wepon_num == 1 && ShotFlag == false)
+			{
+				switch (img_Vec)
+				{
+				case 0:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
+					break;
+				case 1:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
+					break;
+				case 2:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI / 2, img, TRUE, FALSE, FALSE);
+					break;
+				case 3:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
+					break;
+				}
+			}
+		}
 		else
-			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.img, TRUE);
+		{
+			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, w_img, TRUE);
+		}
 		break;
 	case P3:
-		if (r_flag == false)
-			DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+		if (p_flag == true)
+		{
+			if (r_flag == false)
+				DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+			else
+				DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+			if (status.wepon_num == 1 && ShotFlag == false)
+			{
+				switch (img_Vec)
+				{
+				case 0:
+					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
+					break;
+				case 1:
+					DrawRotaGraph(status.pos.x - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
+					break;
+				case 2:
+					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI / 2, img, TRUE, FALSE, FALSE);
+					break;
+				case 3:
+					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
+					break;
+				}
+			}
+		}
 		else
-			DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+		{
+			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y + 572.0f, w_img, TRUE);
+		}
 		break;
 	case P4:
-		if (r_flag == false)
-			DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+		if (p_flag == true)
+		{
+			if (r_flag == false)
+				DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+			else
+				DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+			if (status.wepon_num == 1 && ShotFlag == false)
+			{
+				switch (img_Vec)
+				{
+				case 0:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
+					break;
+				case 1:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
+					break;
+				case 2:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI/2, img, TRUE, FALSE, FALSE);
+					break;
+				case 3:
+					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 + IMGSIZE64 / 2,  status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
+					break;
+				}
+			}
+		}
 		else
-			DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+		{
+			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y + 572.0f, w_img, TRUE);
+		}
 		break;
-	}
+	}	
 
-	if (status.wepon_num == 1 && ShotFlag == false)
-	{
-
-	}
+	
 }

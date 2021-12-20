@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	ChangeWindowMode(TRUE);
 
 	//windowサイズ
-	SetGraphMode(WINDOW_WIDTH - 10, WINDOW_HEIGHT - 10, 32);
+	SetGraphMode(WINDOW_WIDTH-10, WINDOW_HEIGHT-10, 32);
 
 	//Dxライブラリの初期化
 	if (DxLib_Init() == -1)return -1;
@@ -36,6 +36,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		{ IMGSIZE64 * 2							,(MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3 },
 		{ MAP_SIZE_X * IMGSIZE64 - IMGSIZE64 * 3,(MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3 }
 	};
+
+	bool vic = false;
+
+	int vic_p = -1;
 
 	//プレイヤー作成
 	for (int i = 0; i < 4; i++)//i->WINDOW番号
@@ -108,10 +112,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
-			(*i)->Action(base);//各オブジェクトの処理
+			if (vic == false)
+				(*i)->Action(base);//各オブジェクトの処理
 			(*i)->Draw();//各オブジェクトの処理
 
-		
+			if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
+			{
+				if (((Player*)(*i).get())->kill >= 10)
+				{
+					vic = true;
+					vic_p = (*i)->status.WIN_ID;
+				}
+			}
+		}
+		if (vic == true)
+		{
+			DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 / 2, WINDOW_HEIGHT / 2, GetColor(255, 255, 255), "%dP WIN", vic_p);
 		}
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
@@ -122,6 +138,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				DeleteGraph((*i)->status.img, 0);
 			}
 		}
+		
 		
 
 		//ESC終了処理

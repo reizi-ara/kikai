@@ -68,6 +68,10 @@ public:
 	//プレイヤー生成フラグ
 	bool r_flag = true;
 	int r_time = 0;
+
+	int kill = 0;
+
+	bool p_flag = true;
 };
 
 //弾
@@ -75,7 +79,7 @@ class Bullet :public Base {
 private:
 public:
 	//コンストラクタ
-	Bullet(float vx, float vy, float px, float py,int WIN_ID);
+	Bullet(float vx, float vy, float px, float py,int WIN_ID,int IMGSIZE);
 
 	int img{ 0 };
 	int Action(list<unique_ptr<Base>>& base);
@@ -94,11 +98,53 @@ public:
 	{0.0f,0.0f}
 	};
 
+	int img_size = 0;
+
 	int hit_player = -1;
 
 	int delete_time = 0;
 
 	Hit h_bullet;//当たり判定
+
+	bool kill_flag = false;
+};
+
+
+//トラップ
+class Trap :public Base {
+private:
+public:
+	//コンストラクタ
+	Trap(float vx, float vy, float px, float py, int WIN_ID, int IMGSIZE);
+
+	int img{ 0 };
+	int Action(list<unique_ptr<Base>>& base);
+	void Draw();
+
+	Vector scroll[4]{
+		{0.0f,0.0f},
+		{0.0f,0.0f},
+		{0.0f,0.0f},
+		{0.0f,0.0f}
+	};
+	Point p_pos[4]{
+	{0.0f,0.0f},
+	{0.0f,0.0f},
+	{0.0f,0.0f},
+	{0.0f,0.0f}
+	};
+
+	int ID[4]{ 0,0,0,0 };
+
+	int img_size = 0;
+
+	int hit_player = -1;
+
+	int delete_time = 0;
+
+	Hit h_bullet;//当たり判定
+
+	bool kill_flag = false;
 };
 
 //セレクトカーソル
@@ -178,6 +224,8 @@ public:
 		{0.0f,0.0f}
 	};
 
+	bool w_flag[4] = { false,false,false,false };
+
 	bool Draw_flag = false;
 
 	int img = LoadGraph("image\\block.png", 0);
@@ -223,7 +271,11 @@ public:
 
 	int HP[4] = { 0,0,0,0 };
 
+	int Skill[4] = { 0,0,0,0 };
+
 	int WEPON[4] = { 0,0,0,0 };
+
+	int Kill[4] = { 0,0,0,0 };
 
 	int img_Item =		LoadGraph("image\\UI\\Item_UI.png", 0);
 	int img_Item_UI =	LoadGraph("image\\UI\\Item_UI.png", 0);

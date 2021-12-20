@@ -35,6 +35,24 @@ int Block::Action(list<unique_ptr<Base>>& base)
 			}
 			
 		}
+		if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
+		{
+			switch ((*i)->status.WIN_ID)
+			{
+			case P1:
+				w_flag[P1] = ((Player*)(*i).get())->r_flag;
+				break;
+			case P2:
+				w_flag[P2] = ((Player*)(*i).get())->r_flag;
+				break;
+			case P3:
+				w_flag[P3] = ((Player*)(*i).get())->r_flag;
+				break;
+			case P4:
+				w_flag[P4] = ((Player*)(*i).get())->r_flag;
+				break;
+			}
+		}
 	}
 
 	//アイテムボックス再生成処理
@@ -115,7 +133,7 @@ void Block::Draw()
 	//(player.cppに移動するかも)
 	for (int z = 0; z < 4; z++)
 	{
-		if (z != P1)
+		if (z != P1 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
@@ -142,7 +160,7 @@ void Block::Draw()
 				}
 			}
 		}
-		if (z != P2)
+		if (z != P2 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
@@ -170,7 +188,7 @@ void Block::Draw()
 
 			}
 		}
-		if (z != P3)
+		if (z != P3 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
@@ -198,7 +216,7 @@ void Block::Draw()
 
 			}
 		}
-		if (z != P4)
+		if (z != P4 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
