@@ -2,7 +2,7 @@
 
 #include"char.h"
 
-
+//コンストラクタ
 Block::Block()
 {
 	pri = 90;
@@ -11,10 +11,13 @@ Block::Block()
 	GetMap(map);
 }
 
+//処理実行
 int Block::Action(list<unique_ptr<Base>>& base)
 {
+	//スクロール情報セッティング
 	ScrollSet(scroll, p_pos, base);
 
+	//プレイヤーの画像情報取得
 	Getimg(base, p_img);
 
 	//アイテムボックスをプレイヤーがとった際アイテムボックスを再生成するための位置を持ってくる
@@ -35,6 +38,7 @@ int Block::Action(list<unique_ptr<Base>>& base)
 			}
 			
 		}
+		//プレイヤーが現在　マップ上に存在するかを調べ、格納
 		if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
 		{
 			switch ((*i)->status.WIN_ID)
@@ -64,6 +68,7 @@ int Block::Action(list<unique_ptr<Base>>& base)
 		{
 			for (int z = 0; z < 10; z++)
 			{
+				//アイテム位置が同じならば生成
 				if (Item_pos[z].x > 0.0f && Item_pos[z].y > 0.0f)
 				{
 					base.emplace_back((unique_ptr<Base>)new Itembox(Item_pos[z].x, Item_pos[z].y));
@@ -82,8 +87,10 @@ int Block::Action(list<unique_ptr<Base>>& base)
 	return 0;
 }
 
+//描画系処理実行
 void Block::Draw()
 {
+	//分割画面ごとのブロック作成
 	for (int y = 0; y < MAP_SIZE_Y; y++)
 	{
 		for (int x = 0; x < MAP_SIZE_X; x++)
@@ -92,18 +99,22 @@ void Block::Draw()
 			{
 				switch (BlockDraw(scroll, p_pos, i, x, y))
 				{
+					//マップ情報が-99の場合は何もしない
 				case -99:
 					Draw_flag = false;
 					break;
+					//地面
 				case 0:
 					status.img = img_green;
 					Draw_flag = true;
 					break;
+					//ブロック
 				case 1:
 					status.img = img;
 					Draw_flag = true;
 					break;
 				}
+				//マップチップに数値がある場合　ウィンドウごとに描画
 				if (Draw_flag == true)
 				{
 					if (i == P1)
@@ -129,10 +140,11 @@ void Block::Draw()
 
 
 	
-//WINDOWごとの敵プレイヤーを表示
+	//WINDOWごとの敵プレイヤーを表示
 	//(player.cppに移動するかも)
 	for (int z = 0; z < 4; z++)
 	{
+		//画面番号１以外のプレイヤー表示　再生成中は表示しない
 		if (z != P1 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
@@ -160,6 +172,7 @@ void Block::Draw()
 				}
 			}
 		}
+		//画面番号２以外のプレイヤー表示　再生成中は表示しない
 		if (z != P2 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
@@ -188,6 +201,7 @@ void Block::Draw()
 
 			}
 		}
+		//画面番号３以外のプレイヤー表示　再生成中は表示しない
 		if (z != P3 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
@@ -216,6 +230,7 @@ void Block::Draw()
 
 			}
 		}
+		//画面番号４以外のプレイヤー表示　再生成中は表示しない
 		if (z != P4 && w_flag[z] != true)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&

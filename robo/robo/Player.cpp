@@ -7,6 +7,7 @@
 //コンストラクタ
 Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int window_num, Point Pos)
 {
+	//画像ロード-------------------------------------------------------------
 	switch (type_num)
 	{
 	case SPEED_PLAYER:
@@ -39,11 +40,15 @@ Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int win
 	img = LoadGraph("image\\UI\\katana.png");
 	w_img = LoadGraph("image\\bakuhatsu.png");
 
-	status.WIN_ID = window_num;
+	//----------------------------------------------------------------------
+
+	
 
 	//キャラクター初期化--------------------------------------------------------------
 	status.pos.x = Pos.x;
 	status.pos.y = Pos.y;
+
+	status.WIN_ID = window_num;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -79,21 +84,28 @@ Player::Player(float _x, float _y,int type_num,int pilot,int player_num, int win
 	
 	SetMachine(&status, type_num, pilot);//機体情報、パイロット情報挿入
 
-	pri = 990;
+	
 
 	
 	//-------------------------------------------------------------------------------
+
+	//描画順番号
+	pri = 990;
 }
 
+//処理実行
 int Player::Action(list<unique_ptr<Base>>& base)
 {
+	//再生成フラグがtrueの時
 	if (r_flag == true)
 	{
 		r_time++;
+		//HPを増やして再生成する
 		if (status.hp < 400)
 		{
 			status.hp += 4;
 		}
+		//HPが200を超えると位置を初期化し、再生成する。
 		if (status.hp >= 200)
 		{
 			p_flag = true;
@@ -127,19 +139,23 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			status.skill_cooldown = 0;
 		}
 
-		
+		//三秒後、再戦
 		if (r_time >= TIME1*3)
 		{
 			r_flag = false;
 			r_time = 0;
 		}
 	}
+	//通常時
 	else
 	{
+		//移動処理----------------------------------------------------
 		static int vx, vy;
 
+		//コントローラースティック情報取得
 		GetJoypadAnalogInput(&vx, &vy, (Con[status.WIN_ID]));
 
+		//位置の更新
 		if (vx > 0)
 		{
 			status.pos.x += status.speed.x;
@@ -171,47 +187,60 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			BulletSave_vy = vy / 250.0f;
 		}
 
-		//右
+		//描画　右
 		if (rotate_vx > 0)
 		{
 			img_Vec = 3;
 		}
-		//左
+		//描画　左
 		if (rotate_vx < 0)
 		{
 			img_Vec = 1;
 		}
-		//下
+		//描画　下
 		if (rotate_vy > 0)
 		{
 			img_Vec = 0;
 		}
-		//上
+		//描画　上
 		if (rotate_vy < 0)
 		{
 			img_Vec = 2;
 		}
 
-		//スキルゲージ
+		//------------------------------------------------------------------------------
+
+		//スキル処理--------------------------------------------------------------------
+
+		//スキルゲ－ジが溜まっていないとき
 		if (status.skill_cooldown < 400 && (status.ID == TRAP_PLAYER || status.ID == ATTACK_PLAYER))
 		{
 			status.skill_cooldown++;
 		}
+		//スキルゲージが溜まっている時
 		if (status.skill_cooldown == 400)
 		{
+			//砲撃型
 			if (status.ID == ATTACK_PLAYER)
 			{
+				//Yボタンを押すとスキル発動
 				if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_X) != 0)
 				{
+					//砲弾生成
 					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64));
+					//スキルゲージ初期化
 					status.skill_cooldown = 0;
 				}
 			}
+			//トラップ型
 			if (status.ID == TRAP_PLAYER)
 			{
+				//Yボタンを押すとスキル発動
 				if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_X) != 0)
 				{
+					//砲弾生成
 					base.emplace_back((unique_ptr<Base>)new Trap(BulletSave_vx, BulletSave_vy, status.pos.x , status.pos.y, status.WIN_ID, IMGSIZE64));
+					//スキルゲージ初期化
 					status.skill_cooldown = 0;
 				}
 			}
@@ -222,9 +251,11 @@ int Player::Action(list<unique_ptr<Base>>& base)
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
 			if ((*i)->status.ID == ITEMBOX) {
+				//アイテムボックスとの当たり判定
 				Item = ((Itembox*)(*i).get())->status.pos;
 				if (Item.x < status.pos.x + 64 && Item.x + 64 > status.pos.x && Item.y < status.pos.y + 64 && Item.y + 64 > status.pos.y)
 				{
+					//武器取得フラグtrue
 					if (status.wepon_num == -1)
 						weponget_flag = true;
 				}
@@ -232,21 +263,23 @@ int Player::Action(list<unique_ptr<Base>>& base)
 		}
 		//武器取得
 		if (weponget_flag == true) {
+			//ランダム（仮）で武器取得
 			status.wepon_num = rand() % 2;
-			//status.wepon_num = 0;
 			ShotFlag = true;
 			weponget_flag = false;
 		}
 
 		//ライフル処理
 		if (status.wepon_num == 0)
-		{
+		{	
+			//Bボタンで弾丸発射
 			if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_B) == 0 && wepon_cd == 0)
 			{
 				ShotFlag = true;
 			}
 			else
 			{
+				//ライフル射撃フラグ
 				if (ShotFlag == true && wepon_cd == 0)
 				{
 					ShotFlag = false;
@@ -254,6 +287,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			}
 			if (ShotFlag == false)
 			{
+				//wepon_cdが20ごとに一発弾丸を発射する。
 				wepon_cd++;
 				if (wepon_cd % 20 == 0)
 				{
@@ -274,9 +308,10 @@ int Player::Action(list<unique_ptr<Base>>& base)
 					{
 						bullet.y = IMGSIZE64 / 8;
 					}
+					//弾丸生成
 					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64 / 4));
 				}
-
+				//三発射撃したらアイテムを初期化
 				if (wepon_cd > 60)
 				{
 					wepon_cd = 0;
@@ -284,15 +319,17 @@ int Player::Action(list<unique_ptr<Base>>& base)
 				}
 			}
 		}
-
+		//剣処理
 		if (status.wepon_num == 1)
 		{
+			//Bボタンで剣生成
 			if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_B) == 0 && wepon_cd == 0)
 			{
 				ShotFlag = true;
 			}
 			else
 			{
+				//剣生成フラグ
 				if (ShotFlag == true && wepon_cd == 0)
 				{
 					ShotFlag = false;
@@ -300,8 +337,10 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			}
 			if (ShotFlag == false)
 			{
+				//武器関数で剣を生成する
 				wepon_summary(base, status.pos, e_scroll, status.wepon_num, status.WIN_ID, img_Vec, &kill);
 				wepon_cd++;
+				//当たり判定終了
 				if (wepon_cd >= 20)
 				{
 					wepon_cd = 0;
@@ -310,11 +349,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			}
 		}
 
-		if (wepon_cd < 60)
-		{
-			//DrawGraphF(status.pos.x + 64, status.pos.y, w_img, TRUE);
-		}
-
+		//HPが0になったら再生成フラグをONにする
 		if (status.hp <= 0)
 		{
 			p_flag = false;
@@ -322,38 +357,48 @@ int Player::Action(list<unique_ptr<Base>>& base)
 		}
 	}
 
-	GetScroll(&status.pos, &scroll, status.WIN_ID);
-	BlockHit(&h_player, &status.pos, &status.speed, IMGSIZE64);
-	ScrollSet(e_scroll, e_pos, base);
+	GetScroll(&status.pos, &scroll, status.WIN_ID);				//スクロール情報取得
+	BlockHit(&h_player, &status.pos, &status.speed, IMGSIZE64);	//ブロックとの当たり判定実行
+	ScrollSet(e_scroll, e_pos, base);							//スクロール情報セッティング
 	return 0;
 }
 
-// 描画
+// 描画関連処理
 void Player::Draw() {
 
-	
+	//WINDOWごとの描画
 	switch (status.WIN_ID)
 	{
+		//WINDOW 1
 	case P1:
+		//撃破されていない場合
 		if (p_flag == true)
 		{
+			//通常時
 			if (r_flag == false)
 				DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+			//再生成中
 			else
 				DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.img, TRUE);
+			//剣の描画
 			if (status.wepon_num == 1 && ShotFlag == false)
 			{
+				//向きによって描画場所を修正
 				switch (img_Vec)
 				{
+					//下
 				case 0:
 					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
 					break;
+					//左
 				case 1:
 					DrawRotaGraph(status.pos.x - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
 					break;
+					//上
 				case 2:
 					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI / 2, img, TRUE, FALSE, FALSE);
 					break;
+					//右
 				case 3:
 					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
 					break;
@@ -362,29 +407,40 @@ void Player::Draw() {
 		}
 		else
 		{
+			//撃破画像描画
 			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, w_img, TRUE);
 		}
 		break;
+		//WINDOW 2
 	case P2:
+		//撃破されていない場合
 		if (p_flag == true) 
 		{
+			//通常時
 			if (r_flag == false)
 				DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+			//再生成中
 			else
 				DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.img, TRUE);
+			//剣の描画
 			if (status.wepon_num == 1 && ShotFlag == false)
 			{
+				//向きによって描画場所を修正
 				switch (img_Vec)
 				{
+					//下
 				case 0:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
 					break;
+					//左
 				case 1:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
 					break;
+					//上
 				case 2:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI / 2, img, TRUE, FALSE, FALSE);
 					break;
+					//右
 				case 3:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 + IMGSIZE64 / 2, status.pos.y - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
 					break;
@@ -393,29 +449,40 @@ void Player::Draw() {
 		}
 		else
 		{
+			//撃破画像描画
 			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, w_img, TRUE);
 		}
 		break;
+		//WINDOW 3
 	case P3:
+		//撃破されていない場合
 		if (p_flag == true)
 		{
+			//通常時
 			if (r_flag == false)
 				DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+			//再生成中
 			else
 				DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+			//剣の描画
 			if (status.wepon_num == 1 && ShotFlag == false)
 			{
+				//向きによって描画場所を修正
 				switch (img_Vec)
 				{
+					//下
 				case 0:
 					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
 					break;
+					//左
 				case 1:
 					DrawRotaGraph(status.pos.x - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
 					break;
+					//上
 				case 2:
 					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI / 2, img, TRUE, FALSE, FALSE);
 					break;
+					//右
 				case 3:
 					DrawRotaGraph(status.pos.x - scroll.x + IMGSIZE64 + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
 					break;
@@ -424,29 +491,40 @@ void Player::Draw() {
 		}
 		else
 		{
+			//撃破画像描画
 			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y + 572.0f, w_img, TRUE);
 		}
 		break;
+		//WINDOW 4
 	case P4:
+		//撃破されていない場合
 		if (p_flag == true)
 		{
+			//通常時
 			if (r_flag == false)
 				DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+			//再生成中
 			else
 				DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
+			//剣の描画
 			if (status.wepon_num == 1 && ShotFlag == false)
 			{
+				//向きによって描画場所を修正
 				switch (img_Vec)
 				{
+					//下
 				case 0:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 + IMGSIZE64 / 2, 1, PI / 2, img, TRUE, FALSE, FALSE);
 					break;
+					//左
 				case 1:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x - IMGSIZE64 + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, PI, img, TRUE, FALSE, FALSE);
 					break;
+					//上
 				case 2:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 / 2, status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 - IMGSIZE64 / 2, 1, -PI/2, img, TRUE, FALSE, FALSE);
 					break;
+					//右
 				case 3:
 					DrawRotaGraph(status.pos.x + 992.0f - scroll.x + IMGSIZE64 + IMGSIZE64 / 2,  status.pos.y + 572.0f - scroll.y + IMGSIZE64 - IMGSIZE64 / 2, 1, 0, img, TRUE, FALSE, FALSE);
 					break;
@@ -455,6 +533,7 @@ void Player::Draw() {
 		}
 		else
 		{
+			//撃破画像描画
 			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y + 572.0f, w_img, TRUE);
 		}
 		break;

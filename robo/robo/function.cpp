@@ -5,6 +5,8 @@
 int time_count = 0;
 
 //マップ変数
+//番号　０　地面
+//番号　１　ブロック
 int map[MAP_SIZE_Y][MAP_SIZE_X]{
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -120,6 +122,7 @@ void GetMap(int _map[MAP_SIZE_Y][MAP_SIZE_X])
 	}
 }
 
+//マップチップ設置関数
 void SetMap(int x, int y,int NUM)
 {
 	map[y][x] = NUM;
@@ -290,6 +293,7 @@ void Getimg(list<unique_ptr<Base>>& base, int img[4])
 {
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
+		//弾丸以外のプレイヤーを探して画像を取得
 		if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
 		{
 			if (((Player*)(*i).get())->img_Vec < 0 || ((Player*)(*i).get())->img_Vec>3)
@@ -316,14 +320,22 @@ void Getimg(list<unique_ptr<Base>>& base, int img[4])
 }
 
 //プレイヤーとの当たり判定関数
+//Point		p_pos			関数を呼び出したオブジェクトの位置
+//Vector　	scroll[4]		WINDOW ごとのスクロール情報
+//Base						リスト
+//int		IMGSIZE			オブジェクトの大きさ
+//bool		*FLAG			オブジェクトの削除フラグ
+//int		WIN_ID			ウィンドウ番号
 int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int IMGSIZE, bool* FLAG,int WIN_ID)
 {
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
+		//弾丸以外のプレイヤー（引数　WIN_ID　以外）を探す
 		if ((*i)->status.WIN_ID >= 0 && (*i)->status.WIN_ID != WIN_ID && (*i)->status.ID != BULLET)
 		{
 			switch ((*i)->status.WIN_ID)
 			{
+				//WINDOW 1　のプレイヤーとの当たり判定
 			case P1:
 				if (p_pos.x - scroll[P1].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
 					p_pos.x + IMGSIZE - scroll[P1].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
@@ -334,6 +346,7 @@ int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int 
 					return P1;
 				}
 				break;
+				//WINDOW 2　のプレイヤーとの当たり判定
 			case P2:
 				if (p_pos.x - scroll[P2].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
 					p_pos.x + IMGSIZE - scroll[P2].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
@@ -344,6 +357,7 @@ int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int 
 					return P2;
 				}
 				break;
+				//WINDOW 3　のプレイヤーとの当たり判定
 			case P3:
 				if (p_pos.x - scroll[P3].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
 					p_pos.x + IMGSIZE - scroll[P3].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
@@ -354,6 +368,7 @@ int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int 
 					return P3;
 				}
 				break;
+				//WINDOW 4　のプレイヤーとの当たり判定
 			case P4:
 				if (p_pos.x - scroll[P4].x < (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x + IMGSIZE64 &&
 					p_pos.x + IMGSIZE - scroll[P4].x > (*i)->status.pos.x - ((Player*)(*i).get())->scroll.x &&
@@ -361,7 +376,6 @@ int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int 
 					p_pos.y + IMGSIZE - scroll[P4].y > (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 				{
 					*FLAG = false;
-
 					return P4;
 				}
 				break;
@@ -371,41 +385,50 @@ int Hit_Player(Point p_pos, Vector scroll[4], list<unique_ptr<Base>>& base, int 
 	return -1;
 }
 
+//機体情報、パイロット情報取得
 void SetMachine(Status* st, int machine, int pilot)
 {
+	//スピード型機体のステータス
 	if (machine == SPEED_PLAYER)
 	{
 		st->def -= default_DEF / 0.5f;
 		st->speed.x += default_SPD_X * 0.5f;
 		st->speed.y += default_SPD_Y * 0.5f;
 	}
+	//ディフェンス型機体のステータス
 	if (machine == DEFFENSE_PLAYER)
 	{
 		st->def += default_DEF * 2.0f;
 		st->speed.x += default_SPD_X * -0.3f;
 		st->speed.y += default_SPD_X * -0.3f;
 	}
+	//砲撃型機体のステータス
 	if (machine == ATTACK_PLAYER)
 	{
 		;
 	}
+	//トラップ型機体のステータス
 	if (machine == TRAP_PLAYER)
 	{
 		;
 	}
+	//格闘戦型パイロットのステータス
 	if (pilot == COMBAT)
 	{
 		st->f_atk += default_F_ATK * 0.5f;
 	}
+	//射撃型パイロットのステータス
 	if (pilot == SHOOT)
 	{
 		st->s_atk += default_S_ATK * 0.2f;
 	}
+	//高機動型パイロットのステータス
 	if (pilot == RUN)
 	{
 		st->speed.x += default_SPD_X * 0.3f;
 		st->speed.y += default_SPD_Y * 0.3f;
 	}
+	//メカニック型パイロットのステータス
 	if (pilot == MECHANIC)
 	{
 		;

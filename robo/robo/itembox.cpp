@@ -1,35 +1,43 @@
 #pragma once
 #include "char.h"
 
+//コンストラクタ
 Itembox::Itembox(float px, float py)
 {
+	img = LoadGraph("image\\ケアパケ.png");
+	//初期化----------------------------
 	status.pos.x = px;
 	status.pos.y = py;
-
-	img = LoadGraph("image\\ケアパケ.png");
-
 	status.ID = ITEMBOX;
+	//----------------------------------
 
+	//描画順番号
 	pri = 80;
 
 }
 
+//処理実行
 int Itembox::Action(list<unique_ptr<Base>>& base)
 {
+	//スクロール情報セッティング
 	ScrollSet(scroll,p_pos, base);
 
 	//プレイヤーとの当たり判定実行（WINDOW＿IDは必要ないのでー１を入れる）
 	Hit_Player(status.pos, scroll, base, IMGSIZE64, &status.FLAG, -1);
+	//アイテムを取得した場合
 	if (status.FLAG == false)
 	{
+		//itembox の番号を初期化する
 		SetMap(status.pos.x / IMGSIZE64, status.pos.y / IMGSIZE64, 0);
 	}
 
 	return 0;
 }
 
+//描画関連処理
 void Itembox::Draw() {
 
+	//WINDOWごとの描画実行
 	for (int i = 0; i < 4; i++)
 	{
 		switch (i)
