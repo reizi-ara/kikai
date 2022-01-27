@@ -43,41 +43,41 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	GetMap(map);
 
-	//プレイヤー作成
-	for (int i = 0; i < 4; i++)//i->WINDOW番号
-		base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, i, SPEED, PLAYER1, i, pos[i]));
+	////プレイヤー作成
+	//for (int i = 0; i < 4; i++)//i->WINDOW番号
+	//	base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, i, SPEED, PLAYER1, i, pos[i]));
 
-	//マップ作成
-	base.emplace_back((unique_ptr<Base>)new Block());
+	////マップ作成
+	//base.emplace_back((unique_ptr<Base>)new Block());
 
-	//UI作成
-	base.emplace_back((unique_ptr<Base>)new UI());
+	////UI作成
+	//base.emplace_back((unique_ptr<Base>)new UI());
 
-	//マップチップによるアイテム生成
-	for (int y = 0; y < MAP_SIZE_Y; y++)
-	{
-		for (int x = 0; x < MAP_SIZE_X; x++)
-		{
-			switch (map[y][x])
-			{
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				base.emplace_back((unique_ptr<Base>)new Itembox(x * IMGSIZE64, y * IMGSIZE64));
-				break;
-			case 3:
-				break;
-			}
-		}
-	}
+	////マップチップによるアイテム生成
+	//for (int y = 0; y < MAP_SIZE_Y; y++)
+	//{
+	//	for (int x = 0; x < MAP_SIZE_X; x++)
+	//	{
+	//		switch (map[y][x])
+	//		{
+	//		case 0:
+	//			break;
+	//		case 1:
+	//			break;
+	//		case 2:
+	//			base.emplace_back((unique_ptr<Base>)new Itembox(x * IMGSIZE64, y * IMGSIZE64));
+	//			break;
+	//		case 3:
+	//			break;
+	//		}
+	//	}
+	//}
 
 	
 
-	//bace.emplace_back((unique_ptr<Bace>)new Cursor(128.0f, 192.0f));
+	base.emplace_back((unique_ptr<Base>)new Cursor(128.0f, 192.0f));
 
-	int scene = GAME;
+	int scene = SELECT;
 	
 	//機体選択画面
 	while (scene == SELECT)
@@ -129,8 +129,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		}
 		if (vic == true)
 		{
-			DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 / 2, WINDOW_HEIGHT / 2, GetColor(255, 255, 255), "%dP WIN", vic_p);
+			SetFontSize(IMGSIZE64 * 2);
+			DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64*2 , WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(255, 0, 0), "%dP WIN", vic_p + 1);
+			SetFontSize(16);
 		}
+		
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
 			//リストから不要オブジェクトを削除（弾）
