@@ -59,7 +59,7 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 				}
 					
 			}
-			if (kill_flag == true && (*i)->status.WIN_ID == status.WIN_ID && (*i)->status.ID != BULLET)
+			if (kill_flag == true && (*i)->status.WIN_ID != status.WIN_ID && (*i)->status.ID != BULLET)
 			{
 				((Player*)(*i).get())->kill++;
 				kill_flag = false;
