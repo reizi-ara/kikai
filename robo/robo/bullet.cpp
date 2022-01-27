@@ -56,17 +56,19 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 					{
 						kill_flag = true;
 					}
-				}
-					
+				}		
 			}
-			if (kill_flag == true && (*i)->status.WIN_ID != status.WIN_ID && (*i)->status.ID != BULLET)
-			{
-				((Player*)(*i).get())->kill++;
-				kill_flag = false;
-			}
-			
 		}
 	}
+	for (auto i = base.begin(); i != base.end(); i++)
+	{
+		if (kill_flag == true && (*i)->status.WIN_ID == status.WIN_ID && (*i)->status.ID != BULLET)
+		{
+			((Player*)(*i).get())->kill++;
+			kill_flag = false;
+		}
+	}
+	
 
 	if (h_bullet.UP == true || h_bullet.DOWN == true || h_bullet.LEFT == true || h_bullet.RIGHT == true)
 	{

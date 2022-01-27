@@ -65,10 +65,10 @@ enum ID_NUMBER
 
 enum WINDOW_NUMBER
 {
-	P1,
-	P2,
-	P3,
-	P4
+	P1,//プレイヤー1
+	P2,//プレイヤー2
+	P3,//プレイヤー3
+	P4,//プレイヤー4
 };
 
 enum ROBO_NUMBER
