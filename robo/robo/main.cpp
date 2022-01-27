@@ -37,24 +37,26 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		{ MAP_SIZE_X * IMGSIZE64 - IMGSIZE64 * 3,(MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3 }
 	};
 
+	//キャラクターセレクト変数-------------------
 	int get_select[2][4];
-
-	bool vic = false;
-
-	int time = 0;
-
-	int vic_p = -1;
-
 	bool select[4]{ false,false,false,false };
+	//-------------------------------------------
 
+	//シーン以降用変数
+	int time = 0;
 	bool scene_change = false;
 
+	//勝利条件変数-------------------------
+	bool vic = false;
+	int vic_p = -1;
+	//------------------------------------
+	
+	//マップ情報取得
 	GetMap(map);
 
 	int scene = SELECT;
-
-
 	
+	//カーソル作成
 	for (int i = 0; i < 4; i++)
 	{
 		base.emplace_back((unique_ptr<Base>)new Cursor(i));
@@ -76,6 +78,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					(*i)->Action(base);//各オブジェクトの処理
 					(*i)->Draw();//各オブジェクトの処理
 				}
+				//セレクト情報取得
 				if ((*i)->status.WIN_ID >= 0)
 				{
 					select[(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->complete_select;
@@ -83,6 +86,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					get_select[1][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[1][(*i)->status.WIN_ID];
 				}
 			}
+			//全員がキャラクターを選択しているか確認
 			for (int i = 0; i < 4; i++)
 			{
 				if (select[i] == false)
@@ -100,10 +104,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
-
+		//全員がキャラクターを選択していたらシーン以降
 		if (scene_change == true)
 		{
-			
 			time++;
 
 			if (time > 20)
@@ -138,6 +141,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						}
 					}
 
+					//シーンをゲームに移行
 				scene = GAME;
 				time = 0;
 			}
@@ -180,6 +184,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				(*i)->Action(base);//各オブジェクトの処理
 			(*i)->Draw();//各オブジェクトの処理
 
+			//勝利条件処理
 			if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
 			{
 				if (((Player*)(*i).get())->kill >= 10)
@@ -189,6 +194,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				}
 			}
 		}
+		//勝利プレイヤーがいた場合
 		if (vic == true)
 		{
 			SetFontSize(IMGSIZE64 * 2);

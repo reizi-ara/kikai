@@ -1,4 +1,3 @@
-
 #pragma once
 #include "char.h"
 
@@ -6,6 +5,7 @@
 //コンストラクタ
 Cursor::Cursor(int WIN_ID) {
 
+	//画像ロード--------------------------------------------------
 	img = LoadGraph("image\\ArrowDown.png");
 	img1 = LoadGraph("image\\UI\\UI.png");
 
@@ -18,7 +18,9 @@ Cursor::Cursor(int WIN_ID) {
 	img_p[1] = LoadGraph("image\\キャラクター\\Shooting.png");
 	img_p[2] = LoadGraph("image\\キャラクター\\Speed.png");
 	img_p[3] = LoadGraph("image\\キャラクター\\Mecha.png");
+	//-------------------------------------------------------------
 
+	//WINDOWごとの位置を設定
 	switch (WIN_ID)
 	{
 	case P1:
@@ -50,7 +52,10 @@ Cursor::Cursor(int WIN_ID) {
 //処理
 int Cursor::Action(list<unique_ptr<Base>>& base) 
 {
-	
+	//セレクトが終わっていなければ実行
+	if (select_mode == false)
+	{
+		//カーソル移動処理
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_RIGHT) != 0 && key_flag == false)
 		{
 			if (x_count < 3)
@@ -60,6 +65,7 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 
 			key_flag = true;
 		}
+		//カーソル移動処理
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_LEFT) != 0 && key_flag == false)
 		{
 			if (x_count > 0)
@@ -69,15 +75,16 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 
 			key_flag = true;
 		}
-
+		//ボタンの多重判定を防ぐ処理
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_LEFT) == 0 && (GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_RIGHT) == 0)
 		{
 			key_flag = false;
 		}
 
-
+		//決定ボタンを押すとセレクトする
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_B) != 0 && button_flag == false)
 		{
+			//機体セレクト
 			if (select_mode == 1)
 			{
 				switch (x_count)
@@ -100,7 +107,7 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 					break;
 				}
 			}
-
+			//パイロットセレクト
 			if (select_mode == 0)
 			{
 				switch (x_count)
@@ -128,29 +135,33 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 				}
 			}
 
-			
+
 			button_flag = true;
 		}
 
+		//ボタン多重判定を防ぐ処理
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_B) == 0)
 			button_flag = false;
-	
+	}
 
 	return 0;
 }
 //描画
 void Cursor::Draw() {
+	//カーソル描画
 	DrawGraphF(status.pos.x + x_count * 256, status.pos.y + y_count * 256 , img, TRUE);
 
+	//キャラクター表示
 	for (int i = 0; i < 4; i++)
 	{
 		DrawGraphF(status.pos.x + i * 256-IMGSIZE64/4, status.pos.y + IMGSIZE64, img_m[i], TRUE);
 		DrawGraphF(status.pos.x + i * 256 - IMGSIZE64 / 4, status.pos.y + 256 + IMGSIZE64, img_p[i], TRUE);
 	}
 		
-
+	//UI表示
 	DrawGraphF(0, 0, img1, TRUE);
 	SetFontSize(IMGSIZE64);
+	//セレクト完了時
 	if (complete_select == true)
 	{
 		DrawFormatString(status.pos.x, status.pos.y, GetColor(255, 255, 255), "%dP SELECT COMPLETE", status.WIN_ID + 1);
