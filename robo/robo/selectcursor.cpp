@@ -144,8 +144,8 @@ void Cursor::Draw() {
 
 	for (int i = 0; i < 4; i++)
 	{
-		DrawGraphF(status.pos.x + i * 256, status.pos.y, img_m[i], TRUE);
-		DrawGraphF(status.pos.x + i * 256, status.pos.y + 256, img_p[i], TRUE);
+		DrawGraphF(status.pos.x + i * 256-IMGSIZE64/4, status.pos.y + IMGSIZE64, img_m[i], TRUE);
+		DrawGraphF(status.pos.x + i * 256 - IMGSIZE64 / 4, status.pos.y + 256 + IMGSIZE64, img_p[i], TRUE);
 	}
 		
 
