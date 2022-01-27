@@ -7,7 +7,7 @@
 
 #include <random>
 
-//基礎ステ
+//基礎ステータス
 #define default_HP    400
 #define default_SP     50
 #define default_S_ATK     1.5
@@ -42,15 +42,18 @@
 //イメージサイズ
 #define IMGSIZE64 64
 
+//一秒
 #define TIME1 60
 
 using namespace std;
 
+//ゲームモード
 enum  mode{
 	SELECT,//セレクト画面
 	GAME//ゲーム中
 };
 
+//オブジェクトID
 enum ID_NUMBER
 {
 	SPEED_PLAYER,
@@ -63,6 +66,7 @@ enum ID_NUMBER
 	BULLET
 };
 
+//WINDOW番号
 enum WINDOW_NUMBER
 {
 	P1,//プレイヤー1
@@ -71,6 +75,7 @@ enum WINDOW_NUMBER
 	P4,//プレイヤー4
 };
 
+//機体番号
 enum ROBO_NUMBER
 {
 	SPEED,
@@ -79,6 +84,7 @@ enum ROBO_NUMBER
 	TRAP
 };
 
+//パイロット番号
 enum PILOT_NUMBER
 {
 	COMBAT,
@@ -87,19 +93,12 @@ enum PILOT_NUMBER
 	MECHANIC
 };
 
-enum PLAYER_NUM
-{
-	PLAYER1,
-	PLAYER2,
-	PLAYER3,
-	PLAYER4,
-};
-
+//構造体　：　ベクトル
 typedef struct Vector {
 	float x, y;
 }Vector;
 
-
+//構造体　：　位置
 typedef struct Point {
 	float x, y;
 }Point;
@@ -109,10 +108,12 @@ typedef struct Hit {
 	bool UP, DOWN, LEFT, RIGHT;
 }Hit;
 
+//マップ座標
 typedef struct MAP {
 	float x, y;
 }MAP;
 
+//ステータス構造体
 typedef struct Status
 {
 	int img;//画像
@@ -132,14 +133,6 @@ typedef struct Status
 	float skill_cooldown;//スキルクールダウン
 	int wepon_num;// 武器の種類
 }Status;
-
-typedef struct Pilot
-{
-	int Pilot_ID;//パイロットID
-	int img{ 0 };//パイロットイメージ
-
-	float up_date;//アップデート
-};
 
 //ベースクラス
 class Base {

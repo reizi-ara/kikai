@@ -3,10 +3,12 @@
 #define b_speedx 10.0f
 #define b_speedy 10.0f
 
+//コンストラクタ
 Trap::Trap(float vx, float vy, float px, float py, int WIN_ID, int IMGSIZE)
 {
 	img = LoadGraph("image\\Trap_bom.png");
 
+	//初期化--------------------------------
 	img_size = IMGSIZE;
 
 	status.pos.x = px;
@@ -17,12 +19,16 @@ Trap::Trap(float vx, float vy, float px, float py, int WIN_ID, int IMGSIZE)
 	status.ID = BULLET;
 	status.speed.x = vx;
 	status.speed.y = vy;
+	//-------------------------------------
 
+	//描画順番号
 	pri = 99;
 }
 
+//処理実行
 int Trap::Action(list<unique_ptr<Base>>& base)
 {
+	//プレイヤーを探し、ID情報を取得する
 	for (auto i = base.begin(); i != base.end(); i++)
 	{
 		if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
@@ -45,44 +51,54 @@ int Trap::Action(list<unique_ptr<Base>>& base)
 		}
 	}
 
+	//スクロール情報セッティング
 	ScrollSet(scroll, p_pos, base);
-	//BlockHit(&h_bullet, &status.pos, &status.speed, IMGSIZE64);
-
+	//プレイヤーとの当たり判定実行
 	hit_player = Hit_Player(status.pos, scroll, base, IMGSIZE64, &status.FLAG, status.WIN_ID);
 
-
+	//hit_player に数値がある場合　ダメージ処理実行
 	if (hit_player >= 0 && hit_player <= 3)
 	{
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
 			if ((*i)->status.WIN_ID == hit_player && ((Player*)(*i).get())->r_flag == false)
 			{
+				//基本ダメージにステータス情報を入れ、ダメージを増減させる
 				(*i)->status.hp -= 200.0f * (*i)->status.s_atk - (50.0f * (*i)->status.s_atk * (*i)->status.def);
+				//当たったプレイヤーのHPが０の時 kill_flag を true　にする
 				if ((*i)->status.hp <= 0)
 				{
 					kill_flag = true;
 				}
 			}
-			if (kill_flag == true && (*i)->status.WIN_ID == status.WIN_ID && (*i)->status.ID != BULLET)
-			{
-				((Player*)(*i).get())->kill++;
-			}
+		}
+	}
+	//キル数カウント処理
+	for (auto i = base.begin(); i != base.end(); i++)
+	{
+		if (kill_flag == true && (*i)->status.WIN_ID == status.WIN_ID && (*i)->status.ID != BULLET)
+		{
+			((Player*)(*i).get())->kill++;
 		}
 	}
 
+	//時間でオブジェクト削除----------------------
 	delete_time++;
 	if (delete_time > 6000)
 	{
 		status.FLAG = false;
 	}
+	//-------------------------------------------
 
 	return 0;
 }
 
 void Trap::Draw()
 {
+	//FLAGがtrueの時
 	if (status.FLAG != false)
 	{
+		//WINDOWごとに描画
 		for (int i = 0; i < 4; i++)
 		{
 			switch (i)
