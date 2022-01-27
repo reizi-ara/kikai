@@ -110,7 +110,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			{
 				//プレイヤー作成
 					for (int i = 0; i < 4; i++)//i->WINDOW番号
-						base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, get_select[0][i], get_select[1][i], PLAYER1, i, pos[i]));
+						base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, get_select[0][i], get_select[1][i], 0, i, pos[i]));
 
 					//マップ作成
 					base.emplace_back((unique_ptr<Base>)new Block());
