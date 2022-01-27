@@ -41,6 +41,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 	int vic_p = -1;
 
+	GetMap(map);
+
 	//プレイヤー作成
 	for (int i = 0; i < 4; i++)//i->WINDOW番号
 		base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, i, SPEED, PLAYER1, i, pos[i]));
@@ -51,7 +53,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//UI作成
 	base.emplace_back((unique_ptr<Base>)new UI());
 
-	GetMap(map);
+	//マップチップによるアイテム生成
 	for (int y = 0; y < MAP_SIZE_Y; y++)
 	{
 		for (int x = 0; x < MAP_SIZE_X; x++)
