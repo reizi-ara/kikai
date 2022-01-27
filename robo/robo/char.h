@@ -152,14 +152,30 @@ class Cursor :public Base {
 private:
 public:
 	//コンストラクタ
-	Cursor(float _x, float _y);
+	Cursor(int WIN_ID);
 	int time = 25;
 
 	int select_type = 0;
 
 	bool key_flag = false;
+	bool button_flag = false;
+
+	int x_count = 0;
+	int y_count = 0;
+	int Icount = 0;
+	int Dcount = 0;
+
+	bool complete_select{ false };
+	int get_select[2][4];
+	int select_mode = 0;
+
+	int img_m[4];
+	int img_p[4];
+
+	int Con[4] = { DX_INPUT_PAD1, DX_INPUT_PAD2, DX_INPUT_PAD3, DX_INPUT_PAD4 };
 
 	int img{ 0 };
+	int img1{ 0 };
 	int Action(list<unique_ptr<Base>>& base);
 	void Draw();
 };

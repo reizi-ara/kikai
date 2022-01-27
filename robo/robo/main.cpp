@@ -37,61 +37,123 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 		{ MAP_SIZE_X * IMGSIZE64 - IMGSIZE64 * 3,(MAP_SIZE_Y * IMGSIZE64) - IMGSIZE64 * 3 }
 	};
 
+	int get_select[2][4];
+
 	bool vic = false;
+
+	int time = 0;
 
 	int vic_p = -1;
 
+	bool select[4]{ false,false,false,false };
+
+	bool scene_change = false;
+
 	GetMap(map);
 
-	////プレイヤー作成
-	//for (int i = 0; i < 4; i++)//i->WINDOW番号
-	//	base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, i, SPEED, PLAYER1, i, pos[i]));
+	int scene = SELECT;
 
-	////マップ作成
-	//base.emplace_back((unique_ptr<Base>)new Block());
-
-	////UI作成
-	//base.emplace_back((unique_ptr<Base>)new UI());
-
-	////マップチップによるアイテム生成
-	//for (int y = 0; y < MAP_SIZE_Y; y++)
-	//{
-	//	for (int x = 0; x < MAP_SIZE_X; x++)
-	//	{
-	//		switch (map[y][x])
-	//		{
-	//		case 0:
-	//			break;
-	//		case 1:
-	//			break;
-	//		case 2:
-	//			base.emplace_back((unique_ptr<Base>)new Itembox(x * IMGSIZE64, y * IMGSIZE64));
-	//			break;
-	//		case 3:
-	//			break;
-	//		}
-	//	}
-	//}
 
 	
+	for (int i = 0; i < 4; i++)
+	{
+		base.emplace_back((unique_ptr<Base>)new Cursor(i));
+	}
+	
 
-	base.emplace_back((unique_ptr<Base>)new Cursor(128.0f, 192.0f));
 
-	int scene = SELECT;
 	
 	//機体選択画面
 	while (scene == SELECT)
 	{
 		ClearDrawScreen();//画面クリア
+		if (scene_change == false)
+		{
+			for (auto i = base.begin(); i != base.end(); i++)
+			{
+				if ((*i)->status.ID == 1)
+				{
+					(*i)->Action(base);//各オブジェクトの処理
+					(*i)->Draw();//各オブジェクトの処理
+				}
+				if ((*i)->status.WIN_ID >= 0)
+				{
+					select[(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->complete_select;
+					get_select[0][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[0][(*i)->status.WIN_ID];
+					get_select[1][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[1][(*i)->status.WIN_ID];
+				}
+			}
+			for (int i = 0; i < 4; i++)
+			{
+				if (select[i] == false)
+					break;
+				if (select[i] == true && i == 3)
+				{
+					scene_change = true;
+					for (auto i = base.begin(); i != base.end(); i++)
+					{
+						if ((*i)->status.ID == 1)
+						{
+							(*i)->status.FLAG = false;
+						}
+					}
+				}
+			}
+		}
+
+		if (scene_change == true)
+		{
+			
+			time++;
+
+			if (time > 20)
+			{
+				//プレイヤー作成
+					for (int i = 0; i < 4; i++)//i->WINDOW番号
+						base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, get_select[0][i], get_select[1][i], PLAYER1, i, pos[i]));
+
+					//マップ作成
+					base.emplace_back((unique_ptr<Base>)new Block());
+
+					//UI作成
+					base.emplace_back((unique_ptr<Base>)new UI());
+
+					//マップチップによるアイテム生成
+					for (int y = 0; y < MAP_SIZE_Y; y++)
+					{
+						for (int x = 0; x < MAP_SIZE_X; x++)
+						{
+							switch (map[y][x])
+							{
+							case 0:
+								break;
+							case 1:
+								break;
+							case 2:
+								base.emplace_back((unique_ptr<Base>)new Itembox(x * IMGSIZE64, y * IMGSIZE64));
+								break;
+							case 3:
+								break;
+							}
+						}
+					}
+
+				scene = GAME;
+				time = 0;
+			}
+			
+		}
 
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
-			if ((*i)->status.ID == 1)
-			{
-				(*i)->Action(base);//各オブジェクトの処理
-				(*i)->Draw();//各オブジェクトの処理
+			//リストから不要オブジェクトを削除（弾）
+			if ((*i)->status.FLAG == false) {
+				i = base.erase(i);
+				break;
+				DeleteGraph((*i)->status.img, 0);
 			}
 		}
+	
 
 		//ESC終了処理
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
