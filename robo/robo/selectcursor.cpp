@@ -53,7 +53,7 @@ Cursor::Cursor(int WIN_ID) {
 int Cursor::Action(list<unique_ptr<Base>>& base) 
 {
 	//セレクトが終わっていなければ実行
-	if (select_mode == false)
+	if (complete_select == false)
 	{
 		//カーソル移動処理
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_RIGHT) != 0 && key_flag == false)
@@ -143,6 +143,17 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_B) == 0)
 			button_flag = false;
 	}
+	else
+	{
+		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_A) != 0)
+		{
+			complete_select = false;
+			y_count = 0;
+			select_mode = 0;
+			get_select[0][status.WIN_ID] = -1;
+			get_select[1][status.WIN_ID] = -1;
+		}
+	}
 
 	return 0;
 }
@@ -158,6 +169,7 @@ void Cursor::Draw()
 		DrawGraphF(status.pos.x + i * 256-IMGSIZE64/4, status.pos.y + IMGSIZE64, img_m[i], TRUE);
 		DrawGraphF(status.pos.x + i * 256 - IMGSIZE64 / 4, status.pos.y + 256 + IMGSIZE64, img_p[i], TRUE);
 	}
+	SetFontSize(IMGSIZE64 / 2);
 	//セレクトした機体を表示
 	switch (get_select[0][status.WIN_ID])
 	{

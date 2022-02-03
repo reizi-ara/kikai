@@ -49,6 +49,7 @@ using namespace std;
 
 //ゲームモード
 enum  mode{
+	TITLE,//タイトル画面
 	SELECT,//セレクト画面
 	GAME//ゲーム中
 };

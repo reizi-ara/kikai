@@ -307,3 +307,22 @@ public:
 	int img_missile =	LoadGraph("image\\UI\\missile.png", 0);
 	int img_rerugan =	LoadGraph("image\\UI\\rerugan.png", 0);
 };
+
+//Title
+class Title :public Base {
+private:
+public:
+	//コンストラクタ
+	Title();
+
+	int img_m[4];
+
+	Point p_pos[8] = { {0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f},{0.0f,0.0f} };//画像移動用ポジション
+
+	int Con[4] = { DX_INPUT_PAD1, DX_INPUT_PAD2, DX_INPUT_PAD3, DX_INPUT_PAD4 };
+
+	bool Change_Scene = false;
+
+	int Action(list<unique_ptr<Base>>& base);
+	void Draw();
+};

@@ -22,18 +22,15 @@
     <Filter Include="ソース ファイル\武器">
       <UniqueIdentifier>{efe2ba78-98a4-47d6-9e60-3573733d0a5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\シーン">
+      <UniqueIdentifier>{75fd975d-6f80-4f47-b471-93bc3cca407c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\キャラクター">
+      <UniqueIdentifier>{6ee17561-e849-47ff-93f2-f6ebf9218680}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="selectcursor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="itembox.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="function.cpp">
@@ -48,11 +45,23 @@
     <ClCompile Include="wepon.cpp">
       <Filter>ソース ファイル\武器</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Trap.cpp">
       <Filter>ソース ファイル\武器</Filter>
+    </ClCompile>
+    <ClCompile Include="selectcursor.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="itembox.cpp">
+      <Filter>ソース ファイル\マップ</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\キャラクター</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル\シーン</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

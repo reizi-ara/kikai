@@ -54,15 +54,47 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	//マップ情報取得
 	GetMap(map);
 
-	int scene = SELECT;
-	
-	//カーソル作成
-	for (int i = 0; i < 4; i++)
-	{
-		base.emplace_back((unique_ptr<Base>)new Cursor(i));
-	}
-	
+	//タイトル作成
+	base.emplace_back((unique_ptr<Base>)new Title());
 
+	int scene = TITLE;
+	
+	//タイトル画面処理
+	while (scene == TITLE)
+	{
+		ClearDrawScreen();//画面クリア
+		
+
+		for (auto i = base.begin(); i != base.end(); i++)
+		{
+			(*i)->Action(base);
+			(*i)->Draw();
+			//リストから不要オブジェクトを削除
+			if ((*i)->status.FLAG == false) {
+
+				scene = SELECT;
+				//カーソル作成
+				for (int z = 0; z < 4; z++)
+				{
+					base.emplace_back((unique_ptr<Base>)new Cursor(z));
+				}
+
+				i = base.erase(i);
+				break;
+				DeleteGraph((*i)->status.img, 0);
+			}
+		}
+
+
+		//ESC終了処理
+		if (CheckHitKey(KEY_INPUT_ESCAPE))
+		{
+			scene = -1;
+		}
+
+
+		ScreenFlip();//画面更新
+	}
 
 	
 	//機体選択画面
@@ -150,7 +182,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 
 		for (auto i = base.begin(); i != base.end(); i++)
 		{
-			//リストから不要オブジェクトを削除（弾）
+			//リストから不要オブジェクトを削除
 			if ((*i)->status.FLAG == false) {
 				i = base.erase(i);
 				break;
