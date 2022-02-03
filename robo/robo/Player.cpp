@@ -246,7 +246,21 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			}
 		}
 		
+		//メカニック型処理
+		if (status.Pilot == MECHANIC)
+		{
+			ME_count++;
+			if (ME_count > TIME1)//HPを一秒に5回復
+			{
+				ME_count = 0;
+				if (status.hp <= default_HP - 5)
+				{
+					status.hp += 5;
+				}
+			}
+		}
 
+		//---------------------------------------------------------------------------------------------
 		//アイテムボックス取得処理
 		for (auto i = base.begin(); i != base.end(); i++)
 		{

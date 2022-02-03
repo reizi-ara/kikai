@@ -147,7 +147,8 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 	return 0;
 }
 //描画
-void Cursor::Draw() {
+void Cursor::Draw() 
+{
 	//カーソル描画
 	DrawGraphF(status.pos.x + x_count * 256, status.pos.y + y_count * 256 , img, TRUE);
 
@@ -157,10 +158,47 @@ void Cursor::Draw() {
 		DrawGraphF(status.pos.x + i * 256-IMGSIZE64/4, status.pos.y + IMGSIZE64, img_m[i], TRUE);
 		DrawGraphF(status.pos.x + i * 256 - IMGSIZE64 / 4, status.pos.y + 256 + IMGSIZE64, img_p[i], TRUE);
 	}
-		
+	//セレクトした機体を表示
+	switch (get_select[0][status.WIN_ID])
+	{
+	case -1:
+		break;
+	case SPEED_PLAYER:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "スピード型");
+		break;
+	case DEFFENSE_PLAYER:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ディフェンス型");
+		break;
+	case ATTACK_PLAYER:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "キャノン型");
+		break;
+	case TRAP_PLAYER:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "トラップ型");
+		break;
+	}
+	switch (get_select[1][status.WIN_ID])
+	{
+	case -1:
+		break;
+	case COMBAT:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "近接型");
+		break;
+	case SHOOT:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "射撃型");
+		break;
+	case RUN:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "高機動型");
+		break;
+	case MECHANIC:
+		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "自動回復型");
+		break;
+	}
+
+
 	//UI表示
 	DrawGraphF(0, 0, img1, TRUE);
 	SetFontSize(IMGSIZE64);
+
 	//セレクト完了時
 	if (complete_select == true)
 	{

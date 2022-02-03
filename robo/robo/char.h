@@ -72,6 +72,8 @@ public:
 	int kill = 0;
 
 	bool p_flag = true;
+
+	int ME_count = 0;//メカニックパイロット用カウント
 };
 
 //弾
@@ -166,7 +168,8 @@ public:
 	int Dcount = 0;
 
 	bool complete_select{ false };
-	int get_select[2][4];
+	int get_select[2][4] = { {-1,-1,-1,-1},
+							{-1,-1,-1,-1} };
 	int select_mode = 0;
 
 	int img_m[4];
