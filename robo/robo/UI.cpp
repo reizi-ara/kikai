@@ -133,7 +133,7 @@ void UI::Draw()
 				break;
 			}
 			SetFontSize(32);
-			DrawFormatString(908 + IMGSIZE64 + IMGSIZE64*2, 508, GetColor(0, 0, 0), "↑　撃破数：%d", Kill[P2]);//キル数表示
+			DrawFormatString(908 + IMGSIZE64 + IMGSIZE64 * 4, 508, GetColor(0, 0, 0), "↑　撃破数：%d", Kill[P2]);//キル数表示
 			break;
 		case P3:
 			DrawGraph(928 - IMGSIZE64 * 2, 508 + IMGSIZE64, img_Item_UI, TRUE);	//アイテム表示場所UI
@@ -201,10 +201,11 @@ void UI::Draw()
 				break;
 			}
 			SetFontSize(32);
-			DrawFormatString(908 + IMGSIZE64 + IMGSIZE64*2, 508+32, GetColor(0, 0, 0), "↓　撃破数：%d", Kill[P4]);//キル数表示
+			DrawFormatString(908 + IMGSIZE64 + IMGSIZE64 * 4, 508+32, GetColor(0, 0, 0), "↓　撃破数：%d", Kill[P4]);//キル数表示
 			break;
 		}
 		
 	}
-
+	SetFontSize(32);
+	DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 * 3, 508 + IMGSIZE64 / 4, GetColor(0, 0, 0), "10体倒したら勝利！");
 }

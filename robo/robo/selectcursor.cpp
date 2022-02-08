@@ -177,16 +177,16 @@ void Cursor::Draw()
 	case -1:
 		break;
 	case SPEED_PLAYER:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "スピード型");
+		DrawFormatString(status.pos.x + get_select[0][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "スピード型");
 		break;
 	case DEFFENSE_PLAYER:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ディフェンス型");
+		DrawFormatString(status.pos.x + get_select[0][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ディフェンス型");
 		break;
 	case ATTACK_PLAYER:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "キャノン型");
+		DrawFormatString(status.pos.x + get_select[0][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "キャノン型");
 		break;
 	case TRAP_PLAYER:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "トラップ型");
+		DrawFormatString(status.pos.x + get_select[0][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "トラップ型");
 		break;
 	}
 	switch (get_select[1][status.WIN_ID])
@@ -194,16 +194,16 @@ void Cursor::Draw()
 	case -1:
 		break;
 	case COMBAT:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "近接型");
+		DrawFormatString(status.pos.x + get_select[1][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "近接型");
 		break;
 	case SHOOT:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "射撃型");
+		DrawFormatString(status.pos.x + get_select[1][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "射撃型");
 		break;
 	case RUN:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "高機動型");
+		DrawFormatString(status.pos.x + get_select[1][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "高機動型");
 		break;
 	case MECHANIC:
-		DrawFormatString(status.pos.x + 256 - IMGSIZE64 / 4, status.pos.y + IMGSIZE64 + IMGSIZE64 + 256, GetColor(255, 255, 255), "自動回復型");
+		DrawFormatString(status.pos.x + get_select[1][status.WIN_ID] * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "自動回復型");
 		break;
 	}
 
@@ -216,5 +216,46 @@ void Cursor::Draw()
 	if (complete_select == true)
 	{
 		DrawFormatString(status.pos.x, status.pos.y, GetColor(255, 255, 255), "%dP SELECT COMPLETE", status.WIN_ID + 1);
+
+		DrawFormatString(status.pos.x, status.pos.y + IMGSIZE64 * 2.5f, GetColor(255, 255, 255), "キャンセル：A");
 	}
+	SetFontSize(IMGSIZE64 / 2);
+	if (y_count == 0)
+	{
+		switch (x_count)
+		{
+		case SPEED_PLAYER:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "スピード型");
+			break;
+		case DEFFENSE_PLAYER:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ディフェンス型");
+			break;
+		case ATTACK_PLAYER:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "キャノン型");
+			break;
+		case TRAP_PLAYER:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "トラップ型");
+			break;
+		}
+	}
+	else
+	{
+		switch (x_count)
+		{
+		case COMBAT:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "近接型");
+			break;
+		case SHOOT:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "射撃型");
+			break;
+		case RUN:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64 / 2, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "高機動型");
+			break;
+		case MECHANIC:
+			DrawFormatString(status.pos.x + x_count * 256 - IMGSIZE64 / 4 - IMGSIZE64, status.pos.y + 256 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "自動回復型");
+			break;
+		}
+	}
+
+	
 }

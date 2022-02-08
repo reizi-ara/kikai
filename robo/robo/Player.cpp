@@ -227,7 +227,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 				if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_X) != 0)
 				{
 					//砲弾生成
-					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64));
+					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64,status.s_atk));
 					//スキルゲージ初期化
 					status.skill_cooldown = 0;
 				}
@@ -238,7 +238,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 				//Yボタンを押すとスキル発動
 				if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_X) != 0)
 				{
-					//砲弾生成
+					//トラップ生成
 					base.emplace_back((unique_ptr<Base>)new Trap(BulletSave_vx, BulletSave_vy, status.pos.x , status.pos.y, status.WIN_ID, IMGSIZE64));
 					//スキルゲージ初期化
 					status.skill_cooldown = 0;
@@ -323,7 +323,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 						bullet.y = IMGSIZE64 / 8;
 					}
 					//弾丸生成
-					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64 / 4));
+					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64 / 4,status.s_atk));
 				}
 				//三発射撃したらアイテムを初期化
 				if (wepon_cd > 60)
@@ -352,7 +352,7 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			if (ShotFlag == false)
 			{
 				//武器関数で剣を生成する
-				wepon_summary(base, status.pos, e_scroll, status.wepon_num, status.WIN_ID, img_Vec, &kill);
+				wepon_summary(base, status.pos, e_scroll, status.wepon_num, status.WIN_ID, img_Vec, &kill, status.f_atk);
 				wepon_cd++;
 				//当たり判定終了
 				if (wepon_cd >= 20)
@@ -368,6 +368,17 @@ int Player::Action(list<unique_ptr<Base>>& base)
 		{
 			p_flag = false;
 			r_flag = true;
+		}
+	}
+
+	//剣の多重当たり判定を防ぐ処理
+	if (S_Hit_flag == true)
+	{
+		S_Hit_count++;
+		if (S_Hit_count >= 30)
+		{
+			S_Hit_flag = false;
+			S_Hit_count = 0;
 		}
 	}
 
@@ -390,7 +401,10 @@ void Player::Draw() {
 		{
 			//通常時
 			if (r_flag == false)
+			{
 				DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+				DrawFormatString(status.pos.x - scroll.x, status.pos.y - scroll.y - IMGSIZE64 / 2, GetColor(255, 255, 255), "↓%dP", status.WIN_ID + 1);
+			}
 			//再生成中
 			else
 				DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, status.img, TRUE);
@@ -432,7 +446,10 @@ void Player::Draw() {
 		{
 			//通常時
 			if (r_flag == false)
+			{
 				DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.p_img[img_Vec], TRUE);
+				DrawFormatString(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y - IMGSIZE64 / 2, GetColor(255, 255, 255), "↓%dP", status.WIN_ID + 1);
+			}
 			//再生成中
 			else
 				DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, status.img, TRUE);
@@ -474,7 +491,11 @@ void Player::Draw() {
 		{
 			//通常時
 			if (r_flag == false)
+			{
 				DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+				DrawFormatString(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y - IMGSIZE64 / 2, GetColor(255, 255, 255), "↓%dP", status.WIN_ID + 1);
+			}
+				
 			//再生成中
 			else
 				DrawGraph(status.pos.x - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);
@@ -516,7 +537,10 @@ void Player::Draw() {
 		{
 			//通常時
 			if (r_flag == false)
+			{
 				DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.p_img[img_Vec], TRUE);
+				DrawFormatString(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y - IMGSIZE64 / 2, GetColor(255, 255, 255), "↓%dP", status.WIN_ID + 1);
+			}
 			//再生成中
 			else
 				DrawGraph(status.pos.x + 992.0f - scroll.x, status.pos.y + 572.0f - scroll.y, status.img, TRUE);

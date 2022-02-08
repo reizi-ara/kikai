@@ -392,7 +392,7 @@ void SetMachine(Status* st, int machine, int pilot)
 	//スピード型機体のステータス
 	if (machine == SPEED_PLAYER)
 	{
-		st->def -= default_DEF / 0.5f;
+		st->def -= default_DEF / 0.2f;
 		st->speed.x += default_SPD_X * 0.5f;
 		st->speed.y += default_SPD_Y * 0.5f;
 	}
@@ -400,8 +400,8 @@ void SetMachine(Status* st, int machine, int pilot)
 	if (machine == DEFFENSE_PLAYER)
 	{
 		st->def += default_DEF * 2.0f;
-		st->speed.x += default_SPD_X * -0.3f;
-		st->speed.y += default_SPD_X * -0.3f;
+		st->speed.x += default_SPD_X * -0.1f;
+		st->speed.y += default_SPD_X * -0.1f;
 	}
 	//砲撃型機体のステータス
 	if (machine == ATTACK_PLAYER)
@@ -416,7 +416,7 @@ void SetMachine(Status* st, int machine, int pilot)
 	//格闘戦型パイロットのステータス
 	if (pilot == COMBAT)
 	{
-		st->f_atk += default_F_ATK * 0.5f;
+		st->f_atk += default_F_ATK * 0.3f;
 	}
 	//射撃型パイロットのステータス
 	if (pilot == SHOOT)

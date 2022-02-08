@@ -2,7 +2,7 @@
 #include"char.h"
 
 //武器関数
-void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], int wepon_num, int WIN_ID, int img_Vec,int *kill)
+void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], int wepon_num, int WIN_ID, int img_Vec,int *kill,float f_atk)
 {
 	for (auto i = base.begin(); i != base.end(); i++)
 	{	//リストからプレイヤーを探す。
@@ -26,10 +26,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y + IMGSIZE64 - scroll[P1].y  < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 + IMGSIZE64 - scroll[P1].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -44,10 +45,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - scroll[P1].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 - scroll[P1].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -62,10 +64,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - IMGSIZE64 - scroll[P1].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y - IMGSIZE64 + IMGSIZE64 - scroll[P1].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -80,10 +83,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - scroll[P1].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 - scroll[P1].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P1 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -104,10 +108,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y + IMGSIZE64 - scroll[P2].y  < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 + IMGSIZE64 - scroll[P2].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P2 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P2 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -123,9 +128,10 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y + IMGSIZE64 - scroll[P2].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
 							//基本ダメージにステータス情報を入れ、ダメージを増減させる
-							if ((*i)->status.WIN_ID == P2&& ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P2&& ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -141,9 +147,10 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - IMGSIZE64 + IMGSIZE64 - scroll[P2].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
 							//基本ダメージにステータス情報を入れ、ダメージを増減させる
-							if ((*i)->status.WIN_ID == P2 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P2 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -160,9 +167,10 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y + IMGSIZE64 - scroll[P2].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
 							//基本ダメージにステータス情報を入れ、ダメージを増減させる
-							if ((*i)->status.WIN_ID == P2 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P2 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -183,10 +191,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y + IMGSIZE64 - scroll[P3].y  < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 + IMGSIZE64 - scroll[P3].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -201,10 +210,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - scroll[P3].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 - scroll[P3].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -219,10 +229,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - IMGSIZE64 - scroll[P3].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y - IMGSIZE64 + IMGSIZE64 - scroll[P3].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -237,10 +248,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - scroll[P3].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 - scroll[P3].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P3 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -260,10 +272,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y + IMGSIZE64 - scroll[P4].y  < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 + IMGSIZE64 - scroll[P4].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -278,10 +291,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - scroll[P4].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 - scroll[P4].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -296,10 +310,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - IMGSIZE64 - scroll[P4].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y - IMGSIZE64 + IMGSIZE64 - scroll[P4].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;
@@ -314,10 +329,11 @@ void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], 
 							p_pos.y - scroll[P4].y < (*i)->status.pos.y - ((Player*)(*i).get())->scroll.y + IMGSIZE64 &&
 							p_pos.y + IMGSIZE64 - scroll[P4].y >(*i)->status.pos.y - ((Player*)(*i).get())->scroll.y)
 						{
-							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false)
+							if ((*i)->status.WIN_ID == P4 && ((Player*)(*i).get())->r_flag == false && ((Player*)(*i).get())->S_Hit_flag == false)
 							{
 								//基本ダメージにステータス情報を入れ、ダメージを増減させる
-								(*i)->status.hp -= 300.0f * (*i)->status.s_atk - (50.0f * (*i)->status.f_atk * (*i)->status.def);
+								(*i)->status.hp -= 150.0f * f_atk - (150.0f * (*i)->status.def);
+								((Player*)(*i).get())->S_Hit_flag = true;
 								if ((*i)->status.hp <= 0)
 								{
 									*kill += 1;

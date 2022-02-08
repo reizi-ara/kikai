@@ -4,7 +4,7 @@
 #define b_speedy 10.0f
 
 //コンストラクタ
-Bullet::Bullet(float vx, float vy, float px, float py,int WIN_ID,int IMGSIZE)
+Bullet::Bullet(float vx, float vy, float px, float py, int WIN_ID, int IMGSIZE, float s_atk)
 {
 		//引数のIMGSIZEによって画像を変更
 	if (IMGSIZE == IMGSIZE64 / 4)
@@ -21,6 +21,8 @@ Bullet::Bullet(float vx, float vy, float px, float py,int WIN_ID,int IMGSIZE)
 	status.pos.y = py;
 
 	status.WIN_ID = WIN_ID;
+
+	status.s_atk = s_atk;
 
 	status.ID = BULLET;
 	status.speed.x = vx;
@@ -54,7 +56,7 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 				if (img_size == IMGSIZE64)
 				{
 					//基本ダメージにステータス情報を入れ、ダメージを増減させる
-					(*i)->status.hp -= 100.0f * (*i)->status.s_atk - (50.0f * (*i)->status.s_atk * (*i)->status.def);
+					(*i)->status.hp -= 150.0f * status.s_atk - (50.0f *  (*i)->status.def);
 					//当たったプレイヤーのHPが0の時 kill_flag を true
 					if ((*i)->status.hp <= 0)
 					{
@@ -64,7 +66,7 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 				else
 				{
 					//基本ダメージにステータス情報を入れ、ダメージを増減させる
-					(*i)->status.hp -= 50.0f * (*i)->status.s_atk - (50.0f * (*i)->status.s_atk * (*i)->status.def);
+					(*i)->status.hp -= 100.0f * status.s_atk - (50.0f * (*i)->status.def);
 					//当たったプレイヤーのHPが0の時 kill_flag を true
 					if ((*i)->status.hp <= 0)
 					{

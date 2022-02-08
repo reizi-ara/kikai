@@ -30,4 +30,4 @@ void SetMap(int x, int y, int NUM);
 void SetMachine(Status* st, int machine, int pilot);
 
 //•ŠíŠÖ”
-void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], int wepon_num, int WIN_ID, int img_Vec, int* kill);
+void wepon_summary(list<unique_ptr<Base>>& base, Point p_pos, Vector scroll[4], int wepon_num, int WIN_ID, int img_Vec, int* kill, float f_atk);

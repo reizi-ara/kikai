@@ -74,6 +74,10 @@ public:
 	bool p_flag = true;
 
 	int ME_count = 0;//メカニックパイロット用カウント
+
+	bool S_Hit_flag = false;
+
+	int S_Hit_count = 0;
 };
 
 //弾
@@ -81,7 +85,7 @@ class Bullet :public Base {
 private:
 public:
 	//コンストラクタ
-	Bullet(float vx, float vy, float px, float py,int WIN_ID,int IMGSIZE);
+	Bullet(float vx, float vy, float px, float py,int WIN_ID,int IMGSIZE,float s_atk);
 
 	int img{ 0 };
 	int Action(list<unique_ptr<Base>>& base);
