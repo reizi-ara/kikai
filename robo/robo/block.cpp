@@ -220,7 +220,7 @@ void Block::Draw()
 							DrawFormatString(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y - IMGSIZE64 / 2, GetColor(255, 0, 0), "%dP", z + 1);
 							break;
 						case P3:
-							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y - IMGSIZE64 / 2, p_img[P3], TRUE);
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y , p_img[P3], TRUE);
 							DrawFormatString(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y - IMGSIZE64 / 2, GetColor(255, 0, 0), "%dP", z + 1);
 							break;
 						case P4:

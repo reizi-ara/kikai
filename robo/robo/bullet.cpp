@@ -56,7 +56,7 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 				if (img_size == IMGSIZE64)
 				{
 					//基本ダメージにステータス情報を入れ、ダメージを増減させる
-					(*i)->status.hp -= 150.0f * status.s_atk - (50.0f *  (*i)->status.def);
+					(*i)->status.hp -= 150.0f * status.s_atk - (150.0f *  (*i)->status.def);
 					//当たったプレイヤーのHPが0の時 kill_flag を true
 					if ((*i)->status.hp <= 0)
 					{
@@ -66,7 +66,7 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 				else
 				{
 					//基本ダメージにステータス情報を入れ、ダメージを増減させる
-					(*i)->status.hp -= 100.0f * status.s_atk - (50.0f * (*i)->status.def);
+					(*i)->status.hp -= 100.0f * status.s_atk - (100.0f * (*i)->status.def);
 					//当たったプレイヤーのHPが0の時 kill_flag を true
 					if ((*i)->status.hp <= 0)
 					{

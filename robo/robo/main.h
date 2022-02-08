@@ -10,7 +10,7 @@
 //基礎ステータス
 #define default_HP    400
 #define default_SP     50
-#define default_S_ATK     1.5
+#define default_S_ATK     1.0
 #define default_F_ATK     1.5
 #define default_DEF    0.2
 #define default_CD     25
