@@ -15,13 +15,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	ChangeWindowMode(TRUE);
 
 	//windowサイズ
-	SetGraphMode(WINDOW_WIDTH-10, WINDOW_HEIGHT-10, 32);
+	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32);
 
 	//Dxライブラリの初期化
 	if (DxLib_Init() == -1)return -1;
 
 	//windowの名前
-	SetWindowText("リストサンプル");
+	SetWindowText("機械対戦");
 
 	//バックバッファを使用
 	SetDrawScreen(DX_SCREEN_BACK);

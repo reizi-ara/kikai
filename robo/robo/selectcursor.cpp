@@ -145,6 +145,7 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 	}
 	else
 	{
+		//ƒLƒƒƒ“ƒZƒ‹ˆ—
 		if ((GetJoypadInputState(Con[status.WIN_ID]) & PAD_INPUT_A) != 0)
 		{
 			complete_select = false;
