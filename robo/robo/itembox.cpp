@@ -4,7 +4,7 @@
 //コンストラクタ
 Itembox::Itembox(float px, float py)
 {
-	img = LoadGraph("image\\ケアパケ.png");
+	img = LoadGraph("image\\Item.png");
 	//初期化----------------------------
 	status.pos.x = px;
 	status.pos.y = py;

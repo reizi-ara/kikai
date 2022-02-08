@@ -8,9 +8,11 @@ Bullet::Bullet(float vx, float vy, float px, float py,int WIN_ID,int IMGSIZE)
 {
 		//引数のIMGSIZEによって画像を変更
 	if (IMGSIZE == IMGSIZE64 / 4)
-		img = LoadGraph("image\\square.png");
+		status.img = LoadGraph("image\\square.png");
 	if (IMGSIZE == IMGSIZE64)
-		img = LoadGraph("image\\square_bullet.png");
+		status.img = LoadGraph("image\\square_bullet.png");
+
+	img = LoadGraph("image\\bakuhatsu.png");
 
 	//初期化---------------------------------------------
 	img_size = IMGSIZE;
@@ -111,9 +113,13 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 	}
 	//-------------------------------------------------------------------------
 
-	//位置の更新
-	status.pos.x += status.speed.x;
-	status.pos.y += status.speed.y;
+	if (status.FLAG != false)
+	{
+		//位置の更新
+		status.pos.x += status.speed.x;
+		status.pos.y += status.speed.y;
+	}
+	
 
 	return 0;
 }
@@ -136,7 +142,7 @@ void Bullet::Draw()
 					status.pos.y-IMGSIZE64 - scroll[P1].y >= 0 - IMGSIZE64 &&
 					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P1].y <= 508 + IMGSIZE64)
 				{
-					DrawRotaGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) , 1, delete_time, img, TRUE, FALSE, FALSE);
+					DrawRotaGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) , 1, delete_time, status.img, TRUE, FALSE, FALSE);
 				}
 				break;
 				//WINDOW 2
@@ -146,7 +152,7 @@ void Bullet::Draw()
 					status.pos.y - IMGSIZE64 - scroll[P2].y >= 0 - IMGSIZE64 &&
 					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P2].y <= 508 + IMGSIZE64)
 				{
-					DrawRotaGraph(status.pos.x + (-scroll[i].x) + 928 +IMGSIZE64, status.pos.y + (-scroll[i].y), 1, delete_time, img, TRUE, FALSE, FALSE);
+					DrawRotaGraph(status.pos.x + (-scroll[i].x) + 928 +IMGSIZE64, status.pos.y + (-scroll[i].y), 1, delete_time, status.img, TRUE, FALSE, FALSE);
 				}
 				break;
 				//WINDOW 3
@@ -156,7 +162,7 @@ void Bullet::Draw()
 					status.pos.y - IMGSIZE64 - scroll[P3].y + 572 >= 572 - IMGSIZE64 &&
 					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P3].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
 				{
-					DrawRotaGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) + 508 +IMGSIZE64, 1, delete_time, img, TRUE, FALSE, FALSE);
+					DrawRotaGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) + 508 +IMGSIZE64, 1, delete_time, status.img, TRUE, FALSE, FALSE);
 				}
 				break;
 				//WINDOW 4
@@ -166,7 +172,57 @@ void Bullet::Draw()
 					status.pos.y - IMGSIZE64 - scroll[P4].y + 572 >= 572 - IMGSIZE64 &&
 					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P4].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
 				{
-					DrawRotaGraph(status.pos.x + (-scroll[i].x) + 928 + IMGSIZE64, status.pos.y + (-scroll[i].y) + 508+ IMGSIZE64, 1, delete_time, img, TRUE, FALSE, FALSE);
+					DrawRotaGraph(status.pos.x + (-scroll[i].x) + 928 + IMGSIZE64, status.pos.y + (-scroll[i].y) + 508+ IMGSIZE64, 1, delete_time, status.img, TRUE, FALSE, FALSE);
+				}
+				break;
+			}
+		}
+	}
+	else
+	{
+		//WINDOWごとに描画
+		for (int i = 0; i < 4; i++)
+		{
+			switch (i)
+			{
+				//WINDOW 1
+			case P1:
+				if (status.pos.x - scroll[P1].x >= -IMGSIZE64 &&
+					status.pos.x + IMGSIZE64 + img_size - scroll[P1].x <= 992 &&
+					status.pos.y - IMGSIZE64 - scroll[P1].y >= 0 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P1].y <= 508 + IMGSIZE64)
+				{
+					DrawRotaGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y), 1, delete_time, img, TRUE, FALSE, FALSE);
+				}
+				break;
+				//WINDOW 2
+			case P2:
+				if (status.pos.x - scroll[P2].x + 992 >= 928 &&
+					status.pos.x + IMGSIZE64 + img_size - scroll[P2].x + 992 <= WINDOW_WIDTH + IMGSIZE64 &&
+					status.pos.y - IMGSIZE64 - scroll[P2].y >= 0 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P2].y <= 508 + IMGSIZE64)
+				{
+					DrawRotaGraph(status.pos.x + (-scroll[i].x) + 928 + IMGSIZE64, status.pos.y + (-scroll[i].y), 1, delete_time, img, TRUE, FALSE, FALSE);
+				}
+				break;
+				//WINDOW 3
+			case P3:
+				if (status.pos.x - scroll[P3].x >= -IMGSIZE64 &&
+					status.pos.x + IMGSIZE64 + img_size - scroll[P3].x <= 928 + IMGSIZE64 &&
+					status.pos.y - IMGSIZE64 - scroll[P3].y + 572 >= 572 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P3].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
+				{
+					DrawRotaGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) + 508 + IMGSIZE64, 1, delete_time, img, TRUE, FALSE, FALSE);
+				}
+				break;
+				//WINDOW 4
+			case P4:
+				if (status.pos.x - scroll[P4].x + 992 >= 992 - IMGSIZE64 &&
+					status.pos.x + IMGSIZE64 + img_size - scroll[P4].x + 992 <= WINDOW_WIDTH + IMGSIZE64 &&
+					status.pos.y - IMGSIZE64 - scroll[P4].y + 572 >= 572 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - IMGSIZE64 + img_size - scroll[P4].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
+				{
+					DrawRotaGraph(status.pos.x + (-scroll[i].x) + 928 + IMGSIZE64, status.pos.y + (-scroll[i].y) + 508 + IMGSIZE64, 1, delete_time, img, TRUE, FALSE, FALSE);
 				}
 				break;
 			}

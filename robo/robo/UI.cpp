@@ -59,7 +59,7 @@ void UI::Draw()
 {
 	//（Blockめり込み対策）UI表示
 	DrawGraph(0, 0, status.img, TRUE);
-	SetFontSize(32);
+	
 	//WINDOWごとのUI描画
 	for (int z = 0; z < 4; z++)
 	{
@@ -79,24 +79,33 @@ void UI::Draw()
 			{
 				DrawGraph(0, 508 - i * 4, img_Skill, TRUE);//スキルゲージ量に合わせて描画
 			}
+			SetFontSize(16);
 			//所持武器UI描画
 			switch (WEPON[P1])
 			{
 				//ライフル
 			case 0:
-				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(928  - IMGSIZE64 * 2, 0, img_rifle, TRUE);
+				//ライフル文字表示
+				DrawFormatString(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ライフル");
 				break;
+				
 				//剣
 			case 1:
-				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_katana, TRUE);
+				DrawGraph(928  - IMGSIZE64 * 2, 0, img_katana, TRUE);
+				//剣文字表示
+				DrawFormatString(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "カタナ");
 				break;
 			}
-			DrawFormatString(0, 508, GetColor(255, 255, 255), "↑キル数：%d", Kill[P1]);//キル数表示
+			SetFontSize(32);
+			DrawFormatString(0 + IMGSIZE64*2, 508, GetColor(0, 0, 0), "↑　撃破数：%d", Kill[P1]);//キル数表示
 			break;
 		case P2:
 			DrawGraph(WINDOW_WIDTH - IMGSIZE64*2, 0, img_Item_UI, TRUE);				//アイテム表示場所UI
 			DrawGraph(928 + IMGSIZE64, 0, img_HP_UI, TRUE);								//HP表示場所UI
 			DrawGraph(WINDOW_WIDTH - IMGSIZE64, 508 - IMGSIZE64, img_Skill_UI, TRUE);	//スキルゲージ表示場所UI
+			
+			SetFontSize(16);
 			//HP描画処理
 			for (int i = 1; i < HP[P2] / 4; i++)
 			{
@@ -112,19 +121,25 @@ void UI::Draw()
 			{
 			case 0:
 				//ライフル
-				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(WINDOW_WIDTH - IMGSIZE64 * 2, 0, img_rifle, TRUE);
+				//ライフル文字表示
+				DrawFormatString(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ライフル");
 				break;
 			case 1:
 				//剣
-				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 / 2, img_katana, TRUE);
+				DrawGraph(WINDOW_WIDTH  - IMGSIZE64 * 2, 0, img_katana, TRUE);
+				//剣文字表示
+				DrawFormatString(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 0 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "カタナ");
 				break;
 			}
-			DrawFormatString(908 + IMGSIZE64, 508, GetColor(255, 255, 255), "↑キル数：%d", Kill[P2]);//キル数表示
+			SetFontSize(32);
+			DrawFormatString(908 + IMGSIZE64 + IMGSIZE64*2, 508, GetColor(0, 0, 0), "↑　撃破数：%d", Kill[P2]);//キル数表示
 			break;
 		case P3:
 			DrawGraph(928 - IMGSIZE64 * 2, 508 + IMGSIZE64, img_Item_UI, TRUE);	//アイテム表示場所UI
 			DrawGraph(0, 508 + IMGSIZE64, img_HP_UI, TRUE);						//HP表示場所UI
 			DrawGraph(0, WINDOW_HEIGHT - IMGSIZE64, img_Skill_UI, TRUE);		//スキルゲージ表示場所UI
+			SetFontSize(16);
 			//HP描画処理
 			for (int i = 1; i < HP[P3] / 4; i++)
 			{
@@ -140,19 +155,25 @@ void UI::Draw()
 			{
 				//ライフル
 			case 0:
-				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(928 - IMGSIZE64 * 2, 508 + IMGSIZE64 , img_rifle, TRUE);
+				//ライフル文字表示
+				DrawFormatString(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ライフル");
 				break;
 				//剣
 			case 1:
-				DrawGraph(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_katana, TRUE);
+				DrawGraph(928 - IMGSIZE64 * 2, 508 + IMGSIZE64, img_katana, TRUE);
+				//剣文字表示
+				DrawFormatString(928 + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "カタナ");
 				break;
 			}
-			DrawFormatString(0, 508 + 32, GetColor(255, 255, 255), "↓キル数：%d", Kill[P3]);//キル数表示
+			SetFontSize(32);
+			DrawFormatString(0 + IMGSIZE64*2, 508 + 32, GetColor(0, 0, 0), "↓　撃破数：%d", Kill[P3]);//キル数表示
 			break;
 		case P4:
 			DrawGraph(WINDOW_WIDTH - IMGSIZE64*2, 508 + IMGSIZE64, img_Item_UI, TRUE);			//アイテム表示場所UI
 			DrawGraph(928 + IMGSIZE64, 508 + IMGSIZE64, img_HP_UI, TRUE);						//HP表示場所UI
 			DrawGraph(WINDOW_WIDTH - IMGSIZE64, WINDOW_HEIGHT - IMGSIZE64, img_Skill_UI, TRUE);	//スキルゲージ表示場所UI
+			SetFontSize(16);
 			//HP描画処理
 			for (int i = 1; i < HP[P4] / 4; i++)
 			{
@@ -168,14 +189,19 @@ void UI::Draw()
 			{
 				//ライフル
 			case 0:
-				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_rifle, TRUE);
+				DrawGraph(WINDOW_WIDTH  - IMGSIZE64 * 2, 508 + IMGSIZE64, img_rifle, TRUE);
+				//ライフル文字表示
+				DrawFormatString(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "ライフル");
 				break;
 				//剣
 			case 1:
-				DrawGraph(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 / 2, img_katana, TRUE);
+				DrawGraph(WINDOW_WIDTH - IMGSIZE64 * 2, 508 + IMGSIZE64, img_katana, TRUE);
+				//剣文字表示
+				DrawFormatString(WINDOW_WIDTH + IMGSIZE64 / 2 - IMGSIZE64 * 2, 508 + IMGSIZE64 + IMGSIZE64 + IMGSIZE64, GetColor(255, 255, 255), "カタナ");
 				break;
 			}
-			DrawFormatString(908 + IMGSIZE64, 508+32, GetColor(255, 255, 255), "↓キル数：%d", Kill[P4]);//キル数表示
+			SetFontSize(32);
+			DrawFormatString(908 + IMGSIZE64 + IMGSIZE64*2, 508+32, GetColor(0, 0, 0), "↓　撃破数：%d", Kill[P4]);//キル数表示
 			break;
 		}
 		

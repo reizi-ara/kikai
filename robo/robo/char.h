@@ -243,7 +243,8 @@ public:
 		{0.0f,0.0f}
 	};
 
-	bool w_flag[4] = { false,false,false,false };
+	bool w_flag[4] = { false,false,false,false };//プレイヤー再生成情報
+	bool p_flag[4] = { false,false,false,false };//プレイヤー撃破情報
 
 	bool Draw_flag = false;
 
@@ -254,6 +255,7 @@ public:
 	int img_attack = LoadGraph("image\\attack.png", 0);
 	int img_deffense = LoadGraph("image\\deffense.png", 0);
 	int img_trap = LoadGraph("image\\trap.png", 0);
+	int img_Bom = LoadGraph("image\\bakuhatsu.png", 0);
 
 	int p_img[4]{ -1,-1,-1,-1 };
 
@@ -302,10 +304,11 @@ public:
 	int img_HP_UI =		LoadGraph("image\\UI\\HP_UI.png", 0);
 	int img_Skill_UI =	LoadGraph("image\\UI\\Skill_UI.png", 0);
 	int img_Skill =		LoadGraph("image\\UI\\Skill.png", 0);
-	int img_rifle =		LoadGraph("image\\UI\\rifle.png", 0);
-	int img_katana =	LoadGraph("image\\UI\\katana.png", 0);
+	int img_rifle =		LoadGraph("image\\UI\\rifle_UI.png", 0);
+	int img_katana =	LoadGraph("image\\UI\\katana_UI.png", 0);
 	int img_missile =	LoadGraph("image\\UI\\missile.png", 0);
 	int img_rerugan =	LoadGraph("image\\UI\\rerugan.png", 0);
+	
 };
 
 //Title

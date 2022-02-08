@@ -151,7 +151,7 @@ void BlockHit(Hit* player, Point* _pos, Vector* _vec,int IMGSIZE)
 			{
 				//キャラクターの右側が当たった時
 				if ((x * IMGSIZE64) + IMGSIZE64 >= _pos->x + IMGSIZE &&
-					(x * IMGSIZE64) - IMGSIZE64 <= _pos->x &&
+					(x * IMGSIZE64) <= _pos->x + IMGSIZE &&
 					y * IMGSIZE64 - 1 < _pos->y + (IMGSIZE / 2) &&
 					(y * IMGSIZE64) + IMGSIZE64 > _pos->y + (IMGSIZE / 2))
 				{
@@ -161,7 +161,7 @@ void BlockHit(Hit* player, Point* _pos, Vector* _vec,int IMGSIZE)
 				}
 				//キャラクターの左側が当たった時
 				if ((x * IMGSIZE64) <= _pos->x &&
-					(x * IMGSIZE64) + (IMGSIZE64 * 2) >= _pos->x + IMGSIZE &&
+					(x * IMGSIZE64) + (IMGSIZE64) >= _pos->x &&
 					y * IMGSIZE64 - 1 < _pos->y + (IMGSIZE / 2) &&
 					(y * IMGSIZE64) + IMGSIZE64 > _pos->y + (IMGSIZE / 2))
 				{
@@ -178,8 +178,8 @@ void BlockHit(Hit* player, Point* _pos, Vector* _vec,int IMGSIZE)
 					player->UP = true;
 				}
 				////キャラクターの下側が当たった時
-				if ((y * IMGSIZE64) >= _pos->y &&
-					(y * IMGSIZE64) - (IMGSIZE64) <= _pos->y &&
+				if ((y * IMGSIZE64) + IMGSIZE64 >= _pos->y + IMGSIZE &&
+					(y * IMGSIZE64)  <= _pos->y + IMGSIZE &&
 					(x * IMGSIZE64) + IMGSIZE64 >= _pos->x + (IMGSIZE / 2) &&
 					(x * IMGSIZE64) <= _pos->x + (IMGSIZE / 2))
 				{

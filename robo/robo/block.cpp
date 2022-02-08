@@ -45,15 +45,19 @@ int Block::Action(list<unique_ptr<Base>>& base)
 			{
 			case P1:
 				w_flag[P1] = ((Player*)(*i).get())->r_flag;
+				p_flag[P1] = ((Player*)(*i).get())->p_flag;
 				break;
 			case P2:
 				w_flag[P2] = ((Player*)(*i).get())->r_flag;
+				p_flag[P2] = ((Player*)(*i).get())->p_flag;
 				break;
 			case P3:
 				w_flag[P3] = ((Player*)(*i).get())->r_flag;
+				p_flag[P3] = ((Player*)(*i).get())->p_flag;
 				break;
 			case P4:
 				w_flag[P4] = ((Player*)(*i).get())->r_flag;
+				p_flag[P4] = ((Player*)(*i).get())->p_flag;
 				break;
 			}
 		}
@@ -145,7 +149,7 @@ void Block::Draw()
 	for (int z = 0; z < 4; z++)
 	{
 		//画面番号１以外のプレイヤー表示　再生成中は表示しない
-		if (z != P1 && w_flag[z] != true)
+		if (z != P1)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
@@ -157,23 +161,41 @@ void Block::Draw()
 					p_pos[z].y - scroll[P1].y >= -IMGSIZE64 &&
 					p_pos[z].y + IMGSIZE64 - scroll[P1].y <= 572)
 				{
-					switch (z)
+					if (p_flag[z] == true && w_flag[z] != true)
 					{
-					case P2:
-						DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, p_img[P2], TRUE);
-						break;
-					case P3:
-						DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, p_img[P3], TRUE);
-						break;
-					case P4:
-						DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, p_img[P4], TRUE);
-						break;
+						switch (z)
+						{
+						case P2:
+							DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, p_img[P2], TRUE);
+							break;
+						case P3:
+							DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, p_img[P3], TRUE);
+							break;
+						case P4:
+							DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, p_img[P4], TRUE);
+							break;
+						}
+					}
+					else if (p_flag[z] != true && w_flag[z] == true)
+					{
+						switch (z)
+						{
+						case P2:
+							DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, img_Bom, TRUE);
+							break;
+						case P3:
+							DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, img_Bom, TRUE);
+							break;
+						case P4:
+							DrawGraph(p_pos[z].x - scroll[P1].x, p_pos[z].y - scroll[P1].y, img_Bom, TRUE);
+							break;
+						}
 					}
 				}
 			}
 		}
 		//画面番号２以外のプレイヤー表示　再生成中は表示しない
-		if (z != P2 && w_flag[z] != true)
+		if (z != P2)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
@@ -185,24 +207,44 @@ void Block::Draw()
 					p_pos[z].y - scroll[P2].y >= -IMGSIZE64 &&
 					p_pos[z].y + IMGSIZE64 - scroll[P2].y <= 572)
 				{
-					switch (z)
+					//撃破されているかどうか
+					if (p_flag[z] == true && w_flag[z] != true)
 					{
-					case P1:
-						DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, p_img[P1], TRUE);
-						break;
-					case P3:
-						DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, p_img[P3], TRUE);
-						break;
-					case P4:
-						DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, p_img[P4], TRUE);
-						break;
+						switch (z)
+						{
+						case P1:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, p_img[P1], TRUE);
+							break;
+						case P3:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, p_img[P3], TRUE);
+							break;
+						case P4:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, p_img[P4], TRUE);
+							break;
+						}
 					}
+					else if (p_flag[z] != true && w_flag[z] == true)
+					{
+						switch (z)
+						{
+						case P1:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, img_Bom, TRUE);
+							break;
+						case P3:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, img_Bom, TRUE);
+							break;
+						case P4:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P2].x, p_pos[z].y - scroll[P2].y, img_Bom, TRUE);
+							break;
+						}
+					}
+					
 				}
 
 			}
 		}
 		//画面番号３以外のプレイヤー表示　再生成中は表示しない
-		if (z != P3 && w_flag[z] != true)
+		if (z != P3)
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
@@ -214,24 +256,43 @@ void Block::Draw()
 					p_pos[z].y - scroll[P3].y + 572 >= 572 - IMGSIZE64 &&
 					p_pos[z].y + IMGSIZE64 - scroll[P3].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
 				{
-					switch (z)
+					if (p_flag[z] == true && w_flag[z] != true)
 					{
-					case P1:
-						DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, p_img[P1], TRUE);
-						break;
-					case P2:
-						DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, p_img[P2], TRUE);
-						break;
-					case P4:
-						DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, p_img[P4], TRUE);
-						break;
+						switch (z)
+						{
+						case P1:
+							DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, p_img[P1], TRUE);
+							break;
+						case P2:
+							DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, p_img[P2], TRUE);
+							break;
+						case P4:
+							DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, p_img[P4], TRUE);
+							break;
+						}
 					}
+					else if (p_flag[z] != true && w_flag[z] == true)
+					{
+						switch (z)
+						{
+						case P1:
+							DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, img_Bom, TRUE);
+							break;
+						case P2:
+							DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, img_Bom, TRUE);
+							break;
+						case P4:
+							DrawGraph(p_pos[z].x - scroll[P3].x, p_pos[z].y + 572.0f - scroll[P3].y, img_Bom, TRUE);
+							break;
+						}
+					}
+					
 				}
 
 			}
 		}
 		//画面番号４以外のプレイヤー表示　再生成中は表示しない
-		if (z != P4 && w_flag[z] != true)
+		if (z != P4 )
 		{
 			if (p_pos[z].x - scroll[z].x >= -IMGSIZE64 &&
 				p_pos[z].x + IMGSIZE64 - scroll[z].x <= 992 &&
@@ -243,18 +304,37 @@ void Block::Draw()
 					p_pos[z].y - scroll[P4].y + 572 >= 572 - IMGSIZE64 &&
 					p_pos[z].y + IMGSIZE64 - scroll[P4].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
 				{
-					switch (z)
+					if (p_flag[z] == true && w_flag[z] != true)
 					{
-					case P1:
-						DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, p_img[P1], TRUE);
-						break;
-					case P2:
-						DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, p_img[P2], TRUE);
-						break;
-					case P3:
-						DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, p_img[P3], TRUE);
-						break;
+						switch (z)
+						{
+						case P1:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, p_img[P1], TRUE);
+							break;
+						case P2:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, p_img[P2], TRUE);
+							break;
+						case P3:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, p_img[P3], TRUE);
+							break;
+						}
 					}
+					else if (p_flag[z] != true && w_flag[z] == true)
+					{
+						switch (z)
+						{
+						case P1:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, img_Bom, TRUE);
+							break;
+						case P2:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, img_Bom, TRUE);
+							break;
+						case P3:
+							DrawGraph(p_pos[z].x + 992.0f - scroll[P4].x, p_pos[z].y + 572.0f - scroll[P4].y, img_Bom, TRUE);
+							break;
+						}
+					}
+					
 				}
 
 			}
