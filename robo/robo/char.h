@@ -127,6 +127,8 @@ public:
 	int Action(list<unique_ptr<Base>>& base);
 	void Draw();
 
+	int img_Bom = LoadGraph("image\\bakuhatsu.png", 0);
+
 	Vector scroll[4]{
 		{0.0f,0.0f},
 		{0.0f,0.0f},
@@ -151,6 +153,8 @@ public:
 	Hit h_bullet;//当たり判定
 
 	bool kill_flag = false;
+
+	
 };
 
 //セレクトカーソル

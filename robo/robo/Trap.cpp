@@ -133,7 +133,7 @@ void Trap::Draw()
 					status.pos.y + IMGSIZE64  - scroll[P3].y + 572 <= WINDOW_HEIGHT + IMGSIZE64 &&
 					ID[P3] == TRAP_PLAYER)
 				{
-					DrawGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) + 928 + IMGSIZE64, img, TRUE);
+					DrawGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) + 508 + IMGSIZE64, img, TRUE);
 				}
 				break;
 				//WINDOW 4
@@ -145,6 +145,57 @@ void Trap::Draw()
 					ID[P4] == TRAP_PLAYER)
 				{
 					DrawGraph(status.pos.x + (-scroll[i].x) + 928 + IMGSIZE64, status.pos.y + (-scroll[i].y) + 508 + IMGSIZE64, img, TRUE);
+				}
+				break;
+			}
+		}
+	}
+	//トラップ起動時
+	else
+	{
+		//WINDOWごとに描画
+		for (int i = 0; i < 4; i++)
+		{
+			switch (i)
+			{
+				//WINDOW 1
+			case P1:
+				if (status.pos.x - scroll[P1].x >= -IMGSIZE64 &&
+					status.pos.x + IMGSIZE64 - scroll[P1].x <= 992 &&
+					status.pos.y - scroll[P1].y >= 0 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - scroll[P1].y <= 508 + IMGSIZE64)
+				{
+					DrawGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y), img_Bom, TRUE);
+				}
+				break;
+				//WINDOW 2
+			case P2:
+				if (status.pos.x - scroll[P2].x + 992 >= 928 &&
+					status.pos.x + IMGSIZE64 - scroll[P2].x + 992 <= WINDOW_WIDTH + IMGSIZE64 &&
+					status.pos.y - scroll[P2].y >= 0 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - scroll[P2].y <= 508 + IMGSIZE64)
+				{
+					DrawGraph(status.pos.x + (-scroll[i].x) + 928 + IMGSIZE64, status.pos.y + (-scroll[i].y), img_Bom, TRUE);
+				}
+				break;
+				//WINDOW 3
+			case P3:
+				if (status.pos.x - scroll[P3].x >= -IMGSIZE64 &&
+					status.pos.x + IMGSIZE64 - scroll[P3].x <= 928 + IMGSIZE64 &&
+					status.pos.y - scroll[P3].y + 572 >= 572 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - scroll[P3].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
+				{
+					DrawGraph(status.pos.x + (-scroll[i].x), status.pos.y + (-scroll[i].y) + 508 + IMGSIZE64, img_Bom, TRUE);
+				}
+				break;
+				//WINDOW 4
+			case P4:
+				if (status.pos.x - scroll[P4].x + 992 >= 992 - IMGSIZE64 &&
+					status.pos.x + IMGSIZE64 - scroll[P4].x + 992 <= WINDOW_WIDTH + IMGSIZE64 &&
+					status.pos.y - scroll[P4].y + 572 >= 572 - IMGSIZE64 &&
+					status.pos.y + IMGSIZE64 - scroll[P4].y + 572 <= WINDOW_HEIGHT + IMGSIZE64)
+				{
+					DrawGraph(status.pos.x + (-scroll[i].x) + 928 + IMGSIZE64, status.pos.y + (-scroll[i].y) + 508 + IMGSIZE64, img_Bom, TRUE);
 				}
 				break;
 			}
