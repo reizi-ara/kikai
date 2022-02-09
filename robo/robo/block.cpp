@@ -163,6 +163,7 @@ void Block::Draw()
 				{
 					if (p_flag[z] == true && w_flag[z] != true)
 					{
+						//敵プレイヤー表示
 						switch (z)
 						{
 						case P2:
@@ -179,8 +180,9 @@ void Block::Draw()
 							break;
 						}
 					}
-					else if (p_flag[z] != true && w_flag[z] == true)
+					else if (p_flag[z] != true && w_flag[z] == true)//撃破された直後の場合
 					{
+						//爆発した画像表示
 						switch (z)
 						{
 						case P2:
@@ -213,6 +215,7 @@ void Block::Draw()
 					//撃破されているかどうか
 					if (p_flag[z] == true && w_flag[z] != true)
 					{
+						//敵プレイヤー表示
 						switch (z)
 						{
 						case P1:
@@ -229,8 +232,9 @@ void Block::Draw()
 							break;
 						}
 					}
-					else if (p_flag[z] != true && w_flag[z] == true)
+					else if (p_flag[z] != true && w_flag[z] == true)//撃破された直後の場合
 					{
+						//爆発した画像表示
 						switch (z)
 						{
 						case P1:
@@ -264,6 +268,7 @@ void Block::Draw()
 				{
 					if (p_flag[z] == true && w_flag[z] != true)
 					{
+						//敵プレイヤー表示
 						switch (z)
 						{
 						case P1:
@@ -280,8 +285,9 @@ void Block::Draw()
 							break;
 						}
 					}
-					else if (p_flag[z] != true && w_flag[z] == true)
+					else if (p_flag[z] != true && w_flag[z] == true)//撃破された直後の場合
 					{
+						//爆発した画像表示
 						switch (z)
 						{
 						case P1:
@@ -315,6 +321,7 @@ void Block::Draw()
 				{
 					if (p_flag[z] == true && w_flag[z] != true)
 					{
+						//敵プレイヤー表示
 						switch (z)
 						{
 						case P1:
@@ -331,8 +338,9 @@ void Block::Draw()
 							break;
 						}
 					}
-					else if (p_flag[z] != true && w_flag[z] == true)
+					else if (p_flag[z] != true && w_flag[z] == true)//撃破された直後の場合
 					{
+						//爆発した画像表示
 						switch (z)
 						{
 						case P1:
