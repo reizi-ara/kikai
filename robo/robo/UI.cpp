@@ -80,6 +80,11 @@ void UI::Draw()
 				DrawGraph(0, 508 - i * 4, img_Skill, TRUE);//スキルゲージ量に合わせて描画
 			}
 			SetFontSize(16);
+			if (Skill[P1] == 400)
+			{
+				DrawFormatString(0, 508 - 32, GetColor(255, 255, 255), "準備完了");
+			}
+			
 			//所持武器UI描画
 			switch (WEPON[P1])
 			{
@@ -116,6 +121,10 @@ void UI::Draw()
 			{
 				DrawGraph(WINDOW_WIDTH - IMGSIZE64, 508 - i * 4 - 4, img_Skill, TRUE);//スキルゲージ量に合わせて描画
 			}
+			if (Skill[P2] == 400)
+			{
+				DrawFormatString(WINDOW_WIDTH - IMGSIZE64, 508 - 32, GetColor(255, 255, 255), "準備完了");
+			}
 			//所持武器UI描画
 			switch (WEPON[P2])
 			{
@@ -149,6 +158,10 @@ void UI::Draw()
 			for (int i = 1; i <= Skill[P3] / 25; i++)
 			{
 				DrawGraph(0, WINDOW_HEIGHT - i * 4, img_Skill, TRUE);//スキルゲージ量に合わせて描画
+			}
+			if (Skill[P3] == 400)
+			{
+				DrawFormatString(0, WINDOW_HEIGHT - 32, GetColor(255, 255, 255), "準備完了");
 			}
 			//所持武器UI描画
 			switch (WEPON[P3])
@@ -184,6 +197,11 @@ void UI::Draw()
 			{
 				DrawGraph(WINDOW_WIDTH - IMGSIZE64, WINDOW_HEIGHT - i * 4 - 4, img_Skill, TRUE);//スキルゲージ量に合わせて描画
 			}
+			if (Skill[P4] == 400)
+			{
+				DrawFormatString(WINDOW_WIDTH - IMGSIZE64, WINDOW_HEIGHT - 32, GetColor(255, 255, 255), "準備完了");
+			}
+
 			//所持武器UI描画
 			switch (WEPON[P4])
 			{
