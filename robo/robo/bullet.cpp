@@ -115,11 +115,17 @@ int Bullet::Action(list<unique_ptr<Base>>& base)
 	}
 	//-------------------------------------------------------------------------
 
+	//位置の更新
 	if (status.FLAG != false)
 	{
 		//位置の更新
 		status.pos.x += status.speed.x;
 		status.pos.y += status.speed.y;
+	}
+	else
+	{
+		//被弾SE再生
+		PlaySoundMem(SE_damege, DX_PLAYTYPE_BACK);
 	}
 	
 

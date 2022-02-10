@@ -54,7 +54,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	bool re_flag = false;
 	
 	//BGM設定
-	int BGM_VIC = LoadSoundMem("BGM,SE\\winBGM");
+	int BGM_VIC = LoadSoundMem("BGM,SE\\winBGM.mp3");
 	//マップ情報取得
 	GetMap(map);
 
@@ -112,22 +112,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			ClearDrawScreen();//画面クリア
 			if (scene_change == false)
 			{
-				for (auto i = base.begin(); i != base.end(); i++)
-				{
-					if ((*i)->status.ID == 1)
-					{
-						(*i)->Action(base);//各オブジェクトの処理
-						(*i)->Draw();//各オブジェクトの処理
-					}
-					//セレクト情報取得
-					if ((*i)->status.WIN_ID >= 0)
-					{
-						select[(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->complete_select;
-						get_select[0][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[0][(*i)->status.WIN_ID];
-						get_select[1][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[1][(*i)->status.WIN_ID];
-					}
-				}
-				//全員がキャラクターを選択しているか確認
+					//全員がキャラクターを選択しているか確認
 				for (int i = 0; i < 4; i++)
 				{
 					if (select[i] == false)
@@ -144,6 +129,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 						}
 					}
 				}
+				for (auto i = base.begin(); i != base.end(); i++)
+				{
+					if ((*i)->status.ID == 1)
+					{
+						(*i)->Action(base);//各オブジェクトの処理
+						(*i)->Draw();//各オブジェクトの処理
+					}
+					//セレクト情報取得
+					if ((*i)->status.WIN_ID >= 0)
+					{
+						select[(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->complete_select;
+						get_select[0][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[0][(*i)->status.WIN_ID];
+						get_select[1][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[1][(*i)->status.WIN_ID];
+					}
+				}
+			
 			}
 			//全員がキャラクターを選択していたらシーン以降
 			if (scene_change == true)
@@ -228,12 +229,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				//勝利条件処理
 				if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
 				{
-					if (((Player*)(*i).get())->kill >= 10)
+					if (((Player*)(*i).get())->kill >= 10 && vic == false)
 					{
 						vic = true;
+						//音量調整
+						ChangeVolumeSoundMem(150, BGM_VIC);
+						//BGM再生
+						PlaySoundMem(BGM_VIC, DX_PLAYTYPE_BACK);
 						vic_p = (*i)->status.WIN_ID;
 					}
 				}
+				//Blockが鳴らしているBGMを止める
+				if (vic == true && (*i)->status.ID == BLOCK)
+				{
+					StopSoundMem(((Block*)(*i).get())->BGM_main);
+				}
+				//リトライ状態の場合すべてのオブジェクトを削除し、Titleシーンに移行する。
 				if (re_flag == true)
 				{
 					(*i)->status.FLAG = false;
@@ -243,10 +254,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			if (vic == true)
 			{
 				SetFontSize(IMGSIZE64 * 2);
-				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 2, WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(255, 0, 0), "%dP WIN", vic_p + 1);
-				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 2, WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(255, 0, 0), "%");
+				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 2, WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(0, 0, 0), "%dP WIN", vic_p + 1);
+				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 4, WINDOW_HEIGHT / 2 + IMGSIZE64, GetColor(0, 0, 0), "１P　Press A");
 				SetFontSize(16);
-				PlaySoundMem(BGM_VIC, DX_PLAYTYPE_BACK);
+			
 				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) != 0)
 					re_flag = true;
 			}
@@ -258,6 +269,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			{
 				//タイトル作成
 				base.emplace_back((unique_ptr<Base>)new Title());
+
+				//BGMを止める
+				StopSoundMem(BGM_VIC);
 
 				//初期化
 				time = 0;

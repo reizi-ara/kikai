@@ -40,7 +40,16 @@ Cursor::Cursor(int WIN_ID) {
 		status.pos.y = 508 + IMGSIZE64;
 		break;
 	}
-	
+	//P1ウィンドウのみBGM再生
+	if (WIN_ID == P1)
+	{
+		//音量調整
+		ChangeVolumeSoundMem(150, BGM_Select);
+		//BGM再生
+		PlaySoundMem(BGM_Select, DX_PLAYTYPE_LOOP);
+	}
+	//音量調整
+	ChangeVolumeSoundMem(150, SE_select);
 
 	status.ID = 1;
 
@@ -92,18 +101,22 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 				case SPEED_PLAYER:
 					get_select[select_mode][status.WIN_ID] = SPEED_PLAYER;
 					complete_select = true;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				case DEFFENSE_PLAYER:
 					get_select[select_mode][status.WIN_ID] = DEFFENSE_PLAYER;
 					complete_select = true;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				case ATTACK_PLAYER:
 					get_select[select_mode][status.WIN_ID] = ATTACK_PLAYER;
 					complete_select = true;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				case TRAP_PLAYER:
 					get_select[select_mode][status.WIN_ID] = TRAP_PLAYER;
 					complete_select = true;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				}
 			}
@@ -116,21 +129,25 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 					get_select[select_mode][status.WIN_ID] = COMBAT;
 					y_count = 1;
 					select_mode = 1;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				case SHOOT:
 					get_select[select_mode][status.WIN_ID] = SHOOT;
 					y_count = 1;
 					select_mode = 1;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				case RUN:
 					get_select[select_mode][status.WIN_ID] = RUN;
 					y_count = 1;
 					select_mode = 1;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				case MECHANIC:
 					get_select[select_mode][status.WIN_ID] = MECHANIC;
 					y_count = 1;
 					select_mode = 1;
+					PlaySoundMem(SE_select, DX_PLAYTYPE_BACK);
 					break;
 				}
 			}
@@ -154,6 +171,11 @@ int Cursor::Action(list<unique_ptr<Base>>& base)
 			get_select[0][status.WIN_ID] = -1;
 			get_select[1][status.WIN_ID] = -1;
 		}
+	}
+	//シーンが切り替わるときBGMを止める
+	if (status.FLAG == false)
+	{
+		StopSoundMem(BGM_Select);
 	}
 
 	return 0;

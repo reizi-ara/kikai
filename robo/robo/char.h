@@ -80,11 +80,11 @@ public:
 	int S_Hit_count = 0;
 
 	int SE_bullet	= LoadSoundMem("BGM,SE\\ライフルSE.mp3");
-	int SE_trap		= LoadSoundMem("BGM,SE\\特殊（罠）SE.mp3");
+	int SE_trap		= LoadSoundMem("BGM,SE\\特殊（罠）.mp3");
 	int SE_sord		= LoadSoundMem("BGM,SE\\カタナSE.mp3");
 	int SE_damege	= LoadSoundMem("BGM,SE\\被弾.mp3");
 	int SE_bom		= LoadSoundMem("BGM,SE\\撃破.mp3");
-	int SE_canon	= LoadSoundMem("BGM,SE\\特殊（砲撃）.mp3");
+	int SE_canon	= LoadSoundMem("BGM,SE\\特殊（砲撃）.wav");
 };
 
 //弾
@@ -120,6 +120,8 @@ public:
 	Hit h_bullet;//当たり判定
 
 	bool kill_flag = false;
+
+	int SE_damege = LoadSoundMem("BGM,SE\\被弾.mp3");
 };
 
 
@@ -161,7 +163,7 @@ public:
 
 	bool kill_flag = false;
 
-	
+	int SE_damege = LoadSoundMem("BGM,SE\\被弾.mp3");
 };
 
 //セレクトカーソル
@@ -197,7 +199,7 @@ public:
 	int Action(list<unique_ptr<Base>>& base);
 	void Draw();
 
-	int SE_select = LoadSoundMem("BGM,SE\\selectSE.mp3");
+	int SE_select = LoadSoundMem("BGM,SE\\決定.wav");
 	int BGM_Select = LoadSoundMem("BGM,SE\\selectBGM.mp3");
 };
 

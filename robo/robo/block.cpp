@@ -9,6 +9,10 @@ Block::Block()
 	status.ID = BLOCK;
 
 	GetMap(map);
+	//‰¹—Ê’²®
+	ChangeVolumeSoundMem(200, BGM_main);
+	//BGMÄ¶
+	PlaySoundMem(BGM_main, DX_PLAYTYPE_LOOP);
 }
 
 //ˆ—Às
@@ -86,6 +90,11 @@ int Block::Action(list<unique_ptr<Base>>& base)
 				}
 			}
 		}
+	}
+	//ƒV[ƒ“‚ğØ‚è‘Ö‚¦‚éBGM‚ğ~‚ß‚é
+	if (status.FLAG == false)
+	{
+		StopSoundMem(BGM_main);
 	}
 
 	return 0;
@@ -360,5 +369,5 @@ void Block::Draw()
 			}
 		}
 	}
-
+	
 }

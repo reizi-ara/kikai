@@ -22,6 +22,11 @@ Title::Title()
 	p_pos[5].y = -WINDOW_HEIGHT / 2;
 	p_pos[6].y = -WINDOW_HEIGHT / 2;
 	p_pos[7].y = -WINDOW_HEIGHT / 2;
+	//‰¹—Ê’²®
+	ChangeVolumeSoundMem(150, BGM_Title);
+	//ƒ^ƒCƒgƒ‹BGMÄ¶
+	PlaySoundMem(BGM_Title, DX_PLAYTYPE_LOOP);
+	
 }
 
 //ˆ—
@@ -35,6 +40,8 @@ int Title::Action(list<unique_ptr<Base>>& base)
 			{
 				Change_Scene = true;
 				status.FLAG = false;
+				//BGM‚ğ~‚ß‚é
+				StopSoundMem(BGM_Title);
 			}
 		}
 	}

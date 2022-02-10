@@ -89,7 +89,10 @@ int Trap::Action(list<unique_ptr<Base>>& base)
 		status.FLAG = false;
 	}
 	//-------------------------------------------
-
+	if (status.FLAG == false)
+	{
+		PlaySoundMem(SE_damege, DX_PLAYTYPE_BACK);
+	}
 	return 0;
 }
 
