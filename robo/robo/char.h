@@ -78,6 +78,13 @@ public:
 	bool S_Hit_flag = false;
 
 	int S_Hit_count = 0;
+
+	int SE_bullet	= LoadSoundMem("BGM,SE\\ライフルSE.mp3");
+	int SE_trap		= LoadSoundMem("BGM,SE\\特殊（罠）SE.mp3");
+	int SE_sord		= LoadSoundMem("BGM,SE\\カタナSE.mp3");
+	int SE_damege	= LoadSoundMem("BGM,SE\\被弾.mp3");
+	int SE_bom		= LoadSoundMem("BGM,SE\\撃破.mp3");
+	int SE_canon	= LoadSoundMem("BGM,SE\\特殊（砲撃）.mp3");
 };
 
 //弾
@@ -189,6 +196,9 @@ public:
 	int img1{ 0 };
 	int Action(list<unique_ptr<Base>>& base);
 	void Draw();
+
+	int SE_select = LoadSoundMem("BGM,SE\\selectSE.mp3");
+	int BGM_Select = LoadSoundMem("BGM,SE\\selectBGM.mp3");
 };
 
 //itembox
@@ -285,6 +295,7 @@ public:
 		{0.0f,0.0f}
 	};
 
+	int BGM_main = LoadSoundMem("BGM,SE\\gameBGM.mp3");
 };
 
 //UI
@@ -336,4 +347,6 @@ public:
 
 	int Action(list<unique_ptr<Base>>& base);
 	void Draw();
+
+	int BGM_Title = LoadSoundMem("BGM,SE\\Title.wav");
 };

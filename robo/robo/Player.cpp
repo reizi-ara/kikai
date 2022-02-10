@@ -228,6 +228,8 @@ int Player::Action(list<unique_ptr<Base>>& base)
 				{
 					//–C’e¶¬
 					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64,status.s_atk));
+					//–C’e”­ËSEÄ¶
+					PlaySoundMem(SE_canon, DX_PLAYTYPE_BACK);
 					//ƒXƒLƒ‹ƒQ[ƒW‰Šú‰»
 					status.skill_cooldown = 0;
 				}
@@ -240,6 +242,9 @@ int Player::Action(list<unique_ptr<Base>>& base)
 				{
 					//ƒgƒ‰ƒbƒv¶¬
 					base.emplace_back((unique_ptr<Base>)new Trap(BulletSave_vx, BulletSave_vy, status.pos.x , status.pos.y, status.WIN_ID, IMGSIZE64));
+					//ƒgƒ‰ƒbƒv¶¬SEÄ¶
+					PlaySoundMem(SE_trap, DX_PLAYTYPE_BACK);
+
 					//ƒXƒLƒ‹ƒQ[ƒW‰Šú‰»
 					status.skill_cooldown = 0;
 				}
@@ -324,6 +329,8 @@ int Player::Action(list<unique_ptr<Base>>& base)
 					}
 					//’eŠÛ¶¬
 					base.emplace_back((unique_ptr<Base>)new Bullet(BulletSave_vx, BulletSave_vy, status.pos.x + IMGSIZE64 / 2 + bullet.x, status.pos.y + IMGSIZE64 / 2 + bullet.y, status.WIN_ID, IMGSIZE64 / 4,status.s_atk));
+					//’eŠÛ”­ËSEÄ¶
+					PlaySoundMem(SE_bullet, DX_PLAYTYPE_BACK);
 				}
 				//O”­ËŒ‚‚µ‚½‚çƒAƒCƒeƒ€‚ğ‰Šú‰»
 				if (wepon_cd > 60)
@@ -353,6 +360,9 @@ int Player::Action(list<unique_ptr<Base>>& base)
 			{
 				//•ŠíŠÖ”‚ÅŒ•‚ğ¶¬‚·‚é
 				wepon_summary(base, status.pos, e_scroll, status.wepon_num, status.WIN_ID, img_Vec, &kill, status.f_atk);
+				//Œ•¶¬SEÄ¶
+				if (wepon_cd == 0)
+					PlaySoundMem(SE_sord, DX_PLAYTYPE_BACK);
 				wepon_cd++;
 				//“–‚½‚è”»’èI—¹
 				if (wepon_cd >= 20)
@@ -437,6 +447,10 @@ void Player::Draw() {
 		{
 			//Œ‚”j‰æ‘œ•`‰æ
 			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y, w_img, TRUE);
+			//Œ‚”jSEÄ¶
+			if (r_time == 1)
+				PlaySoundMem(SE_bom, DX_PLAYTYPE_BACK);
+			
 		}
 		break;
 		//WINDOW 2
@@ -482,6 +496,9 @@ void Player::Draw() {
 		{
 			//Œ‚”j‰æ‘œ•`‰æ
 			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y, w_img, TRUE);
+			//Œ‚”jSEÄ¶
+			if (r_time == 1)
+				PlaySoundMem(SE_bom, DX_PLAYTYPE_BACK);
 		}
 		break;
 		//WINDOW 3
@@ -528,6 +545,9 @@ void Player::Draw() {
 		{
 			//Œ‚”j‰æ‘œ•`‰æ
 			DrawGraph(status.pos.x - scroll.x, status.pos.y - scroll.y + 572.0f, w_img, TRUE);
+			//Œ‚”jSEÄ¶
+			if (r_time == 1)
+				PlaySoundMem(SE_bom, DX_PLAYTYPE_BACK);
 		}
 		break;
 		//WINDOW 4
@@ -573,6 +593,9 @@ void Player::Draw() {
 		{
 			//Œ‚”j‰æ‘œ•`‰æ
 			DrawGraph(status.pos.x - scroll.x + 992.0f, status.pos.y - scroll.y + 572.0f, w_img, TRUE);
+			//Œ‚”jSEÄ¶
+			if (r_time == 1)
+				PlaySoundMem(SE_bom, DX_PLAYTYPE_BACK);
 		}
 		break;
 	}	

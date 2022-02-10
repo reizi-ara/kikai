@@ -50,7 +50,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	bool vic = false;
 	int vic_p = -1;
 	//------------------------------------
+	//リトライフラグ
+	bool re_flag = false;
 	
+	//BGM設定
+	int BGM_VIC = LoadSoundMem("BGM,SE\\winBGM");
 	//マップ情報取得
 	GetMap(map);
 
@@ -58,92 +62,97 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 	base.emplace_back((unique_ptr<Base>)new Title());
 
 	int scene = TITLE;
-	
-	//タイトル画面処理
-	while (scene == TITLE)
+
+	while (scene != -1)
 	{
-		ClearDrawScreen();//画面クリア
-		
 
-		for (auto i = base.begin(); i != base.end(); i++)
+
+
+		//タイトル画面処理
+		while (scene == TITLE)
 		{
-			(*i)->Action(base);
-			(*i)->Draw();
-			//リストから不要オブジェクトを削除
-			if ((*i)->status.FLAG == false) {
-
-				scene = SELECT;
-				//カーソル作成
-				for (int z = 0; z < 4; z++)
-				{
-					base.emplace_back((unique_ptr<Base>)new Cursor(z));
-				}
-
-				i = base.erase(i);
-				break;
-				DeleteGraph((*i)->status.img, 0);
-			}
-		}
+			ClearDrawScreen();//画面クリア
 
 
-		//ESC終了処理
-		if (CheckHitKey(KEY_INPUT_ESCAPE))
-		{
-			scene = -1;
-		}
-
-
-		ScreenFlip();//画面更新
-	}
-
-	
-	//機体選択画面
-	while (scene == SELECT)
-	{
-		ClearDrawScreen();//画面クリア
-		if (scene_change == false)
-		{
 			for (auto i = base.begin(); i != base.end(); i++)
 			{
-				if ((*i)->status.ID == 1)
-				{
-					(*i)->Action(base);//各オブジェクトの処理
-					(*i)->Draw();//各オブジェクトの処理
-				}
-				//セレクト情報取得
-				if ((*i)->status.WIN_ID >= 0)
-				{
-					select[(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->complete_select;
-					get_select[0][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[0][(*i)->status.WIN_ID];
-					get_select[1][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[1][(*i)->status.WIN_ID];
+				(*i)->Action(base);
+				(*i)->Draw();
+				//リストから不要オブジェクトを削除
+				if ((*i)->status.FLAG == false) {
+
+					scene = SELECT;
+					//カーソル作成
+					for (int z = 0; z < 4; z++)
+					{
+						base.emplace_back((unique_ptr<Base>)new Cursor(z));
+					}
+
+					i = base.erase(i);
+					break;
+					DeleteGraph((*i)->status.img, 0);
 				}
 			}
-			//全員がキャラクターを選択しているか確認
-			for (int i = 0; i < 4; i++)
+
+
+			//ESC終了処理
+			if (CheckHitKey(KEY_INPUT_ESCAPE))
 			{
-				if (select[i] == false)
-					break;
-				if (select[i] == true && i == 3)
+				scene = -1;
+			}
+
+
+			ScreenFlip();//画面更新
+		}
+
+
+		//機体選択画面
+		while (scene == SELECT)
+		{
+			ClearDrawScreen();//画面クリア
+			if (scene_change == false)
+			{
+				for (auto i = base.begin(); i != base.end(); i++)
 				{
-					scene_change = true;
-					for (auto i = base.begin(); i != base.end(); i++)
+					if ((*i)->status.ID == 1)
 					{
-						if ((*i)->status.ID == 1)
+						(*i)->Action(base);//各オブジェクトの処理
+						(*i)->Draw();//各オブジェクトの処理
+					}
+					//セレクト情報取得
+					if ((*i)->status.WIN_ID >= 0)
+					{
+						select[(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->complete_select;
+						get_select[0][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[0][(*i)->status.WIN_ID];
+						get_select[1][(*i)->status.WIN_ID] = ((Cursor*)(*i).get())->get_select[1][(*i)->status.WIN_ID];
+					}
+				}
+				//全員がキャラクターを選択しているか確認
+				for (int i = 0; i < 4; i++)
+				{
+					if (select[i] == false)
+						break;
+					if (select[i] == true && i == 3)
+					{
+						scene_change = true;
+						for (auto i = base.begin(); i != base.end(); i++)
 						{
-							(*i)->status.FLAG = false;
+							if ((*i)->status.ID == 1)
+							{
+								(*i)->status.FLAG = false;
+							}
 						}
 					}
 				}
 			}
-		}
-		//全員がキャラクターを選択していたらシーン以降
-		if (scene_change == true)
-		{
-			time++;
-
-			if (time > 20)
+			//全員がキャラクターを選択していたらシーン以降
+			if (scene_change == true)
 			{
-				//プレイヤー作成
+				time++;
+
+				if (time > 20)
+				{
+					//プレイヤー作成
 					for (int i = 0; i < 4; i++)//i->WINDOW番号
 						base.emplace_back((unique_ptr<Base>)new Player(0.0f, 0.0f, get_select[0][i], get_select[1][i], 0, i, pos[i]));
 
@@ -174,87 +183,111 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 					}
 
 					//シーンをゲームに移行
-				scene = GAME;
-				time = 0;
+					scene = GAME;
+					time = 0;
+				}
+
 			}
-			
-		}
 
-		for (auto i = base.begin(); i != base.end(); i++)
-		{
-			//リストから不要オブジェクトを削除
-			if ((*i)->status.FLAG == false) {
-				i = base.erase(i);
-				break;
-				DeleteGraph((*i)->status.img, 0);
-			}
-		}
-	
-
-		//ESC終了処理
-		if (CheckHitKey(KEY_INPUT_ESCAPE))
-		{
-			scene = -1;
-		}
-
-
-		ScreenFlip();//画面更新
-	}
-
-	//メインループ
-	while (scene == GAME) {
-		ClearDrawScreen();//画面クリア
-
-			//ソート
-		Pr pr;
-		if (base.size() >= 2)
-			base.sort(pr);//リストのソートメソッドの引数にソート条件クラスを入れる
-
-		for (auto i = base.begin(); i != base.end(); i++)
-		{
-			if (vic == false)
-				(*i)->Action(base);//各オブジェクトの処理
-			(*i)->Draw();//各オブジェクトの処理
-
-			//勝利条件処理
-			if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
+			for (auto i = base.begin(); i != base.end(); i++)
 			{
-				if (((Player*)(*i).get())->kill >= 10)
-				{
-					vic = true;
-					vic_p = (*i)->status.WIN_ID;
+				//リストから不要オブジェクトを削除
+				if ((*i)->status.FLAG == false) {
+					i = base.erase(i);
+					break;
+					DeleteGraph((*i)->status.img, 0);
 				}
 			}
-		}
-		//勝利プレイヤーがいた場合
-		if (vic == true)
-		{
-			SetFontSize(IMGSIZE64 * 2);
-			DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64*2 , WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(255, 0, 0), "%dP WIN", vic_p + 1);
-			SetFontSize(16);
-		}
-		
-		for (auto i = base.begin(); i != base.end(); i++)
-		{
-			//リストから不要オブジェクトを削除（弾）
-			if ((*i)->status.FLAG == false) {
-				i = base.erase(i);
-				break;
-				DeleteGraph((*i)->status.img, 0);
+
+
+			//ESC終了処理
+			if (CheckHitKey(KEY_INPUT_ESCAPE))
+			{
+				scene = -1;
 			}
-		}
-		
-		
 
-		//ESC終了処理
-		if (CheckHitKey(KEY_INPUT_ESCAPE))
-		{
-			scene = -1;
+
+			ScreenFlip();//画面更新
 		}
 
-		ScreenFlip();//画面更新
-		//例外処理
-		if ((ProcessMessage() == -1)) break;
+		//メインループ
+		while (scene == GAME) {
+			ClearDrawScreen();//画面クリア
+
+				//ソート
+			Pr pr;
+			if (base.size() >= 2)
+				base.sort(pr);//リストのソートメソッドの引数にソート条件クラスを入れる
+
+			for (auto i = base.begin(); i != base.end(); i++)
+			{
+				if (vic == false)
+					(*i)->Action(base);//各オブジェクトの処理
+				(*i)->Draw();//各オブジェクトの処理
+
+				//勝利条件処理
+				if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
+				{
+					if (((Player*)(*i).get())->kill >= 10)
+					{
+						vic = true;
+						vic_p = (*i)->status.WIN_ID;
+					}
+				}
+				if (re_flag == true)
+				{
+					(*i)->status.FLAG = false;
+				}
+			}
+			//勝利プレイヤーがいた場合
+			if (vic == true)
+			{
+				SetFontSize(IMGSIZE64 * 2);
+				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 2, WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(255, 0, 0), "%dP WIN", vic_p + 1);
+				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 2, WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(255, 0, 0), "%");
+				SetFontSize(16);
+				PlaySoundMem(BGM_VIC, DX_PLAYTYPE_BACK);
+				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) != 0)
+					re_flag = true;
+			}
+			if (vic == true && re_flag == true)
+			{
+				time++;
+			}
+			if (re_flag == true && time >= 20)
+			{
+				//タイトル作成
+				base.emplace_back((unique_ptr<Base>)new Title());
+
+				//初期化
+				time = 0;
+				vic = false;
+				re_flag = false;
+				scene = TITLE;
+			}
+
+			for (auto i = base.begin(); i != base.end(); i++)
+			{
+				//リストから不要オブジェクトを削除（弾）
+				if ((*i)->status.FLAG == false) {
+					i = base.erase(i);
+					break;
+					DeleteGraph((*i)->status.img, 0);
+				}
+			}
+
+
+
+			//ESC終了処理
+			if (CheckHitKey(KEY_INPUT_ESCAPE))
+			{
+				scene = -1;
+			}
+
+			ScreenFlip();//画面更新
+			//例外処理
+			if ((ProcessMessage() == -1)) break;
+		}
 	}
 
 	DxLib_End();

@@ -5,6 +5,7 @@
 UI::UI()
 {
 	status.img = LoadGraph("image\\UI\\UI.png");
+	
 
 	//•`‰æ‡”Ô†
 	pri = 999;
