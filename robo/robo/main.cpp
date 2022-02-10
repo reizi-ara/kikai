@@ -229,7 +229,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 				//èüóòèåèèàóù
 				if ((*i)->status.WIN_ID >= 0 && (*i)->status.ID != BULLET)
 				{
-					if (((Player*)(*i).get())->kill >= 10 && vic == false)
+					if (((Player*)(*i).get())->kill >= 1 && vic == false)
 					{
 						vic = true;
 						//âπó í≤êÆ
@@ -254,8 +254,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE,
 			if (vic == true)
 			{
 				SetFontSize(IMGSIZE64 * 2);
-				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 2, WINDOW_HEIGHT / 2 - IMGSIZE64, GetColor(0, 0, 0), "%dP WIN", vic_p + 1);
-				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 4, WINDOW_HEIGHT / 2 + IMGSIZE64, GetColor(0, 0, 0), "ÇPPÅ@Press A");
+
+				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 2, WINDOW_HEIGHT / 3 - IMGSIZE64, GetColor(255, 0, 0), "%dP WIN", vic_p + 1);
+				DrawFormatString(WINDOW_WIDTH / 2 - IMGSIZE64 - IMGSIZE64 * 5, WINDOW_HEIGHT / 2 + IMGSIZE64, GetColor(0, 0, 0), "ÇPPÅ@Press A");
 				SetFontSize(16);
 			
 				if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B) != 0)
